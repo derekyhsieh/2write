@@ -11,6 +11,8 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { NavbarMini } from "./Navbar";
+import CustomRichContainer from "./CustomRTE";
+import CustomRTE from "./CustomRTE";
 
 export default function ComposeContainer() {
   const theme = useMantineTheme();
@@ -61,7 +63,7 @@ export default function ComposeContainer() {
           </Header>
         }
       >
-        <Text>Rich Text Editor</Text>
+        <CustomRTE/>
       </AppShell>
     </div>
   );
