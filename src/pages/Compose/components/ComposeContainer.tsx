@@ -56,7 +56,7 @@ export default function ComposeContainer() {
                 />
               </MediaQuery>
 
-              <Text>Heaer</Text>
+              <Text>Header</Text>
             </div>
           </Header>
         }
