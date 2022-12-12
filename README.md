@@ -1,4 +1,4 @@
 # SapphireRain
 CAS Project AI driven Essay IDE
 
-clone project, cd into, "npm i", "npm run dev"
+clone project, cd into, "yarn install", "npm run dev"
