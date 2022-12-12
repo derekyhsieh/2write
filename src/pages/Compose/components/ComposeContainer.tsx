@@ -10,6 +10,7 @@ import {
   Burger,
   useMantineTheme,
 } from "@mantine/core";
+import { NavbarMini } from "./Navbar";
 
 export default function ComposeContainer() {
   const theme = useMantineTheme();
@@ -27,23 +28,7 @@ export default function ComposeContainer() {
         }}
         navbarOffsetBreakpoint="sm"
         asideOffsetBreakpoint="sm"
-        navbar={
-          <Navbar
-            p="sm"
-            hiddenBreakpoint="sm"
-            hidden={!opened}
-            width={{ sm: 200, lg: 300 }}
-          >
-            <Navbar.Section grow mt="lg">
-              <div style={{ display: "flex", flexDirection: "column" }}>
-                <Text>Navbar</Text>
-              </div>
-            </Navbar.Section>
-            <Navbar.Section>
-              <Text>Footer</Text>
-            </Navbar.Section>
-          </Navbar>
-        }
+        navbar={<NavbarMini />}
         aside={
           <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
             <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 300, lg: 500 }}>
