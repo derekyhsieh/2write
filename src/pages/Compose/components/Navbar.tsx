@@ -84,7 +84,7 @@ const iconsData = [
 ];
 
 export function NavbarMini() {
-  const [active, setActive] = useState(2);
+  const [active, setActive] = useState(0);
 
   const links = iconsData.map((link, index) => (
     <NavbarLink
