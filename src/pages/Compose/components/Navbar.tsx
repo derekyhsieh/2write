@@ -16,6 +16,7 @@ import {
   IconCalendarStats,
   IconUser,
   IconSettings,
+  IconChartDonut,
   IconLogout,
   IconSwitchHorizontal,
 } from "@tabler/icons";
@@ -76,6 +77,7 @@ function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
 }
 
 const iconsData = [
+  {icon: IconChartDonut, label: "Essay Prompt"},
   { icon: IconDeviceDesktopAnalytics, label: "Analytics" },
   { icon: IconListCheck, label: "ToDos" },
   { icon: IconSettings, label: "Settings" },
