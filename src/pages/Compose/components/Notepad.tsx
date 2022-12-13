@@ -94,7 +94,7 @@ function CreateOutlineModalContent({setIsActive}: Props) {
             <ContainedInputs/>
 
 
-            <Button onClick={() => {setIsActive(false)}}>
+            <Button variant='gradient' gradient={{ from: 'indigo', to: 'cyan' }} onClick={() => {setIsActive(false)}}>
                 Generate ✨
             </Button>
 

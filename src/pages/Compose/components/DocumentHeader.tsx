@@ -21,7 +21,7 @@ export default function DocumentHeader() {
                     <IconChevronLeft size={18} />
                 </ActionIcon>
                 <TextInput
-                    styles={{ label: { fontWeight: "bold" } }}
+                    styles={{ root: { fontWeight: "bold", width: "80%"} }}
                     value={documentTitle}
                     onChange={(event) => setDocumentTitle(event.currentTarget.value)}
                     placeholder="Essay Title"
