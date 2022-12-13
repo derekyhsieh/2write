@@ -14,6 +14,7 @@ import { NavbarMini } from "./Navbar";
 import CustomRichContainer from "./CustomRTE";
 import CustomRTE from "./CustomRTE";
 import DocumentHeader from "./DocumentHeader";
+import Notepad from "./Notepad";
 
 export default function ComposeContainer() {
   const theme = useMantineTheme();
@@ -34,8 +35,8 @@ export default function ComposeContainer() {
         navbar={<NavbarMini />}
         aside={
           <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
-            <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 300, lg: 500 }}>
-              <Text>AI Notepad sidebar</Text>
+            <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 250, lg: 450 }}>
+              <Notepad/>
             </Aside>
           </MediaQuery>
         }

@@ -17,7 +17,7 @@ export default function DocumentHeader() {
       >
         <Group position="apart" style={{width: "100vw"}}>
             <Group>
-                <ActionIcon variant="light">
+                <ActionIcon variant="light" size="md">
                     <IconChevronLeft size={18} />
                 </ActionIcon>
                 <TextInput

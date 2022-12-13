@@ -78,7 +78,6 @@ function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
 const iconsData = [
   { icon: IconDeviceDesktopAnalytics, label: "Analytics" },
   { icon: IconListCheck, label: "ToDos" },
-  { icon: IconUser, label: "Account" },
   { icon: IconSettings, label: "Settings" },
 ];
 
