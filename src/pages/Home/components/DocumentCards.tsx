@@ -109,9 +109,9 @@ const useStyles = createStyles((theme) => ({
 	},
 }));
 
-interface DocumentCardProps {}
+interface DocumentCardsProps {}
 
-export default function DocumentCard(props: { dropzoneModalOnClick?: Function; promptModalOnClick?: Function}) {
+export default function DocumentCards(props: { dropzoneModalOnClick?: Function; promptModalOnClick?: Function}) {
 	const { classes } = useStyles();
 	const [ownerFilter, setOwnerFilter] = useState("Owned by anyone");
 	const [ageFilter, setAgeFilter] = useState("Newest");
