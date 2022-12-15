@@ -42,9 +42,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
 
         setUser(JSON.parse(loggedInUser))
 
-        setIsLoading(true)
       
-        // setIsLoading(true)
 
 
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
