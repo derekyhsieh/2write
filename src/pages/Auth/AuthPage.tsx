@@ -44,7 +44,7 @@ export default function AuthPage() {
         return (
             <Stack>
 
-                {loggedInUser || user ?
+                {loggedInUser ?
                     (<>
                         <h1>Hello {loggedInUser?.displayName}</h1>
                         <Button onClick={handleSignOut} color="red">Log Out</Button>
