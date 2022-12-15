@@ -20,12 +20,6 @@ const useStyles = createStyles((theme) => ({
 		height: "100%",
 	},
 
-	links: {
-		[theme.fn.smallerThan("md")]: {
-			display: "none",
-		},
-	},
-
 	search: {
 		[theme.fn.smallerThan("sm")]: {
 			display: "none",
