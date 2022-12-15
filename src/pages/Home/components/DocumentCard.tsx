@@ -111,7 +111,7 @@ const useStyles = createStyles((theme) => ({
 
 interface DocumentCardProps {}
 
-export default function DocumentCard(props: { modalOnClick: Function}) {
+export default function DocumentCard(props: { dropzoneModalOnClick?: Function; promptModalOnClick?: Function}) {
 	const { classes } = useStyles();
 	const [ownerFilter, setOwnerFilter] = useState("Owned by anyone");
 	const [ageFilter, setAgeFilter] = useState("Newest");
@@ -215,34 +215,31 @@ export default function DocumentCard(props: { modalOnClick: Function}) {
 						<TemplateCard
 							templateTitle="Upload document"
 							className={classes.addNewCard}
-							onClick={props.modalOnClick}
+							onClick={props.dropzoneModalOnClick ? props.dropzoneModalOnClick : undefined}
 						>
 							<IconUpload />
 						</TemplateCard>
 						<TemplateCard
 							templateTitle="Research Essay"
 							className={classes.templateCard}
+							onClick={props.promptModalOnClick ? props.promptModalOnClick : undefined}
 						>
 							<IconNews />
 						</TemplateCard>
 						<TemplateCard
 							templateTitle="Historical Essay"
 							className={classes.templateCard}
+							onClick={props.promptModalOnClick ? props.promptModalOnClick : undefined}
 						>
 							<IconBuildingArch />
 						</TemplateCard>
 						<TemplateCard
 							templateTitle="Argumentative Essay"
 							className={classes.templateCard}
+							onClick={props.promptModalOnClick ? props.promptModalOnClick : undefined}
 						>
 							<IconExclamationMark />
 						</TemplateCard>
-						{/* <TemplateCard
-						templateTitle="Reflection Essay"
-						className={classes.templateCard}
-					>
-						<IconBulb />
-					</TemplateCard> */}
 					</SimpleGrid>
 					<Group mb="xl">
 						<Menu transitionDuration={150} transition="scale-y">
