@@ -54,11 +54,20 @@ const mockdata = [
 ];
 
 const useStyles = createStyles((theme) => ({
-	card: {
+	documentCard: {
 		transition: "transform 150ms ease, box-shadow 150ms ease",
 
 		"&:hover": {
 			transform: "scale(1.01)",
+			boxShadow: theme.shadows.md,
+		},
+	},
+
+	addNewTemplateCard: {
+		transition: "transform 150ms ease, box-shadow 150ms ease",
+
+		"&:hover": {
+			transform: "scale(1.03)",
 			boxShadow: theme.shadows.md,
 		},
 	},
@@ -69,6 +78,9 @@ const useStyles = createStyles((theme) => ({
 		"&:hover": {
 			transform: "scale(1.03)",
 			boxShadow: theme.shadows.md,
+		},
+		[theme.fn.smallerThan("sm")]: {
+			display: "none",
 		},
 	},
 
@@ -89,8 +101,7 @@ const useStyles = createStyles((theme) => ({
 	},
 }));
 
-interface DocumentCardProps {
-}
+interface DocumentCardProps {}
 
 export default function DocumentCard() {
 	const { classes } = useStyles();
@@ -106,7 +117,7 @@ export default function DocumentCard() {
 			href="#"
 			withBorder
 			shadow={"sm"}
-			className={classes.card}
+			className={classes.documentCard}
 		>
 			<AspectRatio ratio={1920 / 1080}>
 				<Image radius="md" src={article.image} />
@@ -141,6 +152,7 @@ export default function DocumentCard() {
 			| null
 			| undefined;
 		templateTitle: string;
+		className: string;
 	}) => {
 		return (
 			<Card
@@ -151,7 +163,7 @@ export default function DocumentCard() {
 				href="#"
 				withBorder
 				shadow={"sm"}
-				className={classes.templateCard}
+				className={props.className}
 			>
 				<Center>
 					<Stack>
@@ -166,7 +178,7 @@ export default function DocumentCard() {
 								{props.children}
 							</ActionIcon>
 						</Center>
-						<Text className={classes.templateTitle} mt={5}>
+						<Text className={classes.templateTitle} mt={5} align="center">
 							{props.templateTitle}
 						</Text>
 					</Stack>
@@ -176,30 +188,45 @@ export default function DocumentCard() {
 	};
 
 	return (
-		<Container fluid className={classes.cardContainer} py={"2%"} px={"5%"}>
+		<Container fluid className={classes.cardContainer} py={"xl"} px={"5%"}>
 			<Stack spacing={0}>
 				<SimpleGrid
 					cols={5}
 					breakpoints={[{ maxWidth: "sm", cols: 1 }]}
-					mb="2%"
+					mb="xl"
 				>
-					<TemplateCard templateTitle="Add document">
+					<TemplateCard
+						templateTitle="Add document"
+						className={classes.addNewTemplateCard}
+					>
 						<IconPlus />
 					</TemplateCard>
-					<TemplateCard templateTitle="Research Essay">
+					<TemplateCard
+						templateTitle="Research Essay"
+						className={classes.templateCard}
+					>
 						<IconNews />
 					</TemplateCard>
-					<TemplateCard templateTitle="Historical Essay">
+					<TemplateCard
+						templateTitle="Historical Essay"
+						className={classes.templateCard}
+					>
 						<IconBuildingArch />
 					</TemplateCard>
-					<TemplateCard templateTitle="Argumentative Essay">
+					<TemplateCard
+						templateTitle="Argumentative Essay"
+						className={classes.templateCard}
+					>
 						<IconExclamationMark />
 					</TemplateCard>
-					<TemplateCard templateTitle="Reflection Essay">
+					<TemplateCard
+						templateTitle="Reflection Essay"
+						className={classes.templateCard}
+					>
 						<IconBulb />
 					</TemplateCard>
 				</SimpleGrid>
-				<Group mb="2%">
+				<Group mb="xl">
 					<Menu transitionDuration={150} transition="rotate-right">
 						<Menu.Target>
 							<Button variant="default" radius="md">
@@ -238,7 +265,11 @@ export default function DocumentCard() {
 						</Menu.Dropdown>
 					</Menu>
 				</Group>
-				<SimpleGrid cols={3} breakpoints={[{ maxWidth: "sm", cols: 1 }]} mb="2%">
+				<SimpleGrid
+					cols={3}
+					breakpoints={[{ maxWidth: "sm", cols: 1 }]}
+					mb="xl"
+				>
 					{cards}
 				</SimpleGrid>
 			</Stack>
