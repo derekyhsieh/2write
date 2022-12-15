@@ -176,12 +176,12 @@ export default function DocumentCard() {
 	};
 
 	return (
-		<Container fluid className={classes.cardContainer} py={"2.5%"} px={"5%"}>
-			<Stack>
+		<Container fluid className={classes.cardContainer} py={"2%"} px={"5%"}>
+			<Stack spacing={0}>
 				<SimpleGrid
 					cols={5}
 					breakpoints={[{ maxWidth: "sm", cols: 1 }]}
-					mb="sm"
+					mb="2%"
 				>
 					<TemplateCard templateTitle="Add document">
 						<IconPlus />
@@ -199,7 +199,7 @@ export default function DocumentCard() {
 						<IconBulb />
 					</TemplateCard>
 				</SimpleGrid>
-				<Group>
+				<Group mb="2%">
 					<Menu transitionDuration={150} transition="rotate-right">
 						<Menu.Target>
 							<Button variant="default" radius="md">
@@ -238,7 +238,7 @@ export default function DocumentCard() {
 						</Menu.Dropdown>
 					</Menu>
 				</Group>
-				<SimpleGrid cols={3} breakpoints={[{ maxWidth: "sm", cols: 1 }]}>
+				<SimpleGrid cols={3} breakpoints={[{ maxWidth: "sm", cols: 1 }]} mb="2%">
 					{cards}
 				</SimpleGrid>
 			</Stack>
