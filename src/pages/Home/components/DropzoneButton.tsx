@@ -3,6 +3,10 @@ import { Text, Group, Button, createStyles, Box } from "@mantine/core";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 import { IconCloudUpload, IconX, IconDownload } from "@tabler/icons";
 
+type Props = {
+	setIsActive: (active: boolean) => void;
+};
+
 const useStyles = createStyles((theme) => ({
 	wrapper: {
 		position: "relative",
@@ -28,6 +32,10 @@ const useStyles = createStyles((theme) => ({
 		bottom: -20,
 	},
 }));
+
+export function CreateDropzoneModalContent({ setIsActive }: Props) {
+	return <DropzoneButton onDrop={setIsActive} />;
+}
 
 export function DropzoneButton(props: { onDrop: Function }) {
 	const { classes, theme } = useStyles();
