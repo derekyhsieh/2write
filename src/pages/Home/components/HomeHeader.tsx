@@ -4,16 +4,12 @@ import { IconSearch, IconUser, IconBell } from '@tabler/icons';
 import { MantineLogo } from '@mantine/ds';
 
 const useStyles = createStyles((theme) => ({
-  header: {
-    paddingLeft: theme.spacing.md,
-    paddingRight: theme.spacing.md,
-  },
 
   inner: {
-    height: 70,
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    height: "100%",
   },
 
   links: {
@@ -38,7 +34,7 @@ export default function HomeHeader() {
   const { classes } = useStyles();
 
   return (
-    <Header height={"10%"} className={classes.header}>
+<Header height={{ base: 50, md: 70 }} p="md">
       <div className={classes.inner}>
         <Group>
           <Burger opened={opened} onClick={toggle} size="sm" />
