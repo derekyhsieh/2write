@@ -54,20 +54,6 @@ export default function HomePageContainer() {
 					placeholder="Why is 2Write the best app?"
 					classNames={classes}
 				/>
-
-				<Select
-					style={{ marginTop: 20, zIndex: 2 }}
-					data={[
-						"Research Essay",
-						"Historical Essay",
-						"Argumentative Essay",
-						"Reflection Essay",
-						"Other",
-					]}
-					placeholder="Argumentative Essay"
-					label="Pick which category your essay best fits under"
-					classNames={classes}
-				/>
 			</div>
 		);
 	}
