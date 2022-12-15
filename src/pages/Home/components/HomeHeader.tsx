@@ -1,6 +1,6 @@
-import { createStyles, Header, Autocomplete, Group, Burger } from '@mantine/core';
+import { createStyles, Header, Autocomplete, Group, Burger, ActionIcon, Stack, Center } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconSearch } from '@tabler/icons';
+import { IconSearch, IconUser, IconBell } from '@tabler/icons';
 import { MantineLogo } from '@mantine/ds';
 
 const useStyles = createStyles((theme) => ({
@@ -10,7 +10,7 @@ const useStyles = createStyles((theme) => ({
   },
 
   inner: {
-    height: 56,
+    height: 70,
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -25,66 +25,41 @@ const useStyles = createStyles((theme) => ({
   search: {
     [theme.fn.smallerThan('xs')]: {
       display: 'none',
-      width: '100%'
     },
-  },
-
-  link: {
-    display: 'block',
-    lineHeight: 1,
-    padding: '8px 12px',
-    borderRadius: theme.radius.sm,
-    textDecoration: 'none',
-    color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.gray[7],
-    fontSize: theme.fontSizes.sm,
-    fontWeight: 500,
-
-    '&:hover': {
-      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
-    },
+    width: '60%'
   },
 }));
 
-interface HeaderSearchProps {
-  links: { link: string; label: string }[];
+interface HomeHeaderProps {
 }
 
 export default function HomeHeader() {
   const [opened, { toggle }] = useDisclosure(false);
   const { classes } = useStyles();
 
-  const links: { link: string; label: string } [] = [{ link: "https://google.com", label: "Google"}, {link: "https://mantine.dev", label: "Mantine"}];
-
-  const items = links.map((link) => (
-    <a
-      key={link.label}
-      href={link.link}
-      className={classes.link}
-      onClick={(event) => event.preventDefault()}
-    >
-      {link.label}
-    </a>
-  ));
-
   return (
-    <Header height={56} className={classes.header} mb={60}>
+    <Header height={"10%"} className={classes.header}>
       <div className={classes.inner}>
         <Group>
           <Burger opened={opened} onClick={toggle} size="sm" />
           <MantineLogo size={28} />
-          <Autocomplete
+        </Group>
+
+        <Autocomplete
               radius={"md"}
               className={classes.search}
               placeholder="Search"
               icon={<IconSearch size={16} stroke={1.5} />}
               data={['React', 'Angular', 'Vue', 'Next.js', 'Riot.js', 'Svelte', 'Broken']}
           />
-        </Group>
 
         <Group>
-          <Group ml={50} spacing={5} className={classes.links}>
-            {items}
-          </Group>
+          <ActionIcon>
+            <IconBell />
+          </ActionIcon>
+          <ActionIcon variant="light" radius="xl" size="xl" color="blue">
+                <IconUser />
+            </ActionIcon>
         </Group>
       </div>
     </Header>

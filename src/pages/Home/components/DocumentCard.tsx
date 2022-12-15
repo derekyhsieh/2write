@@ -11,8 +11,24 @@ import {
 	Flex,
 	Stack,
 	UnstyledButton,
+	ActionIcon,
+	Button,
+	Menu,
+	Center,
+	MediaQuery,
 } from "@mantine/core";
-import { IconDots, IconUsers } from "@tabler/icons";
+import {
+	IconDots,
+	IconUsers,
+	IconChevronDown,
+	IconPlus,
+	IconNews,
+	IconBuildingArch,
+	IconExclamationMark,
+	IconBulb,
+	TablerIcon,
+} from "@tabler/icons";
+import React, { useState } from "react";
 
 const mockdata = [
 	{
@@ -47,15 +63,39 @@ const useStyles = createStyles((theme) => ({
 		},
 	},
 
+	templateCard: {
+		transition: "transform 150ms ease, box-shadow 150ms ease",
+
+		"&:hover": {
+			transform: "scale(1.03)",
+			boxShadow: theme.shadows.md,
+		},
+	},
+
 	title: {
 		fontFamily: `Greycliff CF, ${theme.fontFamily}`,
 		fontWeight: 600,
 		width: "79%",
 	},
+
+	templateTitle: {
+		fontFamily: `Greycliff CF, ${theme.fontFamily}`,
+		fontWeight: 600,
+	},
+
+	cardContainer: {
+		height: "100%",
+		backgroundColor: `${theme.colors.gray[0]}`,
+	},
 }));
+
+interface DocumentCardProps {
+}
 
 export default function DocumentCard() {
 	const { classes } = useStyles();
+	const [ownerFilter, setOwnerFilter] = useState("Owned by anyone");
+	const [ageFilter, setAgeFilter] = useState("Newest");
 
 	const cards = mockdata.map((article) => (
 		<Card
@@ -64,20 +104,21 @@ export default function DocumentCard() {
 			radius="lg"
 			component="a"
 			href="#"
+			withBorder
+			shadow={"sm"}
 			className={classes.card}
 		>
 			<AspectRatio ratio={1920 / 1080}>
 				<Image radius="md" src={article.image} />
-				{/* height={200} width={400} */}
 			</AspectRatio>
 			<Stack>
 				<Group mt="md" position="apart">
 					<Text className={classes.title} mt={5} lineClamp={1}>
 						{article.title}
 					</Text>
-					<UnstyledButton>
+					<ActionIcon>
 						<IconDots />
-					</UnstyledButton>
+					</ActionIcon>
 				</Group>
 				<Group>
 					<IconUsers stroke={"1.75"} />
@@ -89,21 +130,118 @@ export default function DocumentCard() {
 		</Card>
 	));
 
+	const TemplateCard = (props: {
+		children:
+			| string
+			| number
+			| boolean
+			| React.ReactElement<any, string | React.JSXElementConstructor<any>>
+			| React.ReactFragment
+			| React.ReactPortal
+			| null
+			| undefined;
+		templateTitle: string;
+	}) => {
+		return (
+			<Card
+				key={"add"}
+				p="lg"
+				radius="lg"
+				component="a"
+				href="#"
+				withBorder
+				shadow={"sm"}
+				className={classes.templateCard}
+			>
+				<Center>
+					<Stack>
+						<Center>
+							<ActionIcon
+								radius="xl"
+								size="xl"
+								gradient={{ from: "indigo", to: "cyan", deg: 45 }}
+								variant="gradient"
+								p={10}
+							>
+								{props.children}
+							</ActionIcon>
+						</Center>
+						<Text className={classes.templateTitle} mt={5}>
+							{props.templateTitle}
+						</Text>
+					</Stack>
+				</Center>
+			</Card>
+		);
+	};
+
 	return (
-		<Container size="xl">
-			<SimpleGrid cols={3} breakpoints={[{ maxWidth: "sm", cols: 1 }]}>
-				{/* <Card key={"add-new-document"} p="md" radius="lg" component="a" href="#" className={classes.card}>
-        <Stack spacing={"xs"}>
-      <AspectRatio ratio={1920 / 1080}>
-        <Image radius="md" src={"https://blog.iamsuleiman.com/wp-content/uploads/2015/04/components_buttons_usage1-e1429491758281.png"} />
-        </AspectRatio>
-      <Text className={classes.title}>
-        {"CREATE EMPTY"}
-      </Text>
-      </Stack>
-        </Card> */}
-				{cards}
-			</SimpleGrid>
+		<Container fluid className={classes.cardContainer} py={"2.5%"} px={"5%"}>
+			<Stack>
+				<SimpleGrid
+					cols={5}
+					breakpoints={[{ maxWidth: "sm", cols: 1 }]}
+					mb="sm"
+				>
+					<TemplateCard templateTitle="Add document">
+						<IconPlus />
+					</TemplateCard>
+					<TemplateCard templateTitle="Research Essay">
+						<IconNews />
+					</TemplateCard>
+					<TemplateCard templateTitle="Historical Essay">
+						<IconBuildingArch />
+					</TemplateCard>
+					<TemplateCard templateTitle="Argumentative Essay">
+						<IconExclamationMark />
+					</TemplateCard>
+					<TemplateCard templateTitle="Reflection Essay">
+						<IconBulb />
+					</TemplateCard>
+				</SimpleGrid>
+				<Group>
+					<Menu transitionDuration={150} transition="rotate-right">
+						<Menu.Target>
+							<Button variant="default" radius="md">
+								<Group position="apart">
+									{ownerFilter} <IconChevronDown />
+								</Group>
+							</Button>
+						</Menu.Target>
+						<Menu.Dropdown>
+							<Menu.Item onClick={() => setOwnerFilter("Owned by anyone")}>
+								Owned by anyone
+							</Menu.Item>
+							<Menu.Item onClick={() => setOwnerFilter("Owned by me")}>
+								Owned by me
+							</Menu.Item>
+							<Menu.Item onClick={() => setOwnerFilter("Not owned by me")}>
+								Not owned by me
+							</Menu.Item>
+						</Menu.Dropdown>
+					</Menu>
+					<Menu transitionDuration={150} transition="rotate-right">
+						<Menu.Target>
+							<Button variant="default" radius="md">
+								<Group position="apart">
+									{ageFilter} <IconChevronDown />
+								</Group>
+							</Button>
+						</Menu.Target>
+						<Menu.Dropdown>
+							<Menu.Item onClick={() => setAgeFilter("Newest")}>
+								Newest
+							</Menu.Item>
+							<Menu.Item onClick={() => setAgeFilter("Oldest")}>
+								Oldest
+							</Menu.Item>
+						</Menu.Dropdown>
+					</Menu>
+				</Group>
+				<SimpleGrid cols={3} breakpoints={[{ maxWidth: "sm", cols: 1 }]}>
+					{cards}
+				</SimpleGrid>
+			</Stack>
 		</Container>
 	);
 }

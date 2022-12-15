@@ -1,13 +1,7 @@
-import React from "react";
-import DocumentCard from "./components/DocumentCard";
-import HomeHeader from "./components/HomeHeader";
-import { Stack } from "@mantine/core";
+import HomePageContainer from './components/HomePageContainer';
 
 export default function HomePage() {
-  return (
-    <Stack>
-    <HomeHeader></HomeHeader>
-    <DocumentCard></DocumentCard>
-    </Stack>
-  );
+	return (
+    <HomePageContainer />
+	);
 }
