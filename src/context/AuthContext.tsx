@@ -40,47 +40,35 @@ export const AuthContextProvider: React.FC = ({ children }) => {
 
     useEffect(() => {
 
-
-        console.log("logged in", loggedInUser)
-
-        
-        console.log("1")
-
-        console.log(loggedInUser)
-
-
-
         setUser(JSON.parse(loggedInUser))
 
-        console.log("2")
         setIsLoading(true)
       
         // setIsLoading(true)
 
 
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-            console.log("3")
-            // setUser(currentUser)
+
+            
             checkUserState()
 
 
+            // Only set loading when it's first time user logs in - not one of persisted logins
             if (loggedInUser == null) {
                 setIsLoading(true)
-                console.log("4")
             }
 
+            
+            // new login need to set local storage user info for persistence 
             if (user == null) {
                 setUser(currentUser)
 
-                console.log("5")
 
                 localStorage.setItem('user', JSON.stringify(currentUser))
-                console.log("5.5")
                 setIsLoading(false)
 
             }
 
-            console.log("6")
 
 
         })
