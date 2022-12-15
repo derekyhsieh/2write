@@ -33,7 +33,6 @@ import {
 	IconDownload,
 } from "@tabler/icons";
 import React, { useState } from "react";
-import { DropzoneButton } from "./DropzoneButton";
 
 const mockdata = [
 	{
@@ -110,18 +109,12 @@ const useStyles = createStyles((theme) => ({
 	},
 }));
 
-type Props = {
-    setIsActive: (active: boolean) => void;
- }
-
 interface DocumentCardProps {}
 
-export default function DocumentCard() {
+export default function DocumentCard(props: { modalOnClick: Function}) {
 	const { classes } = useStyles();
 	const [ownerFilter, setOwnerFilter] = useState("Owned by anyone");
 	const [ageFilter, setAgeFilter] = useState("Newest");
-	const [modalIsOpen, setModalIsOpen] = useState(false);
-	const theme = useMantineTheme()
 
 	const cards = mockdata.map((article) => (
 		<Card
@@ -204,30 +197,8 @@ export default function DocumentCard() {
 		);
 	};
 
-	function CreateDropzoneModalContent({setIsActive}: Props) {
-		return (
-				<DropzoneButton onDrop={setIsActive} />
-		)
-	};
-
 	return (
 		<>
-			<Modal
-				opened={modalIsOpen}
-				centered
-				onClose={() => setModalIsOpen(false)}
-				withCloseButton={false}
-				overlayColor={
-					theme.colorScheme === "dark"
-						? theme.colors.dark[9]
-						: theme.colors.gray[2]
-				}
-				overlayOpacity={0.55}
-				overlayBlur={3}
-			>
-				<CreateDropzoneModalContent setIsActive={setModalIsOpen} />
-			</Modal>
-
 			<Container fluid className={classes.cardContainer} py={"xl"} px={"5%"}>
 				<Stack spacing={0}>
 					<SimpleGrid
@@ -244,7 +215,7 @@ export default function DocumentCard() {
 						<TemplateCard
 							templateTitle="Upload document"
 							className={classes.addNewCard}
-							onClick={setModalIsOpen}
+							onClick={props.modalOnClick}
 						>
 							<IconUpload />
 						</TemplateCard>
