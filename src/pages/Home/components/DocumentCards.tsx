@@ -61,6 +61,39 @@ const mockdata = [
 	},
 ];
 
+const newDocumentArray = [
+	{
+		title: "Add document",
+		template: false,
+		onClickProps: undefined,
+		icon: <IconPlus />,
+	},
+	{
+		title: "Upload document",
+		template: false,
+		onClickProps: "dropzone",
+		icon: <IconUpload />,
+	},
+	{
+		title: "Research Essay",
+		template: true,
+		onClickProps: "prompt",
+		icon: <IconNews />,
+	},
+	{
+		title: "Historical Essay",
+		template: true,
+		onClickProps: "prompt",
+		icon: <IconBuildingArch />,
+	},
+	{
+		title: "Argumentative Essay",
+		template: true,
+		onClickProps: "prompt",
+		icon: <IconExclamationMark />,
+	},
+];
+
 const useStyles = createStyles((theme) => ({
 	documentCard: {
 		transition: "transform 150ms ease, box-shadow 150ms ease",
@@ -111,7 +144,10 @@ const useStyles = createStyles((theme) => ({
 
 interface DocumentCardsProps {}
 
-export default function DocumentCards(props: { dropzoneModalOnClick?: Function; promptModalOnClick?: Function}) {
+export default function DocumentCards(props: {
+	dropzoneModalOnClick?: Function;
+	promptModalOnClick?: Function;
+}) {
 	const { classes } = useStyles();
 	const [ownerFilter, setOwnerFilter] = useState("Owned by anyone");
 	const [ageFilter, setAgeFilter] = useState("Newest");
@@ -173,7 +209,7 @@ export default function DocumentCards(props: { dropzoneModalOnClick?: Function; 
 				withBorder
 				shadow={"sm"}
 				className={props.className}
-				onClick={() => props.onClick ? props.onClick(true) : null}
+				onClick={() => (props.onClick ? props.onClick(true) : null)}
 			>
 				<Center>
 					<Stack>
@@ -197,6 +233,24 @@ export default function DocumentCards(props: { dropzoneModalOnClick?: Function; 
 		);
 	};
 
+	const newDocCards = newDocumentArray.map((newDocItem) => (
+		<TemplateCard
+			templateTitle={newDocItem.title}
+			className={
+				newDocItem.template ? classes.templateCard : classes.addNewCard
+			}
+			onClick={
+				newDocItem.onClickProps
+					? newDocItem.onClickProps === "dropzone"
+						? props.dropzoneModalOnClick
+						: props.promptModalOnClick
+					: undefined
+			}
+		>
+			{newDocItem.icon}
+		</TemplateCard>
+	));
+
 	return (
 		<>
 			<Container fluid className={classes.cardContainer} py={"xl"} px={"5%"}>
@@ -206,40 +260,7 @@ export default function DocumentCards(props: { dropzoneModalOnClick?: Function; 
 						breakpoints={[{ maxWidth: "sm", cols: 1 }]}
 						mb="xl"
 					>
-						<TemplateCard
-							templateTitle="Add document"
-							className={classes.addNewCard}
-						>
-							<IconPlus />
-						</TemplateCard>
-						<TemplateCard
-							templateTitle="Upload document"
-							className={classes.addNewCard}
-							onClick={props.dropzoneModalOnClick ? props.dropzoneModalOnClick : undefined}
-						>
-							<IconUpload />
-						</TemplateCard>
-						<TemplateCard
-							templateTitle="Research Essay"
-							className={classes.templateCard}
-							onClick={props.promptModalOnClick ? props.promptModalOnClick : undefined}
-						>
-							<IconNews />
-						</TemplateCard>
-						<TemplateCard
-							templateTitle="Historical Essay"
-							className={classes.templateCard}
-							onClick={props.promptModalOnClick ? props.promptModalOnClick : undefined}
-						>
-							<IconBuildingArch />
-						</TemplateCard>
-						<TemplateCard
-							templateTitle="Argumentative Essay"
-							className={classes.templateCard}
-							onClick={props.promptModalOnClick ? props.promptModalOnClick : undefined}
-						>
-							<IconExclamationMark />
-						</TemplateCard>
+						{newDocCards}
 					</SimpleGrid>
 					<Group mb="xl">
 						<Menu transitionDuration={150} transition="scale-y">
