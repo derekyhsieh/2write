@@ -1,8 +1,8 @@
-import React, {Dispatch, SetStateAction} from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { useContext, createContext, useEffect, useState } from "react";
-import {GoogleAuthProvider, signInWithRedirect, signOut, onAuthStateChanged} from "firebase/auth"
-import {auth} from "../services/firebase"
-import {User as FirebaseUser} from "firebase/auth"
+import { GoogleAuthProvider, signInWithRedirect, signOut, onAuthStateChanged } from "firebase/auth"
+import { auth } from "../services/firebase"
+import { User as FirebaseUser } from "firebase/auth"
 import useCheckUser from "../hooks/useCheckUser";
 
 
@@ -17,7 +17,7 @@ interface AuthContextInterface {
 
 const AuthContext = createContext<AuthContextInterface | null>(null)
 
-export const AuthContextProvider: React.FC = ({children}) => {
+export const AuthContextProvider: React.FC = ({ children }) => {
 
     const [user, setUser] = useState<FirebaseUser | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -26,7 +26,7 @@ export const AuthContextProvider: React.FC = ({children}) => {
 
 
     const googleSignIn = () => {
-   
+
         const provider = new GoogleAuthProvider()
         signInWithRedirect(auth, provider)
     }
@@ -39,26 +39,50 @@ export const AuthContextProvider: React.FC = ({children}) => {
     }
 
     useEffect(() => {
+
+
+        console.log("logged in", loggedInUser)
+
+        
+        console.log("1")
+
         console.log(loggedInUser)
 
-        if(loggedInUser == null) {
-            // setIsLoading(true)
-        }
 
-            setUser(JSON.parse(loggedInUser))
+
+        setUser(JSON.parse(loggedInUser))
+
+        console.log("2")
+        setIsLoading(true)
+      
+        // setIsLoading(true)
+
 
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            console.log("3")
             // setUser(currentUser)
             checkUserState()
-        
-            if(user == null) {
-                setUser(currentUser)
 
-                localStorage.setItem('user', JSON.stringify(currentUser))
-                setIsLoading(false)
+
+            if (loggedInUser == null) {
+                setIsLoading(true)
+                console.log("4")
             }
 
-            
+            if (user == null) {
+                setUser(currentUser)
+
+                console.log("5")
+
+                localStorage.setItem('user', JSON.stringify(currentUser))
+                console.log("5.5")
+                setIsLoading(false)
+
+            }
+
+            console.log("6")
+
+
         })
         return () => {
             unsubscribe();
@@ -66,7 +90,7 @@ export const AuthContextProvider: React.FC = ({children}) => {
     }, [])
 
     return (
-        <AuthContext.Provider value={{googleSignIn, logOut, user, loggedInUser, isLoading}}>
+        <AuthContext.Provider value={{ googleSignIn, logOut, user, loggedInUser, isLoading }}>
             {children}
         </AuthContext.Provider>
     )
