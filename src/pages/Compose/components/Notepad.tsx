@@ -46,7 +46,7 @@ export default function Notepad() {
 
                     <Title order={2}>Notepad</Title>
 
-                    <Button variant='gradient' gradient={{ from: 'indigo', to: 'cyan' }} onClick={(() => setModalIsOpen(true))} radius="md" size="sm">Create Outline</Button>
+                    <Button onClick={(() => setModalIsOpen(true))} radius="md" size="sm">Create Outline</Button>
 
                 </Group>
 
@@ -89,7 +89,7 @@ function CreateOutlineModalContent({setIsActive}: Props) {
     return (
         <Center>
             <Stack>
-                <Title size={"lg"} order={4}>Oops you forgot to include your Esssay prompt!</Title>
+                <Title size={"lg"} order={4}>Oops, you forgot to include your essay prompt!</Title>
 
             <ContainedInputs/>
 
