@@ -12,19 +12,24 @@ import {
     Loader,
 } from '@mantine/core'
 import { UserAuth } from "../../context/AuthContext"
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import useCheckUser from '../../hooks/useCheckUser'
+import { useNavigate } from 'react-router-dom'
+import { getAuth } from 'firebase/auth'
 
 
 export default function AuthPage() {
-    const { user, logOut, loggedInUser, isLoading } = UserAuth()
+    const { user, googleSignIn, logOut } = UserAuth()
+    const [isLoading, setIsLoading] = useState(false)
 
-    const { googleSignIn } = UserAuth()
 
+    const navigate = useNavigate()
 
 
     const handleSignOut = async () => {
         try {
+
+            setIsLoading(false)
             await logOut()
         } catch (error) {
             console.log(error)
@@ -33,28 +38,43 @@ export default function AuthPage() {
 
     const handleGoogleSignIn = async () => {
         try {
+            setIsLoading(true)
+
             await googleSignIn()
+
+            
         } catch (error) {
             console.log(error)
         }
 
     }
 
+    useEffect(() => {
+
+    
+
+        if(user != null) {
+            // redirect to home page after user successfully logs in
+            navigate("/")
+        }
+
+        if(user == null) {
+        }
+
+    }, [user])
+
+
+
     function Auth() {
         return (
             <Stack>
 
-                {loggedInUser ?
-                    (<>
-                        <h1>Hello {loggedInUser?.displayName}</h1>
-                        <Button onClick={handleSignOut} color="red">Log Out</Button>
-                        <Button onClick={() => { console.log(loggedInUser) }}>Print logged user</Button>
-                    </>
-                    ) :
-                    (
+               
                         <Button onClick={handleGoogleSignIn}>Sign in with google</Button>
-                    )
-                }
+
+                        {user &&
+
+                        <Button color="red" onClick={handleSignOut}>log out</Button>}
 
             </Stack>
 
@@ -64,16 +84,14 @@ export default function AuthPage() {
     return (
         <Center>
 
+            {isLoading && user == null ? (
+                <Loader/>
 
-            {isLoading && loggedInUser === null ? (
-                <Loader />
             ) : (
-               <Auth/>
-            )
+                <Auth/>
+            )}
 
 
-
-            }
 
 
 

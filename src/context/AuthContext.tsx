@@ -11,17 +11,17 @@ interface AuthContextInterface {
     googleSignIn: () => void,
     logOut: () => void,
     user: FirebaseUser | null,
-    loggedInUser: string | React.Dispatch<React.SetStateAction<string | null>> | null,
-    isLoading: boolean
 }
 
-const AuthContext = createContext<AuthContextInterface | null>(null)
+const AuthContext = createContext<AuthContextInterface>(null!)
 
-export const AuthContextProvider: React.FC = ({ children }) => {
+type AuthProps = {
+    children: React.ReactNode;
+}
+
+export const AuthContextProvider = ({children}: AuthProps) => {
 
     const [user, setUser] = useState<FirebaseUser | null>(null)
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [loggedInUser, setLoggedInUser, checkUserState] = useCheckUser();
 
 
 
@@ -32,44 +32,16 @@ export const AuthContextProvider: React.FC = ({ children }) => {
     }
 
     const logOut = () => {
-        setUser(null)
-        setLoggedInUser(null)
-        localStorage.clear();
         signOut(auth)
     }
 
     useEffect(() => {
 
-        setUser(JSON.parse(loggedInUser))
-
-        setIsLoading(true)
-
-      
-
 
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
 
-            
-            checkUserState()
-
-
-            // Only set loading when it's first time user logs in - not one of persisted logins
-            if (loggedInUser == null) {
-                setIsLoading(true)
-            }
-
-            
-            // new login need to set local storage user info for persistence 
-            if (user == null) {
+               
                 setUser(currentUser)
-
-
-                localStorage.setItem('user', JSON.stringify(currentUser))
-                setIsLoading(false)
-
-            }
-
-
 
         })
         return () => {
@@ -78,7 +50,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
     }, [])
 
     return (
-        <AuthContext.Provider value={{ googleSignIn, logOut, user, loggedInUser, isLoading }}>
+        <AuthContext.Provider value={{ googleSignIn, logOut, user}}>
             {children}
         </AuthContext.Provider>
     )
