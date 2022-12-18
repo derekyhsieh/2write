@@ -5,6 +5,7 @@ import {
   Tooltip,
   UnstyledButton,
   createStyles,
+  Text,
   Stack,
 } from "@mantine/core";
 import {
@@ -21,6 +22,11 @@ import {
   IconSwitchHorizontal,
 } from "@tabler/icons";
 import { MantineLogo } from "@mantine/ds";
+import { CustomDrawer } from "./CustomDrawer";
+import SettingsDrawer from "./SettingsDrawer";
+import AnalyticsDrawer from "./AnalyticsDrawer";
+import TodoDrawer from "./TodoDrawer";
+import EssayDataDrawer from "./EssayDataDrawer";
 
 const useStyles = createStyles((theme) => ({
   link: {
@@ -77,34 +83,46 @@ function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
 }
 
 const iconsData = [
-  {icon: IconChartDonut, label: "Essay Prompt"},
-  { icon: IconDeviceDesktopAnalytics, label: "Analytics" },
-  { icon: IconListCheck, label: "ToDos" },
-  { icon: IconSettings, label: "Settings" },
+  { icon: IconChartDonut, label: "Essay Prompt", name: "data" },
+  { icon: IconDeviceDesktopAnalytics, label: "Analytics", name: "analytics" },
+  { icon: IconListCheck, label: "To-Dos", name: "todos" },
+  { icon: IconSettings, label: "Settings", name: "settings" },
 ];
 
 export function NavbarMini() {
   const [active, setActive] = useState(0);
 
+  const [openDrawer, setOpenDrawer] = useState("null");
+
   const links = iconsData.map((link, index) => (
     <NavbarLink
+      onClick={() => {
+        setActive(index);
+        setOpenDrawer(link.name);
+      }}
       {...link}
       key={link.label}
       active={index === active}
-      onClick={() => setActive(index)}
     />
   ));
 
   return (
-    <Navbar height={"100vh"} width={{ base: 80 }} p="md">
-      <Center>
-        <MantineLogo type="mark" size={30} />
-      </Center>
-      <Navbar.Section grow mt={50}>
-        <Stack justify="center" spacing={0}>
-          {links}
-        </Stack>
-      </Navbar.Section>
-    </Navbar>
+    <>
+      <SettingsDrawer opened={openDrawer} setOpened={setOpenDrawer} />
+      <AnalyticsDrawer opened={openDrawer} setOpened={setOpenDrawer}/>
+      <TodoDrawer opened={openDrawer} setOpened={setOpenDrawer}/>
+      <EssayDataDrawer opened={openDrawer} setOpened={setOpenDrawer} />
+
+      <Navbar height={"100vh"} width={{ base: 80 }} p="md">
+        <Center>
+          <MantineLogo type="mark" size={30} />
+        </Center>
+        <Navbar.Section grow mt={50}>
+          <Stack justify="center" spacing={0}>
+            {links}
+          </Stack>
+        </Navbar.Section>
+      </Navbar>
+    </>
   );
 }

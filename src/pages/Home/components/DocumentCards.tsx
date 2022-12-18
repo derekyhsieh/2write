@@ -33,6 +33,7 @@ import {
 	IconDownload,
 } from "@tabler/icons";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const mockdata = [
 	{
@@ -148,6 +149,8 @@ export default function DocumentCards(props: {
 	dropzoneModalOnClick?: Function;
 	promptModalOnClick?: Function;
 }) {
+
+	const navigate = useNavigate()
 	const { classes } = useStyles();
 	const [ownerFilter, setOwnerFilter] = useState("Owned by anyone");
 	const [ageFilter, setAgeFilter] = useState("Newest");
@@ -162,6 +165,9 @@ export default function DocumentCards(props: {
 			withBorder
 			shadow={"sm"}
 			className={classes.documentCard}
+			onClick={() => {
+			navigate("/compose")	
+			}} 
 		>
 			<AspectRatio ratio={1920 / 1080}>
 				<Image radius="md" src={article.image} />

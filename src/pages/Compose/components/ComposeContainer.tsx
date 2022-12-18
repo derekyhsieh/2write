@@ -35,7 +35,7 @@ export default function ComposeContainer() {
         navbar={<NavbarMini />}
         aside={
           <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
-            <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 250, lg: 450 }}>
+            <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 300, lg: 500 }}>
               <Notepad/>
             </Aside>
           </MediaQuery>
