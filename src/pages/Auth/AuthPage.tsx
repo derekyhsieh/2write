@@ -17,9 +17,8 @@ import useCheckUser from '../../hooks/useCheckUser'
 
 
 export default function AuthPage() {
-    const { user, logOut, loggedInUser, isLoading } = UserAuth()
+    const { user, googleSignIn, logOut } = UserAuth()
 
-    const { googleSignIn } = UserAuth()
 
 
 
@@ -44,11 +43,10 @@ export default function AuthPage() {
         return (
             <Stack>
 
-                {loggedInUser ?
+                {user ?
                     (<>
-                        <h1>Hello {loggedInUser?.displayName}</h1>
+                        <h1>Hello {user?.displayName}</h1>
                         <Button onClick={handleSignOut} color="red">Log Out</Button>
-                        <Button onClick={() => { console.log(loggedInUser) }}>Print logged user</Button>
                     </>
                     ) :
                     (
@@ -65,15 +63,7 @@ export default function AuthPage() {
         <Center>
 
 
-            {isLoading && loggedInUser === null ? (
-                <Loader />
-            ) : (
                <Auth/>
-            )
-
-
-
-            }
 
 
 
