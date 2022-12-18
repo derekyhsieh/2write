@@ -85,7 +85,7 @@ export default function CustomRTE() {
 
   return (
 
-    <RichTextEditor editor={editor}>
+    <RichTextEditor styles={{root: {minHeight:"100%", backgroundColor: "#fff"}, content: {minHeight: "100%"}}} editor={editor}>
       {toolbar}
 
       {editor && (
@@ -110,39 +110,4 @@ export default function CustomRTE() {
 }
 
 const content = `
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-
-<p></p><p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p><p></p>
 `
