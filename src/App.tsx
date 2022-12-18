@@ -20,7 +20,14 @@ function App() {
           }
         />
         <Route path="/landing" element={<LandingPage />} />
-        <Route path="/compose" element={<ComposePage />} />
+        <Route
+          path="/compose"
+          element={
+            <ProtectedAuth>
+              <ComposePage />
+            </ProtectedAuth>
+          }
+        />
         <Route path="/auth" element={<AuthPage />} />
       </Routes>
     </AuthContextProvider>
