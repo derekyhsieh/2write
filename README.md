@@ -23,7 +23,7 @@ yarn dev
 ## Technologies
 
 - [Mantine](https://mantine.dev) - Fully Featured React Component Library
-- [React](reactjs.org) - Doesn't need an explanation
-- [Firebase](firebase.google.com) - Backend for authentication and database
-- [OpenAI](openai.com) - Running fine-tuned and gpt-3 models
+- [React](https://reactjs.org) - Doesn't need an explanation
+- [Firebase](https://firebase.google.com) - Backend for authentication and database
+- [OpenAI](https://openai.com) - Running fine-tuned and gpt-3 models
 
