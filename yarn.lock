@@ -1268,6 +1268,11 @@
   resolved "https://registry.npmjs.org/@tiptap/extension-list-item/-/extension-list-item-2.0.0-beta.207.tgz"
   integrity sha512-mPTmUMNKcsiRsE+BbhFcG0msgmIya+ak7mCRqr53UBxwlZ41MLC742QrSYDua7OTHXhfnYFDAManyJbc8D/42Q==
 
+"@tiptap/extension-mention@^2.0.0-beta.209":
+  version "2.0.0-beta.209"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-mention/-/extension-mention-2.0.0-beta.209.tgz#f6d2787d823e911a3cb707937819d949b7300f46"
+  integrity sha512-Ke8+/T9gsI10CQtb8CxuR+1t/6RkHVUr9ZZd7lqQ7c7kpw5YcEJ89yzDl/OpEoUboC7IlHLlxuhI8njf9+zHVw==
+
 "@tiptap/extension-ordered-list@^2.0.0-beta.207":
   version "2.0.0-beta.207"
   resolved "https://registry.npmjs.org/@tiptap/extension-ordered-list/-/extension-ordered-list-2.0.0-beta.207.tgz"
@@ -1341,6 +1346,11 @@
     "@tiptap/extension-paragraph" "^2.0.0-beta.207"
     "@tiptap/extension-strike" "^2.0.0-beta.207"
     "@tiptap/extension-text" "^2.0.0-beta.207"
+
+"@tiptap/suggestion@^2.0.0-beta.209":
+  version "2.0.0-beta.209"
+  resolved "https://registry.yarnpkg.com/@tiptap/suggestion/-/suggestion-2.0.0-beta.209.tgz#7cd93e60024b3d229129c2723d9e09416e093dfe"
+  integrity sha512-KKV64rTzTGY1q03nK0b4wCrAmihwThYJrYlPTUTelQm0AeJ4EPTNMRSR5rHD+fVF7agqrtrCkMw46vTXd6j1Jw==
 
 "@types/long@^4.0.1":
   version "4.0.2"
@@ -2244,7 +2254,7 @@ supports-preserve-symlinks-flag@^1.0.0:
 
 tippy.js@^6.3.7:
   version "6.3.7"
-  resolved "https://registry.npmjs.org/tippy.js/-/tippy.js-6.3.7.tgz"
+  resolved "https://registry.yarnpkg.com/tippy.js/-/tippy.js-6.3.7.tgz#8ccfb651d642010ed9a32ff29b0e9e19c5b8c61c"
   integrity sha512-E1d3oP2emgJ9dRQZdf3Kkn0qJgI6ZLpyS5z6ZkY1DF3kaQaBsGZsndEpHwx+eC+tYM41HaSNvNtLx8tU57FzTQ==
   dependencies:
     "@popperjs/core" "^2.9.0"
