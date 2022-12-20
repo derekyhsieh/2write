@@ -8,6 +8,9 @@ import Superscript from '@tiptap/extension-superscript';
 import SubScript from '@tiptap/extension-subscript';
 import {IconHighlight, IconDrone} from "@tabler/icons"
 import { Text } from '@mantine/core';
+import Mention from "@tiptap/extension-mention"
+import suggestion from './Suggestion';
+
 
 
 function AutocompleteIconButton() {
@@ -26,6 +29,13 @@ function AutocompleteIconButton() {
 export default function CustomRTE() {
   const editor = useEditor({
     extensions: [
+
+      Mention.configure({
+        HTMLAttributes: {
+          class: '',
+        },
+        suggestion
+      }),
       StarterKit,
       Underline,
       Link,
