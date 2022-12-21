@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import { Configuration, OpenAIApi } from "openai";
 
 const app = express();
-app.use(bodyParser.json({ extended: true }));
+app.use(bodyParser.json());
 
 app.post("/api/outline", (req, res) => {
 
