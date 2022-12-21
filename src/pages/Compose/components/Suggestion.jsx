@@ -4,6 +4,13 @@ import tippy from 'tippy.js'
 import { MentionList } from './MentionList'
 
 export default {
+
+  char: "/",
+  startOfLine: false,
+  command: ({ editor, range, props }) => {
+    props.command({ editor, range });
+  },
+
   items: ({ query }) => {
     return [
       'This is the autocompleted sentence', 'This is the second autocompleted sentence',
