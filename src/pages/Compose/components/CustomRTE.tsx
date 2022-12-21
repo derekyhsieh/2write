@@ -7,14 +7,17 @@ import TextAlign from '@tiptap/extension-text-align';
 import Superscript from '@tiptap/extension-superscript';
 import SubScript from '@tiptap/extension-subscript';
 import {IconHighlight, IconDrone} from "@tabler/icons"
-import { Text } from '@mantine/core';
+
+import { Text, Group } from '@mantine/core';
+import Mention from "@tiptap/extension-mention"
+import suggestion from './Suggestion';
 
 
 function AutocompleteIconButton() {
   const { editor } = useRichTextEditorContext();
   return (
     <RichTextEditor.Control
-      onClick={() => editor?.commands.insertContent('AUTOCOMPLETE')}
+      onClick={() => editor?.commands.insertContent(' /')}
       aria-label="AI autocomplete sentence"
       title="AI autocomplete"
     >
@@ -23,9 +26,19 @@ function AutocompleteIconButton() {
   );
 }
 
+
 export default function CustomRTE() {
   const editor = useEditor({
     extensions: [
+
+
+      Mention.configure({
+ 
+        HTMLAttributes: {
+          class: '',
+        },
+        suggestion
+      }),
       StarterKit,
       Underline,
       Link,
@@ -84,8 +97,7 @@ export default function CustomRTE() {
   )
 
   return (
-
-    <RichTextEditor styles={{root: {minHeight:"100%", backgroundColor: "#fff"}, content: {minHeight: "100%"}}} editor={editor}>
+    <RichTextEditor styles={{root: {minHeight:"100%", backgroundColor: "#fff"}, content: {backgroundColor: "green"}}} editor={editor}>
       {toolbar}
 
       {editor && (
@@ -104,7 +116,7 @@ export default function CustomRTE() {
           </RichTextEditor.ControlsGroup>
         </BubbleMenu>
       )}
-      <RichTextEditor.Content />
+          <RichTextEditor.Content spellCheck />
     </RichTextEditor>
   );
 }

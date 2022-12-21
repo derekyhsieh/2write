@@ -26,6 +26,7 @@
     "@tabler/icons": "^1.116.1",
     "@tiptap/extension-highlight": "^2.0.0-beta.204",
     "@tiptap/extension-link": "^2.0.0-beta.204",
+    "@tiptap/extension-mention": "^2.0.0-beta.209",
     "@tiptap/extension-subscript": "^2.0.0-beta.204",
     "@tiptap/extension-superscript": "^2.0.0-beta.204",
     "@tiptap/extension-text-align": "^2.0.0-beta.204",
@@ -52,6 +53,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.4.5",
+    "tippy.js": "^6.3.7",
     "vite-plugin-externals": "^0.5.1"
   },
   "devDependencies": {
