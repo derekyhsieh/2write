@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import { Configuration, OpenAIApi } from "openai";
 
 const app = express();
-app.use(bodyParser.json({ extended: true }));
+app.use(bodyParser.json());
 
 app.post("/api/outline", (req, res) => {
 
@@ -27,7 +27,7 @@ function appendQuestionMarkToPrompt(prompt: string) {
 
 async function getAnswer(question: string) {
   const configuration = new Configuration({
-    apiKey: "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",
+    apiKey: import.meta.env.VITE_OPENAI_API_KEY,
   });
 
   const openai = new OpenAIApi(configuration);
