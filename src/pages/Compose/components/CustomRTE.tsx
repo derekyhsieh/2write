@@ -121,5 +121,4 @@ export default function CustomRTE() {
   );
 }
 
-const content = `
-`
+const content = `In the fifteenth and sixteenth centuries, European nations began to claim `

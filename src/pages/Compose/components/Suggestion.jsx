@@ -2,6 +2,8 @@ import { ReactRenderer } from '@tiptap/react'
 import tippy from 'tippy.js'
 
 import { MentionList } from './MentionList'
+import {cleanForAutocomplete, removeEmptyParagraphs} from "../../../utils/ExtractHTML"
+// import { useFetch } from "../../hooks/useFetch";
 
 export default {
 
@@ -9,17 +11,46 @@ export default {
   startOfLine: false,
   command: ({ editor, range, props }) => {
     // props.command({ editor, range });
-    editor
-    .chain()
-    .focus()
-    .deleteRange(range)
-    .insertContent('This is the autocompleted sentence')
-    .run();
+
+     function getAutocomplete()  {
+      console.log(editor.getJSON())
+
+      const editorContent = cleanForAutocomplete(editor.getHTML(), range)
+      // range 75 to 76
+      console.log(cleanForAutocomplete(editor.getHTML(), range))
+
+      let autocomplete = ""
+      fetch("/api/autocomplete", {
+        method: "post",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({"prompt": editorContent})
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      autocomplete = data.answer
+        
+    }).finally(() => {
+
+      // editor destroy etc
+      editor
+      .chain()
+      .focus()
+      .deleteRange({from: range.from - 1, to: range.to})
+      .insertContent(autocomplete)
+      .run()
+
+    } 
+      )
+    }
+
+    getAutocomplete()
+
+    // .run();
   },
 
   items: ({ query }) => {
     return [
-      'This is the autocompleted sentence'
+      'Autocomplete Sentence'
     ].filter(item => item.toLowerCase().startsWith(query.toLowerCase())).slice(0, 5)
   },
 

@@ -48,7 +48,7 @@ async function getAnswer(question: string, isAutocomplete: boolean = false) {
     model: "text-davinci-003",
     prompt: questionPrompt,
     temperature: 1.0,
-    max_tokens: isAutocomplete ? 70 : 200,
+    max_tokens: isAutocomplete ? 20 :  50,
     
     stop: isAutocomplete ? "\n" : "10"
 
