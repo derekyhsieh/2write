@@ -34,6 +34,7 @@ import {
 } from "@tabler/icons";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { createEssay } from "../../../services/FirestoreHelpers";
 
 const mockdata = [
 	{
@@ -62,38 +63,9 @@ const mockdata = [
 	},
 ];
 
-const newDocumentArray = [
-	{
-		title: "Add document",
-		template: false,
-		onClickProps: undefined,
-		icon: <IconPlus />,
-	},
-	{
-		title: "Upload document",
-		template: false,
-		onClickProps: "dropzone",
-		icon: <IconUpload />,
-	},
-	{
-		title: "Research Essay",
-		template: true,
-		onClickProps: "prompt",
-		icon: <IconNews />,
-	},
-	{
-		title: "Historical Essay",
-		template: true,
-		onClickProps: "prompt",
-		icon: <IconBuildingArch />,
-	},
-	{
-		title: "Argumentative Essay",
-		template: true,
-		onClickProps: "prompt",
-		icon: <IconExclamationMark />,
-	},
-];
+
+
+
 
 const useStyles = createStyles((theme) => ({
 	documentCard: {
@@ -146,9 +118,45 @@ const useStyles = createStyles((theme) => ({
 interface DocumentCardsProps {}
 
 export default function DocumentCards(props: {
+	createModalOnClick?: Function;
 	dropzoneModalOnClick?: Function;
 	promptModalOnClick?: Function;
 }) {
+
+
+	const newDocumentArray = [
+		{
+			title: "Add document",
+			template: false,
+			onClickProps: "create",
+			icon: <IconPlus />,
+		},
+		{
+			title: "Upload document",
+			template: false,
+			onClickProps: "dropzone",
+			icon: <IconUpload />,
+		},
+		{
+			title: "Research Essay",
+			template: true,
+			onClickProps: "prompt",
+			icon: <IconNews />,
+		},
+		{
+			title: "Historical Essay",
+			template: true,
+			onClickProps: "prompt",
+			icon: <IconBuildingArch />,
+		},
+		{
+			title: "Argumentative Essay",
+			template: true,
+			onClickProps: "prompt",
+			icon: <IconExclamationMark />,
+		},
+	];
+
 
 	const navigate = useNavigate()
 	const { classes } = useStyles();
@@ -246,10 +254,13 @@ export default function DocumentCards(props: {
 				newDocItem.template ? classes.templateCard : classes.addNewCard
 			}
 			onClick={
+
 				newDocItem.onClickProps
 					? newDocItem.onClickProps === "dropzone"
 						? props.dropzoneModalOnClick
-						: props.promptModalOnClick
+						:  newDocItem.onClickProps === "create" ? 
+							props.createModalOnClick : 
+							props.promptModalOnClick
 					: undefined
 			}
 		>

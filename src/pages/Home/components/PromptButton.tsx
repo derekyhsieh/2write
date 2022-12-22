@@ -13,6 +13,9 @@ import DocumentCards from "./DocumentCards";
 import HomeHeader from "./HomeHeader";
 import { useState } from "react";
 import { DropzoneButton } from "./DropzoneButton";
+import { createEssay } from "../../../services/FirestoreHelpers";
+import { UserAuth } from "../../../context/AuthContext";
+import { createSearchParams, useNavigate } from "react-router-dom";
 
 type Props = {
 	setIsActive: (active: boolean) => void;
@@ -39,17 +42,43 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export function CreatePromptModalContent({ setIsActive }: Props) {
+
+   const [essayPromptValue, setEssayPromptValue] = useState<string>("");
+   const navigate = useNavigate()
+   
+
+    const {user} = UserAuth()
+
+    const generateEssay = () => {
+
+       
+
+
+        const essayID = crypto.randomUUID()
+        const params = [
+            ['essayId', essayID],
+        ];
+        createEssay(user.uid, essayID, essayPromptValue === "" ? null : essayPromptValue).then(() => {
+            navigate({
+                pathname: '/compose',
+                search: `?${createSearchParams({essayId: essayID})}`
+            })
+        })
+
+    } 
+
     return (
             <Stack>
                 <Title size={"lg"} order={4} align="center">
-                    Enter your essay prompt below
+                    Enter your essay prompt below (optional)
                 </Title>
 
-                <PromptContainedInputs />
+                <PromptContainedInputs setEssayPromptValue={setEssayPromptValue} essayPromptValue={essayPromptValue}/>
 
                 <Button
                     onClick={() => {
-                        setIsActive(false);
+                        generateEssay()
+                        // setIsActive(false);
                     }}
                 >
                     Generate ✨
@@ -58,12 +87,19 @@ export function CreatePromptModalContent({ setIsActive }: Props) {
     );
 }
 
-function PromptContainedInputs() {
+type PromptContainedInputsProps = {
+    essayPromptValue: string;
+    setEssayPromptValue: (value: string) => void;
+}
+
+function PromptContainedInputs({setEssayPromptValue, essayPromptValue}: PromptContainedInputsProps) {
     const { classes } = useStyles();
 
     return (
         <div>
             <TextInput
+                value={essayPromptValue}
+                onChange={(event) => setEssayPromptValue(event.currentTarget.value)}
                 label="Enter the prompt for your essay"
                 placeholder="Why is 2Write the best app?"
                 classNames={classes}
