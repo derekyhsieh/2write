@@ -11,6 +11,7 @@ import { CreatePromptModalContent } from "./PromptButton";
 export default function HomePageContainer() {
 	const [dropzoneModalIsOpen, setDropzoneModalIsOpen] = useState(false);
 	const [promptModalIsOpen, setPromptModalIsOpen] = useState(false);
+	const [createModalIsOpen, setCreateModalIsOpen] = useState(false);
 	const theme = useMantineTheme();
 
 	return (
@@ -46,8 +47,25 @@ export default function HomePageContainer() {
 			>
 				<CreatePromptModalContent setIsActive={setPromptModalIsOpen} />
 			</Modal>
+
+			<Modal
+				opened={createModalIsOpen}
+				centered
+				onClose={() => setCreateModalIsOpen(false)}
+				// withCloseButton={false}
+				overlayColor={
+					theme.colorScheme === "dark"
+						? theme.colors.dark[9]
+						: theme.colors.gray[2]
+				}
+				overlayOpacity={0.55}
+				overlayBlur={3}
+			>
+				<CreatePromptModalContent setIsActive={setCreateModalIsOpen} />
+			</Modal>
 			<HomeHeader />
 			<DocumentCards
+				createModalOnClick={setCreateModalIsOpen}
 				dropzoneModalOnClick={setDropzoneModalIsOpen}
 				promptModalOnClick={setPromptModalIsOpen}
 			/>

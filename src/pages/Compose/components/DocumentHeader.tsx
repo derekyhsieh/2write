@@ -29,7 +29,7 @@ export default function DocumentHeader() {
                     <IconChevronLeft size={22} />
                 </ActionIcon>
                 <TextInput
-                    value={documentTitle}
+                    // value={documentTitle}
                     onChange={(event) => setDocumentTitle(event.currentTarget.value)}
                     placeholder="Essay Title"
                     variant="default"
