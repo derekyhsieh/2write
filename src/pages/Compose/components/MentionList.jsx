@@ -1,4 +1,6 @@
 import './MentionList.css'
+import { Loader } from '@mantine/core';
+
 
 import React, {
   forwardRef,
@@ -11,6 +13,7 @@ import React, {
 
 export const MentionList = forwardRef((props, ref) => {
   const [selectedIndex, setSelectedIndex] = useState(0)
+  const [isClicked, setIsClicked] = useState(false)
 
   const selectItem = index => {
     const item = props.items[index]
@@ -29,7 +32,11 @@ export const MentionList = forwardRef((props, ref) => {
   }
 
   const enterHandler = () => {
-    selectItem(selectedIndex)
+    if(isClicked == false) {
+      selectItem(selectedIndex)
+      setIsClicked(true)
+    } 
+    
   }
 
   useEffect(() => setSelectedIndex(0), [props.items])
@@ -55,20 +62,50 @@ export const MentionList = forwardRef((props, ref) => {
     },
   }))
 
-  return (
+  if(isClicked){
+
     <div className="items">
-      {props.items.length
-        ? props.items.map((item, index) => (
-          <button
-            className={`item ${index === selectedIndex ? 'is-selected' : ''}`}
-            key={index}
-            onClick={() => selectItem(index)}
-          >
-            {item}
-          </button>
-        ))
-        : <div className="item">No result</div>
+      <Loader/>
+    </div>
+    
+  }
+
+  return (
+
+
+    <div className="items">
+
+      {
+        isClicked ? (
+          <Loader/>
+        ) : (
+          <div>
+          {props.items.length
+            ? props.items.map((item, index) => (
+              <button
+                disabled={isClicked}
+                className={`item ${index === selectedIndex ? 'is-selected' : ''}`}
+                key={index}
+                onClick={() => {
+    
+                  if(!isClicked)  {
+                    selectItem(index)
+                    console.log("clicked!")
+                    setIsClicked(true)
+                  }
+                }
+              }
+              >
+                {item}
+              </button>
+            ))
+            : <div className="item">No result</div>
+          }
+          </div>
+        )
       }
+
+     
     </div>
   )
 })

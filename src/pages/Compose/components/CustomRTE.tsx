@@ -17,7 +17,10 @@ function AutocompleteIconButton() {
   const { editor } = useRichTextEditorContext();
   return (
     <RichTextEditor.Control
-      onClick={() => editor?.commands.insertContent(' /')}
+      onClick={() => {
+        editor?.commands.insertContent(' /')
+        editor?.view.dom.focus()
+      }}
       aria-label="AI autocomplete sentence"
       title="AI autocomplete"
     >
@@ -121,5 +124,4 @@ export default function CustomRTE() {
   );
 }
 
-const content = `
-`
+const content = `In the fifteenth and sixteenth centuries, European nations began to claim `

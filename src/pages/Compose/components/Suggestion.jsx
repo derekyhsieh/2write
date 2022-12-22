@@ -2,18 +2,51 @@ import { ReactRenderer } from '@tiptap/react'
 import tippy from 'tippy.js'
 
 import { MentionList } from './MentionList'
+import {convertEditorJSONToPlainText} from "../../../utils/ExtractEditorJSON"
+// import { useFetch } from "../../hooks/useFetch";
 
 export default {
 
   char: "/",
   startOfLine: false,
   command: ({ editor, range, props }) => {
-    props.command({ editor, range });
+    // props.command({ editor, range });
+
+     function getAutocomplete()  {
+
+      const editorContent = convertEditorJSONToPlainText(editor.getJSON(), range)
+
+      let autocomplete = ""
+      fetch("/api/autocomplete", {
+        method: "post",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({"prompt": editorContent})
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      autocomplete = data.answer
+        
+    }).finally(() => {
+
+      editor
+      .chain()
+      .focus()
+      .deleteRange({from: range.from - 1, to: range.to})
+      .insertContent(`${autocomplete}`)
+      .run()
+
+    } 
+      )
+    }
+
+    getAutocomplete()
+
+    // .run();
   },
 
   items: ({ query }) => {
     return [
-      'This is the autocompleted sentence', 'This is the second autocompleted sentence',
+      'Autocomplete Sentence'
     ].filter(item => item.toLowerCase().startsWith(query.toLowerCase())).slice(0, 5)
   },
 

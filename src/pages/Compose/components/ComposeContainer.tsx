@@ -16,7 +16,9 @@ import CustomRTE from "./CustomRTE";
 import DocumentHeader from "./DocumentHeader";
 import Notepad from "./Notepad";
 
-export default function ComposeContainer() {
+export default function ComposeContainer() {  
+
+
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
   return (
@@ -35,7 +37,7 @@ export default function ComposeContainer() {
         navbar={<NavbarMini />}
         aside={
           <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
-            <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 300, lg: 500 }}>
+            <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 300, md: 350, lg: 400 }}>
               <Notepad/>
             </Aside>
           </MediaQuery>

@@ -2,9 +2,9 @@ import { Button, Group, Stack, Title, Modal, useMantineTheme, Center, Text, Text
 
 import { useState, Dispatch, SetStateAction } from 'react';
 
-import { RichTextEditor } from '@mantine/tiptap';
-import { useEditor } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
+import { RichTextEditor } from "@mantine/rte"
+import "./NotepadEditor.css"
+
 
 
 
@@ -15,15 +15,10 @@ export default function Notepad() {
         `
     <h3 style="text-align: center">Welcome to the AI Notepad ✨</h3>
     <p style="text-align: center">Brainstorm essay outlines with the integrated <strong>Create Outline</strong> button or jot down any notes here!</p>
-    <ul><li><p>Paste links here to populate your essay works cited page ✅</p></li><li><p>Include references and images for later ✅</p></li><li><p>General text formatting: <strong>bold</strong>, <em>italic</em>, underline, <s>strike-through</s> ✅</p></li><li><p>Ordered </p><ul><li><p>and bullet lists ✅</p></li></ul></li></ul>
+    <ul><li><p>Paste links here to populate your essay works cited page ✅</p></li><li><p>Include references and images for later ✅</p></li><li><p>General text formatting: <strong>bold</strong>, <em>italic</em>, underline, <s>strike-through</s> ✅</p><p>Ordered and bullet lists ✅</p></li></ul></li></ul>
     `
 
-    const editor = useEditor({
-        extensions: [
-            StarterKit,
-        ],
-        content,
-    });
+
 
     return (
         <>
@@ -50,9 +45,11 @@ export default function Notepad() {
 
                 </Group>
 
-                <RichTextEditor editor={editor}>
-                    <RichTextEditor.Content />
-                </RichTextEditor>
+                <RichTextEditor value={content} controls={[
+                    ['bold', 'italic', 'underline', 'link', 'image'],
+                    
+                ]} id="rte" />
+
             </Group>
         </>
     );
@@ -61,42 +58,42 @@ export default function Notepad() {
 
 const useStyles = createStyles((theme) => ({
     root: {
-      position: 'relative',
+        position: 'relative',
     },
-  
+
     input: {
-      height: 'auto',
-      paddingTop: 18,
+        height: 'auto',
+        paddingTop: 18,
     },
-  
+
     label: {
-      position: 'absolute',
-      pointerEvents: 'none',
-      fontSize: theme.fontSizes.xs,
-      paddingLeft: theme.spacing.sm,
-      paddingTop: theme.spacing.sm / 2,
-      zIndex: 1,
+        position: 'absolute',
+        pointerEvents: 'none',
+        fontSize: theme.fontSizes.xs,
+        paddingLeft: theme.spacing.sm,
+        paddingTop: theme.spacing.sm / 2,
+        zIndex: 1,
     },
-  }));
+}));
 
-  type Props = {
+type Props = {
     setIsActive: (active: boolean) => void;
- }
+}
 
 
 
-function CreateOutlineModalContent({setIsActive}: Props) {
+function CreateOutlineModalContent({ setIsActive }: Props) {
     return (
         <Center>
             <Stack>
                 <Title size={"lg"} order={4}>Oops, you forgot to include your essay prompt!</Title>
 
-            <ContainedInputs/>
+                <ContainedInputs />
 
 
-            <Button onClick={() => {setIsActive(false)}}>
-                Generate ✨
-            </Button>
+                <Button onClick={() => { setIsActive(false) }}>
+                    Generate ✨
+                </Button>
 
             </Stack>
         </Center>
@@ -108,20 +105,20 @@ function CreateOutlineModalContent({setIsActive}: Props) {
 function ContainedInputs() {
     // You can add these classes as classNames to any Mantine input, it will work the same
     const { classes } = useStyles();
-  
+
     return (
-      <div>
-        <TextInput label="Enter the prompt for your essay" placeholder="Why is 2Write the best app?" classNames={classes} />
-  
-        <Select
-          style={{ marginTop: 20, zIndex: 2 }}
-          data={['Research Essay', 'Historical Essay', 'Argumentative Essay', 'Reflection Essay', 'Other']}
-          placeholder="Argumentative Essay"
-          label="Pick which category your essay best fits under"
-          classNames={classes}
-        />
-  
-       
-      </div>
+        <div>
+            <TextInput label="Enter the prompt for your essay" placeholder="Why is 2Write the best app?" classNames={classes} />
+
+            <Select
+                style={{ marginTop: 20, zIndex: 2 }}
+                data={['Research Essay', 'Historical Essay', 'Argumentative Essay', 'Reflection Essay', 'Other']}
+                placeholder="Argumentative Essay"
+                label="Pick which category your essay best fits under"
+                classNames={classes}
+            />
+
+
+        </div>
     );
-  }
+}
