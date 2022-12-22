@@ -8,12 +8,18 @@ export default {
   char: "/",
   startOfLine: false,
   command: ({ editor, range, props }) => {
-    props.command({ editor, range });
+    // props.command({ editor, range });
+    editor
+    .chain()
+    .focus()
+    .deleteRange(range)
+    .insertContent('This is the autocompleted sentence')
+    .run();
   },
 
   items: ({ query }) => {
     return [
-      'This is the autocompleted sentence', 'This is the second autocompleted sentence',
+      'This is the autocompleted sentence'
     ].filter(item => item.toLowerCase().startsWith(query.toLowerCase())).slice(0, 5)
   },
 
