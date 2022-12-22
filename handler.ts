@@ -15,7 +15,18 @@ app.post("/api/outline", (req, res) => {
 });
 
 app.post("/api/autocomplete", (req, res) => {
+
   // {"prompt": "In the fifteenth and sixteenth centuries, European nations began to claim "}
+
+  if(req.body.prompt.length < 1) {
+    res.status(200).json({
+      error: "Autocomplete sentence must be longer",
+      answer: ""
+    })
+    return
+  }
+
+
   getAnswer(req.body.prompt, true).then((answerString) => {
     res.status(200).json({answer: answerString})
   })

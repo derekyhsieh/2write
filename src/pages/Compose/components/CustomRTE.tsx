@@ -17,7 +17,10 @@ function AutocompleteIconButton() {
   const { editor } = useRichTextEditorContext();
   return (
     <RichTextEditor.Control
-      onClick={() => editor?.commands.insertContent(' /')}
+      onClick={() => {
+        editor?.commands.insertContent(' /')
+        editor?.view.dom.focus()
+      }}
       aria-label="AI autocomplete sentence"
       title="AI autocomplete"
     >

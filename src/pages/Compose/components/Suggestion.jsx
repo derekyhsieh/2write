@@ -2,7 +2,7 @@ import { ReactRenderer } from '@tiptap/react'
 import tippy from 'tippy.js'
 
 import { MentionList } from './MentionList'
-import {cleanForAutocomplete, removeEmptyParagraphs} from "../../../utils/ExtractHTML"
+import {convertEditorJSONToPlainText} from "../../../utils/ExtractEditorJSON"
 // import { useFetch } from "../../hooks/useFetch";
 
 export default {
@@ -13,11 +13,8 @@ export default {
     // props.command({ editor, range });
 
      function getAutocomplete()  {
-      console.log(editor.getJSON())
 
-      const editorContent = cleanForAutocomplete(editor.getHTML(), range)
-      // range 75 to 76
-      console.log(cleanForAutocomplete(editor.getHTML(), range))
+      const editorContent = convertEditorJSONToPlainText(editor.getJSON(), range)
 
       let autocomplete = ""
       fetch("/api/autocomplete", {
@@ -31,12 +28,11 @@ export default {
         
     }).finally(() => {
 
-      // editor destroy etc
       editor
       .chain()
       .focus()
       .deleteRange({from: range.from - 1, to: range.to})
-      .insertContent(autocomplete)
+      .insertContent(`${autocomplete}`)
       .run()
 
     } 
