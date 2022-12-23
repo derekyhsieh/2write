@@ -6,6 +6,7 @@ import {
   doc,
   setDoc,
   getDoc,
+  getDocs,
 } from "firebase/firestore";
 import { db } from "./firebase";
 import { convertEditorJSONToPlainText } from "../utils/ExtractEditorJSON";
@@ -44,9 +45,30 @@ const loadEssay = async (userID: string, essayID: string) => {
 
 }
 
+const loadEssayList = async (userID: string) => {
+    const essayListRef = collection(db, "users", userID, "essays")
+
+    const essayListSnap = await getDocs(essayListRef)
+    // Get list of document IDs in the essay collection
+    const essayIds = essayListSnap.docs.map(doc => doc.id)
+    const essayList = essayListSnap.docs.map(doc => doc.data())
+
+    console.log(essayList)
+
+    // loop to iterate through essayList and add essayID to each object
+    essayList.forEach((essay, index) => {
+        essay["essayId"] = essayIds[index]
+    })
+
+    console.log(essayList)
+
+    return essayList;
+
+}
+
 
 const createEssay = async (userID: string, essayID: string, essayPrompt?: string) => {
-    // generate essay ID with "crypto.randomUUID()" outside of this function
+    // generate essay ID with "uuidv4()" outside of this function
     
     const essayRef = doc(db, "users", userID, "essays", essayID);
 
@@ -68,4 +90,4 @@ const createEssay = async (userID: string, essayID: string, essayPrompt?: string
 
 
 
-export {saveEssay, createEssay, loadEssay}
+export {saveEssay, createEssay, loadEssay, loadEssayList}

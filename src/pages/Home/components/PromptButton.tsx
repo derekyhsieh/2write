@@ -16,6 +16,7 @@ import { DropzoneButton } from "./DropzoneButton";
 import { createEssay } from "../../../services/FirestoreHelpers";
 import { UserAuth } from "../../../context/AuthContext";
 import { createSearchParams, useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from 'uuid';
 
 type Props = {
 	setIsActive: (active: boolean) => void;
@@ -54,7 +55,7 @@ export function CreatePromptModalContent({ setIsActive }: Props) {
        
 
 
-        const essayID = crypto.randomUUID()
+        const essayID = uuidv4()
         const params = [
             ['essayId', essayID],
         ];
