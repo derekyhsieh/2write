@@ -157,7 +157,7 @@ export default function DocumentCards(props: {
 						onClick={() => {
 							navigate({
 								pathname: "/compose",
-								search: `?${createSearchParams({ essayId: essay.essayId, ...(!essay.title && { placeholder: (index + 1).toString() }) })}`,
+								search: `?${createSearchParams({ essayId: essay.essayId })}`,
 							});
 						}}
 					>
@@ -175,9 +175,7 @@ export default function DocumentCards(props: {
 						<Stack>
 							<Group mt="md" position="apart">
 								<Text className={classes.title} mt={5} lineClamp={1}>
-									{essay.title
-										? essay.title
-										: "Document ".concat((index + 1).toString())}
+									{essay.title ? essay.title : "Untitled Document"}
 								</Text>
 								<ActionIcon>
 									<IconDots />

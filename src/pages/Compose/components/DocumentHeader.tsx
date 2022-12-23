@@ -7,7 +7,7 @@ import { saveTitle, loadEssay } from "../../../services/FirestoreHelpers";
 import { useSearchParams } from "react-router-dom";
 
 export default function DocumentHeader({ localDocData }) {
-	const [documentTitle, setDocumentTitle] = useState("");
+	const [documentTitle, setDocumentTitle] = useState("Untitled Document");
 	const { user } = UserAuth();
     const [searchParams, setSearchParams] = useSearchParams();
 
@@ -19,7 +19,7 @@ export default function DocumentHeader({ localDocData }) {
 
     useEffect(() => {
         loadEssay(user.uid, searchParams.get("essayId")).then((doc) => {
-            setDocumentTitle(doc.title ? doc.title : "Document ".concat(searchParams.get("placeholder")));
+            setDocumentTitle(doc.title ? doc.title : "Untitled Document");
         });
     }, []);
 
