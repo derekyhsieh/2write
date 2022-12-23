@@ -32,9 +32,11 @@ import {
 	IconX,
 	IconDownload,
 } from "@tabler/icons";
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { createEssay } from "../../../services/FirestoreHelpers";
+import React, { useState, useEffect } from "react";
+import { createSearchParams, useNavigate } from "react-router-dom";
+import { createEssay, loadEssayList } from "../../../services/FirestoreHelpers";
+import { UserAuth } from "../../../context/AuthContext";
+import { v4 as uuidv4 } from "uuid";
 
 const mockdata = [
 	{
@@ -62,10 +64,6 @@ const mockdata = [
 		date: "November 12, 2020",
 	},
 ];
-
-
-
-
 
 const useStyles = createStyles((theme) => ({
 	documentCard: {
@@ -122,7 +120,67 @@ export default function DocumentCards(props: {
 	dropzoneModalOnClick?: Function;
 	promptModalOnClick?: Function;
 }) {
+	const [cards, setCards] = useState([<></>]);
 
+	const { user } = UserAuth();
+
+	useEffect(() => {
+		loadEssayList(user.uid).then((essayList) => {
+			setCards(
+				essayList.map((essay) => (
+					<Card
+						key={essay.essayId}
+						p="lg"
+						radius="lg"
+						component="a"
+						href="#"
+						withBorder
+						shadow={"sm"}
+						className={classes.documentCard}
+						onClick={() => {
+							navigate({
+								pathname: "/compose",
+								search: `?${createSearchParams({ essayId: essay.essayId })}`,
+							});
+						}}
+					>
+						<AspectRatio
+							ratio={1920 / 1080}
+							dangerouslySetInnerHTML={{ __html: essay.content }}
+						>
+							{/* <Image
+ 							radius="md"
+ 							src={
+ 								"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqwegyXlV-Wy1U1nCq-M02IQkGPo6ki4nxxp__sxKDKNnPjbtqLFSZtAyxqrlzx7lKR74&usqp=CAU"
+ 							}
+ 						/> */}
+						</AspectRatio>
+						<Stack>
+							<Group mt="md" position="apart">
+								<Text className={classes.title} mt={5} lineClamp={1}>
+									{essay.essayId}
+								</Text>
+								<ActionIcon>
+									<IconDots />
+								</ActionIcon>
+							</Group>
+							<Group>
+								<IconUsers stroke={"1.75"} />
+								<Text
+									color="dimmed"
+									size="xs"
+									transform="uppercase"
+									weight={700}
+								>
+									Shared with 2 groups
+								</Text>
+							</Group>
+						</Stack>
+					</Card>
+				))
+			);
+		});
+	}, []);
 
 	const newDocumentArray = [
 		{
@@ -157,47 +215,10 @@ export default function DocumentCards(props: {
 		},
 	];
 
-
-	const navigate = useNavigate()
+	const navigate = useNavigate();
 	const { classes } = useStyles();
 	const [ownerFilter, setOwnerFilter] = useState("Owned by anyone");
 	const [ageFilter, setAgeFilter] = useState("Newest");
-
-	const cards = mockdata.map((article) => (
-		<Card
-			key={article.title}
-			p="lg"
-			radius="lg"
-			component="a"
-			href="#"
-			withBorder
-			shadow={"sm"}
-			className={classes.documentCard}
-			onClick={() => {
-			navigate("/compose")	
-			}} 
-		>
-			<AspectRatio ratio={1920 / 1080}>
-				<Image radius="md" src={article.image} />
-			</AspectRatio>
-			<Stack>
-				<Group mt="md" position="apart">
-					<Text className={classes.title} mt={5} lineClamp={1}>
-						{article.title}
-					</Text>
-					<ActionIcon>
-						<IconDots />
-					</ActionIcon>
-				</Group>
-				<Group>
-					<IconUsers stroke={"1.75"} />
-					<Text color="dimmed" size="xs" transform="uppercase" weight={700}>
-						Shared with 2 groups
-					</Text>
-				</Group>
-			</Stack>
-		</Card>
-	));
 
 	const TemplateCard = (props: {
 		children:
@@ -215,7 +236,7 @@ export default function DocumentCards(props: {
 	}) => {
 		return (
 			<Card
-				key={"add"}
+				key={uuidv4()}
 				p="lg"
 				radius="lg"
 				component="a"
@@ -254,13 +275,12 @@ export default function DocumentCards(props: {
 				newDocItem.template ? classes.templateCard : classes.addNewCard
 			}
 			onClick={
-
 				newDocItem.onClickProps
 					? newDocItem.onClickProps === "dropzone"
 						? props.dropzoneModalOnClick
-						:  newDocItem.onClickProps === "create" ? 
-							props.createModalOnClick : 
-							props.promptModalOnClick
+						: newDocItem.onClickProps === "create"
+						? props.createModalOnClick
+						: props.promptModalOnClick
 					: undefined
 			}
 		>
