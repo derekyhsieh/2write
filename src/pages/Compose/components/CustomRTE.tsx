@@ -147,7 +147,6 @@ export default function CustomRTE({localDocData, setLocalDocData}) {
     <RichTextEditor
       styles={{
         root: { minHeight: "100%", backgroundColor: "#fff" },
-        content: { backgroundColor: "green" },
       }}
       editor={editor}
     >

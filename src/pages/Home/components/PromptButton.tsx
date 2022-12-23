@@ -16,6 +16,7 @@ import { DropzoneButton } from "./DropzoneButton";
 import { createEssay } from "../../../services/FirestoreHelpers";
 import { UserAuth } from "../../../context/AuthContext";
 import { createSearchParams, useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
 
 type Props = {
 	setIsActive: (active: boolean) => void;
@@ -42,68 +43,69 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export function CreatePromptModalContent({ setIsActive }: Props) {
+	const [essayPromptValue, setEssayPromptValue] = useState<string>("");
+	const navigate = useNavigate();
 
-   const [essayPromptValue, setEssayPromptValue] = useState<string>("");
-   const navigate = useNavigate()
-   
+	const { user } = UserAuth();
 
-    const {user} = UserAuth()
+	const generateEssay = () => {
+		const essayID = uuidv4();
+		const params = [["essayId", essayID]];
+		createEssay(
+			user.uid,
+			essayID,
+			essayPromptValue === "" ? null : essayPromptValue
+		).then(() => {
+			navigate({
+				pathname: "/compose",
+				search: `?${createSearchParams({ essayId: essayID })}`,
+			});
+		});
+	};
 
-    const generateEssay = () => {
+	return (
+		<Stack>
+			<Title size={"lg"} order={4} align="center">
+				Enter your essay prompt below (optional)
+			</Title>
 
-       
+			<PromptContainedInputs
+				setEssayPromptValue={setEssayPromptValue}
+				essayPromptValue={essayPromptValue}
+			/>
 
-
-        const essayID = crypto.randomUUID()
-        const params = [
-            ['essayId', essayID],
-        ];
-        createEssay(user.uid, essayID, essayPromptValue === "" ? null : essayPromptValue).then(() => {
-            navigate({
-                pathname: '/compose',
-                search: `?${createSearchParams({essayId: essayID})}`
-            })
-        })
-
-    } 
-
-    return (
-            <Stack>
-                <Title size={"lg"} order={4} align="center">
-                    Enter your essay prompt below (optional)
-                </Title>
-
-                <PromptContainedInputs setEssayPromptValue={setEssayPromptValue} essayPromptValue={essayPromptValue}/>
-
-                <Button
-                    onClick={() => {
-                        generateEssay()
-                        // setIsActive(false);
-                    }}
-                >
-                    Generate ✨
-                </Button>
-            </Stack>
-    );
+			<Button
+				onClick={() => {
+					generateEssay();
+					// setIsActive(false);
+				}}
+			>
+				Generate ✨
+			</Button>
+		</Stack>
+	);
 }
 
 type PromptContainedInputsProps = {
-    essayPromptValue: string;
-    setEssayPromptValue: (value: string) => void;
-}
+	essayPromptValue: string;
+	setEssayPromptValue: (value: string) => void;
+};
 
-function PromptContainedInputs({setEssayPromptValue, essayPromptValue}: PromptContainedInputsProps) {
-    const { classes } = useStyles();
+function PromptContainedInputs({
+	setEssayPromptValue,
+	essayPromptValue,
+}: PromptContainedInputsProps) {
+	const { classes } = useStyles();
 
-    return (
-        <div>
-            <TextInput
-                value={essayPromptValue}
-                onChange={(event) => setEssayPromptValue(event.currentTarget.value)}
-                label="Enter the prompt for your essay"
-                placeholder="Why is 2Write the best app?"
-                classNames={classes}
-            />
-        </div>
-    );
+	return (
+		<div>
+			<TextInput
+				value={essayPromptValue}
+				onChange={(event) => setEssayPromptValue(event.currentTarget.value)}
+				label="Enter the prompt for your essay"
+				placeholder="Why is 2Write the best app?"
+				classNames={classes}
+			/>
+		</div>
+	);
 }
