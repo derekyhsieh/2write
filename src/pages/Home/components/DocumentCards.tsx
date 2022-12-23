@@ -18,6 +18,7 @@ import {
 	MediaQuery,
 	Modal,
 	useMantineTheme,
+	Loader,
 } from "@mantine/core";
 import {
 	IconDots,
@@ -120,14 +121,27 @@ export default function DocumentCards(props: {
 	dropzoneModalOnClick?: Function;
 	promptModalOnClick?: Function;
 }) {
-	const [cards, setCards] = useState([<></>]);
+	const [cards, setCards] = useState([]);
+	const navigate = useNavigate();
+	const { classes } = useStyles();
+	const [ownerFilter, setOwnerFilter] = useState("Owned by anyone");
+	const [ageFilter, setAgeFilter] = useState("Newest");
 
 	const { user } = UserAuth();
 
 	useEffect(() => {
 		loadEssayList(user.uid).then((essayList) => {
 			// sort essays by last edit and store in new array called sortedEssayList
-			let sortedEssayList = essayList.sort((a, b) => b.lastEdit.toMillis() - a.lastEdit.toMillis())
+			let sortedEssayList =
+				ageFilter === "Newest"
+					? essayList.sort(
+							(a, b) => b.lastEdit.toMillis() - a.lastEdit.toMillis()
+					  )
+					: essayList.sort(
+							(a, b) => a.lastEdit.toMillis() - b.lastEdit.toMillis()
+					  );
+
+			console.log(user.uid);
 
 			setCards(
 				sortedEssayList.map((essay, index) => (
@@ -143,7 +157,7 @@ export default function DocumentCards(props: {
 						onClick={() => {
 							navigate({
 								pathname: "/compose",
-								search: `?${createSearchParams({ essayId: essay.essayId })}`,
+								search: `?${createSearchParams({ essayId: essay.essayId, ...(!essay.title && { placeholder: (index + 1).toString() }) })}`,
 							});
 						}}
 					>
@@ -161,7 +175,9 @@ export default function DocumentCards(props: {
 						<Stack>
 							<Group mt="md" position="apart">
 								<Text className={classes.title} mt={5} lineClamp={1}>
-									{essay.title ? essay.title : "Document ".concat((index + 1).toString())}
+									{essay.title
+										? essay.title
+										: "Document ".concat((index + 1).toString())}
 								</Text>
 								<ActionIcon>
 									<IconDots />
@@ -183,7 +199,7 @@ export default function DocumentCards(props: {
 				))
 			);
 		});
-	}, []);
+	}, [ageFilter, ownerFilter]);
 
 	const newDocumentArray = [
 		{
@@ -217,11 +233,6 @@ export default function DocumentCards(props: {
 			icon: <IconExclamationMark />,
 		},
 	];
-
-	const navigate = useNavigate();
-	const { classes } = useStyles();
-	const [ownerFilter, setOwnerFilter] = useState("Owned by anyone");
-	const [ageFilter, setAgeFilter] = useState("Newest");
 
 	const TemplateCard = (props: {
 		children:
@@ -341,13 +352,19 @@ export default function DocumentCards(props: {
 							</Menu.Dropdown>
 						</Menu>
 					</Group>
-					<SimpleGrid
-						cols={3}
-						breakpoints={[{ maxWidth: "sm", cols: 1 }]}
-						mb="xl"
-					>
-						{cards}
-					</SimpleGrid>
+					{cards.length === 0 ? (
+						<Center>
+							<Loader />
+						</Center>
+					) : (
+						<SimpleGrid
+							cols={3}
+							breakpoints={[{ maxWidth: "sm", cols: 1 }]}
+							mb="xl"
+						>
+							{cards}
+						</SimpleGrid>
+					)}
 				</Stack>
 			</Container>
 		</>

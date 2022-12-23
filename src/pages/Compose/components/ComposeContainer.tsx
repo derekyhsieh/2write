@@ -36,6 +36,7 @@ export default function ComposeContainer() {
       seconds: number,
       nanoseconds: number
     },
+    title?: string,
   }>(
     {content: "", timestamp: {seconds: 0, nanoseconds: 0}
   }
