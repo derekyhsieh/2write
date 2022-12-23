@@ -1,11 +1,15 @@
 import { Button, Group, Stack, Title, Modal, useMantineTheme, Center, Text, TextInput, Select, createStyles } from '@mantine/core';
 
-import { useState, Dispatch, SetStateAction } from 'react';
+import { useState, Dispatch, SetStateAction, useEffect } from 'react';
 import { convertStringIntoHTML } from '../../../utils/CleanHTML';
 
 import { RichTextEditor } from "@mantine/rte"
 import "./NotepadEditor.css"
 import { useFetch } from '../../../hooks/useFetch';
+import { useDebounce } from "use-debounce";
+import { useSearchParams } from 'react-router-dom';
+import { saveNotepad } from '../../../services/FirestoreHelpers';
+import { UserAuth } from '../../../context/AuthContext';
 
 
 
@@ -18,14 +22,34 @@ export default function Notepad(localDocData) {
     const theme = useMantineTheme()
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const content =
-    `
+    const [searchParams] = useSearchParams()
+    const content = searchParams.get("isNewDoc") == "true" ? `
     <h3 style="text-align: center">Welcome to the AI Notepad ✨</h3>
     <p style="text-align: center">Brainstorm essay outlines with the integrated <strong>Create Outline</strong> button or jot down any notes here!</p>
-    <ul><li><p>Paste links here to populate your essay works cited page ✅</p></li><li><p>Include references and images for later ✅</p></li><li><p>General text formatting: <strong>bold</strong>, <em>italic</em>, underline, <s>strike-through</s> ✅</p><p>Ordered and bullet lists ✅</p></li></ul></li></ul>
-    `
+    <ul><li><p>Paste links here to populate your essay works cited page ✅</p></li><li><p>Include references and images for later ✅</p></li><li><p>General text formatting: <strong>bold</strong>, <em>italic</em>, underline, <s>strike-through</s> ✅</p><p>Ordered and bullet lists ✅</p></li></ul></li></ul>`
+    : ''
+
 
     const [editorValue, setEditorValue] = useState(content)
+    const [debouncedEditor] = useDebounce(editorValue, 8000)
+
+    const {user} = UserAuth()
+
+    useEffect(() => {
+
+        if(editorValue !== '') {
+            saveNotepad(user.uid, searchParams.get("essayId"), debouncedEditor)
+        }
+
+
+    }, [debouncedEditor])
+
+
+    useEffect(() => {
+
+        setEditorValue(localDocData.localDocData.notepad)
+
+    }, [localDocData])
 
     const handleCreateOutline = () => {
         const data = localDocData
@@ -97,7 +121,7 @@ export default function Notepad(localDocData) {
                 <RichTextEditor value={editorValue} controls={[
                     ['bold', 'italic', 'underline', 'link', 'image'],
                     
-                ]} id="rte" />
+                ]} id="rte"/>
 
             </Group>
         </>

@@ -86,4 +86,19 @@ const createEssay = async (
 	}
 };
 
-export { saveEssay, createEssay, loadEssay, loadEssayList };
+
+const saveNotepad = async (userID: string, essayID: string, notepadContent: string) => {
+
+	const essayRef = doc(db, "users", userID, "essays", essayID);
+
+	try {
+		await updateDoc(essayRef, {
+			notepad: notepadContent
+		})
+	} catch (error) {
+		console.log(error)
+	}
+
+}
+
+export { saveEssay, createEssay, loadEssay, loadEssayList, saveNotepad };

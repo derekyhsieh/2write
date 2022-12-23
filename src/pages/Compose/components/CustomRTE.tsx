@@ -70,6 +70,7 @@ export default function CustomRTE({localDocData, setLocalDocData}) {
       loadEssay(user.uid, searchParams.get("essayId")).then((doc) => {
         // neeed to set intial content so debouncer isn't called on first load
         setInitialContent(doc.content)
+        console.log({...doc})
         setLocalDocData({...doc})
         editor.commands.setContent(doc.content)
       })
