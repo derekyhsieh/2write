@@ -17,7 +17,7 @@ import { convertEditorJSONToPlainText } from "../utils/ExtractEditorJSON";
 const saveEssay = async (
 	docContent: string,
 	userID: string,
-	essayID: string
+	essayID: string,
 ) => {
 	// creating document ref
 
@@ -31,6 +31,18 @@ const saveEssay = async (
 		console.log(error);
 	}
 };
+
+const saveTitle = async (userID: string, essayID: string, title: string) => {
+	const essayRef = doc(db, "users", userID, "essays", essayID);
+
+	try {
+		await updateDoc(essayRef, {
+			title: title,
+		});
+	} catch (error) {
+		console.log(error);
+	}
+}
 
 const loadEssay = async (userID: string, essayID: string) => {
 	const essayRef = doc(db, "users", userID, "essays", essayID);
@@ -97,4 +109,4 @@ const saveNotepad = async (userID: string, essayID: string, notepadContent: stri
 
 }
 
-export { saveEssay, createEssay, loadEssay, loadEssayList, saveNotepad };
+export { saveEssay, createEssay, loadEssay, loadEssayList, saveNotepad, saveTitle };

@@ -52,7 +52,7 @@ export default function HomePageContainer() {
 				opened={createModalIsOpen}
 				centered
 				onClose={() => setCreateModalIsOpen(false)}
-				// withCloseButton={false}
+				withCloseButton={false}
 				overlayColor={
 					theme.colorScheme === "dark"
 						? theme.colors.dark[9]
