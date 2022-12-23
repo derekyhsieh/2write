@@ -18,9 +18,29 @@ import Notepad from "./Notepad";
 
 export default function ComposeContainer() {  
 
+  
+
 
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
+  // document metadata
+  const [localDocData, setLocalDocData] = useState<
+  {
+    content: string,
+    essayPrompt?: string,
+    timestamp: {
+      seconds: number, 
+      nanoseconds: number
+    }, 
+    lastEdit?: {
+      seconds: number,
+      nanoseconds: number
+    },
+  }>(
+    {content: "", timestamp: {seconds: 0, nanoseconds: 0}
+  }
+  )
+
   return (
     <div>
       <AppShell
@@ -38,17 +58,17 @@ export default function ComposeContainer() {
         aside={
           <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
             <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 300, md: 350, lg: 400 }}>
-              <Notepad/>
+              <Notepad localDocData={localDocData}/>
             </Aside>
           </MediaQuery>
         }
         header={
           <Header height={{ base: 50, md: 70 }} p="md">
-              <DocumentHeader/>
+              <DocumentHeader localDocData={localDocData}/>
           </Header>
         }
       >
-        <CustomRTE/>
+        <CustomRTE localDocData={localDocData} setLocalDocData={setLocalDocData}/>
       </AppShell>
     </div>
   );

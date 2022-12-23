@@ -1,22 +1,71 @@
 import { Button, Group, Stack, Title, Modal, useMantineTheme, Center, Text, TextInput, Select, createStyles } from '@mantine/core';
 
 import { useState, Dispatch, SetStateAction } from 'react';
+import { convertStringIntoHTML } from '../../../utils/CleanHTML';
 
 import { RichTextEditor } from "@mantine/rte"
 import "./NotepadEditor.css"
+import { useFetch } from '../../../hooks/useFetch';
 
 
 
+type NotepadProps = {
+    localDocData: any
+}
 
-export default function Notepad() {
+
+export default function Notepad(localDocData) {
     const theme = useMantineTheme()
     const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const content =
-        `
+    `
     <h3 style="text-align: center">Welcome to the AI Notepad ✨</h3>
     <p style="text-align: center">Brainstorm essay outlines with the integrated <strong>Create Outline</strong> button or jot down any notes here!</p>
     <ul><li><p>Paste links here to populate your essay works cited page ✅</p></li><li><p>Include references and images for later ✅</p></li><li><p>General text formatting: <strong>bold</strong>, <em>italic</em>, underline, <s>strike-through</s> ✅</p><p>Ordered and bullet lists ✅</p></li></ul></li></ul>
     `
+
+    const [editorValue, setEditorValue] = useState(content)
+
+    const handleCreateOutline = () => {
+        const data = localDocData
+
+
+
+
+        
+
+        if(data.localDocData.hasOwnProperty('essayPrompt')) {
+            // fetch outline 
+            const prompt = data.localDocData.essayPrompt
+
+            setIsLoading(true)
+
+            fetch("/api/outline", {
+                method: "post",
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({"prompt": prompt}),
+            })
+            .then((res) => res.json())
+            .then((returnedData) => {
+
+                const cleanedHTML = convertStringIntoHTML(returnedData.answer)
+                setEditorValue(`<h3>AI Outline</h3> <p>${cleanedHTML}</p>`)
+                
+            }).finally(() => {
+
+                setIsLoading(false)
+
+            })
+
+
+
+        } else {
+            setModalIsOpen(true)
+        }
+
+
+    }
 
 
 
@@ -41,11 +90,11 @@ export default function Notepad() {
 
                     <Title order={2}>Notepad</Title>
 
-                    <Button onClick={(() => setModalIsOpen(true))} radius="md" size="sm">Create Outline</Button>
+                    <Button loading={isLoading} onClick={handleCreateOutline} radius="md" size="sm">Create Outline</Button>
 
                 </Group>
 
-                <RichTextEditor value={content} controls={[
+                <RichTextEditor value={editorValue} controls={[
                     ['bold', 'italic', 'underline', 'link', 'image'],
                     
                 ]} id="rte" />

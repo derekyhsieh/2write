@@ -57,7 +57,6 @@
     "react-router-dom": "^6.4.5",
     "tippy.js": "^6.3.7",
     "use-debounce": "^9.0.2",
-    "uuid": "^9.0.0",
     "vite-plugin-externals": "^0.5.1"
   },
   "devDependencies": {
