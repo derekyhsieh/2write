@@ -3,8 +3,9 @@ import { useState } from "react"
 import { IconChevronLeft, IconUser } from "@tabler/icons"
 import { useNavigate } from "react-router-dom"
 
-export default function DocumentHeader() {
+export default function DocumentHeader({localDocData}) {
     const [documentTitle, setDocumentTitle] = useState("Document #2")
+    
     const navigate = useNavigate()
 
     const navigateToHome = () => {

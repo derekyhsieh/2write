@@ -41,9 +41,8 @@ function AutocompleteIconButton() {
   );
 }
 
-export default function CustomRTE() {
+export default function CustomRTE({localDocData, setLocalDocData}) {
   // has data on timestamp etc 
-  const [clientDocData, setClientDocData] = useState(null);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const [initalContent, setInitialContent] = useState("");
@@ -71,19 +70,14 @@ export default function CustomRTE() {
       loadEssay(user.uid, searchParams.get("essayId")).then((doc) => {
         // neeed to set intial content so debouncer isn't called on first load
         setInitialContent(doc.content)
-        setClientDocData(doc)
+        setLocalDocData({...doc})
         editor.commands.setContent(doc.content)
       })
     },
+
   });
 
-  // editor.on("create", ({editor}) => {
-  //   console.log("created")
-  //   loadEssay(user.uid, searchParams.get("essayId")).then((doc) => {
-  //     // editor.commands.setContent("<p>Hello world can you save this</p>");
 
-  //   });
-  // })
 
   const [debouncedEditor] = useDebounce(editor?.state.doc.content, 3000);
 
