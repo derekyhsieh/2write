@@ -126,8 +126,11 @@ export default function DocumentCards(props: {
 
 	useEffect(() => {
 		loadEssayList(user.uid).then((essayList) => {
+			// sort essays by last edit and store in new array called sortedEssayList
+			let sortedEssayList = essayList.sort((a, b) => b.lastEdit.toMillis() - a.lastEdit.toMillis())
+
 			setCards(
-				essayList.map((essay) => (
+				sortedEssayList.map((essay, index) => (
 					<Card
 						key={essay.essayId}
 						p="lg"
@@ -158,7 +161,7 @@ export default function DocumentCards(props: {
 						<Stack>
 							<Group mt="md" position="apart">
 								<Text className={classes.title} mt={5} lineClamp={1}>
-									{essay.essayId}
+									{essay.title ? essay.title : "Document ".concat((index + 1).toString())}
 								</Text>
 								<ActionIcon>
 									<IconDots />
