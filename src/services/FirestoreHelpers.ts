@@ -53,14 +53,10 @@ const loadEssayList = async (userID: string) => {
 	const essayIds = essayListSnap.docs.map((doc) => doc.id);
 	const essayList = essayListSnap.docs.map((doc) => doc.data());
 
-	console.log(essayList);
-
 	// loop to iterate through essayList and add essayID to each object
 	essayList.forEach((essay, index) => {
 		essay["essayId"] = essayIds[index];
 	});
-
-	console.log(essayList);
 
 	return essayList;
 };
