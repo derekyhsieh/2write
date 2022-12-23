@@ -58,7 +58,7 @@ export function CreatePromptModalContent({ setIsActive }: Props) {
 		).then(() => {
 			navigate({
 				pathname: "/compose",
-				search: `?${createSearchParams({ essayId: essayID, isNewDoc: "true" })}`,
+				search: `?${createSearchParams({ essayId: essayID, isNewDoc: "true", placeholder: "1" })}`,
 			});
 		});
 	};
