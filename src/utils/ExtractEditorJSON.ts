@@ -63,19 +63,25 @@ function convertEditorJSONToPlainText(doc: DocumentJSON, range: IRange) {
 
     doc.content.forEach((content) => {
         if(content.type == "paragraph" && content.content[0].hasOwnProperty("text"))  {
-            for(const c of content.content[0].text) {
-                if(indexCounter < startIndex) {
-                text += c
-                indexCounter += 1
-                } else {
-
-                    console.log(returnOnlyParagraphUserIsTypingIn(text))
-
-
-
-                    return returnOnlyParagraphUserIsTypingIn(text)
+            // iterate through every content.content array element and add it to text
+            for(const cont of content.content) {
+                for(const c of cont.text) {
+                    if(indexCounter <= startIndex) {
+                    text += c
+                    indexCounter += 1
+                    } else {
+                        console.log(text)
+    
+                        console.log(returnOnlyParagraphUserIsTypingIn(text))
+    
+    
+    
+                        return returnOnlyParagraphUserIsTypingIn(text)
+                    }
                 }
             }
+
+         
 
         } else {
             text += "\n"
