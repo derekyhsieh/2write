@@ -11,6 +11,14 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { IconSearch, IconUser, IconBell } from "@tabler/icons";
 import { MantineLogo } from "@mantine/ds";
+import { loadEssayList } from "../../../services/FirestoreHelpers";
+import { UserAuth } from "../../../context/AuthContext";
+import React, { useEffect, useState } from "react";
+import {
+	getMonthName,
+	convertFirebaseTimestampToDate,
+} from "../../../utils/misc";
+import { createSearchParams, useNavigate } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
 	inner: {
@@ -31,8 +39,28 @@ const useStyles = createStyles((theme) => ({
 interface HomeHeaderProps {}
 
 export default function HomeHeader() {
+	const { user } = UserAuth();
 	const [opened, { toggle }] = useDisclosure(false);
 	const { classes } = useStyles();
+	const [searchQuery, setSearchQuery] = useState("");
+	const [essayTitleArray, setEssayTitleArray] = useState([]);
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		loadEssayList(user.uid).then((essayList) => {
+			let essaySearch = [];
+			essayList.map((essay) => {
+				const essayObject = {};
+				essayObject["value"] = essay.title ? essay.title : "Untitled Document";
+				essayObject["key"] = essay.essayId;
+				let essayDate = convertFirebaseTimestampToDate(essay.lastEdit);
+				essayObject["group"] =
+					getMonthName(essayDate.getMonth()) + " " + essayDate.getDate();
+				essaySearch.push(essayObject);
+			});
+			setEssayTitleArray(essaySearch);
+		});
+	}, []);
 
 	return (
 		<Header height={{ base: 50, md: 70 }} p="md">
@@ -43,19 +71,22 @@ export default function HomeHeader() {
 				</Group>
 
 				<Autocomplete
+					value={searchQuery}
 					radius={"md"}
+					onChange={(event: string) => {
+						setSearchQuery(event);
+					}}
 					className={classes.search}
 					placeholder="Search"
 					icon={<IconSearch size={16} stroke={1.5} />}
-					data={[
-						"React",
-						"Angular",
-						"Vue",
-						"Next.js",
-						"Riot.js",
-						"Svelte",
-						"MaterialUI",
-					]}
+					data={essayTitleArray}
+					limit={4}
+					onItemSubmit={(item) => {
+						navigate({
+							pathname: "/",
+							search: `?${createSearchParams({ searchQuery: item.value })}`,
+						});
+					}}
 				/>
 
 				<Group>
