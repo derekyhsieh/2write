@@ -141,8 +141,6 @@ export default function DocumentCards(props: {
 							(a, b) => a.lastEdit.toMillis() - b.lastEdit.toMillis()
 					  );
 
-			console.log(user.uid);
-
 			setCards(
 				sortedEssayList.map((essay, index) => (
 					<Card
