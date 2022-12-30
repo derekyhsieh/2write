@@ -5,21 +5,18 @@ import {
 	Group,
 	Burger,
 	ActionIcon,
-	Stack,
-	Center,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconSearch, IconUser, IconBell } from "@tabler/icons";
 import { MantineLogo } from "@mantine/ds";
 import { loadEssayList } from "../../../services/FirestoreHelpers";
 import { UserAuth } from "../../../context/AuthContext";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
 	getMonthName,
 	convertFirebaseTimestampToDate,
 } from "../../../utils/misc";
 import { createSearchParams, useNavigate } from "react-router-dom";
-import { useEventListener } from "@mantine/hooks";
 
 const useStyles = createStyles((theme) => ({
 	inner: {
@@ -56,7 +53,7 @@ export default function HomeHeader() {
 			);
 			sortedEssayList.map((essay) => {
 				const essayObject = {};
-				essayObject["value"] = essay.title ? essay.title : "Untitled Document";
+				essayObject["value"] = essay.title ?? "Untitled Document";
 				essayObject["key"] = essay.essayId;
 				let essayDate = convertFirebaseTimestampToDate(essay.lastEdit);
 				essayObject["group"] =
@@ -96,6 +93,7 @@ export default function HomeHeader() {
 							});
 						} else {
 							searchInput.current.blur();
+							navigate("/");
 						}
 					}}
 					onItemSubmit={(item) => {

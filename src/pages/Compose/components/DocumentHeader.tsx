@@ -19,7 +19,7 @@ export default function DocumentHeader({ localDocData }) {
 
     useEffect(() => {
         loadEssay(user.uid, searchParams.get("essayId")).then((doc) => {
-            setDocumentTitle(doc.title ? doc.title : "Untitled Document");
+            setDocumentTitle(doc.title ?? "Untitled Document");
         });
     }, []);
 
