@@ -5,21 +5,18 @@ import {
 	Group,
 	Burger,
 	ActionIcon,
-	Stack,
-	Center,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconSearch, IconUser, IconBell } from "@tabler/icons";
 import { MantineLogo } from "@mantine/ds";
 import { loadEssayList } from "../../../services/FirestoreHelpers";
 import { UserAuth } from "../../../context/AuthContext";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
 	getMonthName,
 	convertFirebaseTimestampToDate,
 } from "../../../utils/misc";
 import { createSearchParams, useNavigate } from "react-router-dom";
-import { useEventListener } from "@mantine/hooks";
 
 const useStyles = createStyles((theme) => ({
 	inner: {
@@ -45,7 +42,7 @@ export default function HomeHeader() {
 	const { classes } = useStyles();
 	const [searchQuery, setSearchQuery] = useState("");
 	const [essayTitleArray, setEssayTitleArray] = useState([]);
-	const [searchFocus, setSearchFocus] = useState(false);
+	const searchInput = useRef<HTMLInputElement>(null);
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -56,7 +53,7 @@ export default function HomeHeader() {
 			);
 			sortedEssayList.map((essay) => {
 				const essayObject = {};
-				essayObject["value"] = essay.title ? essay.title : "Untitled Document";
+				essayObject["value"] = essay.title ?? "Untitled Document";
 				essayObject["key"] = essay.essayId;
 				let essayDate = convertFirebaseTimestampToDate(essay.lastEdit);
 				essayObject["group"] =
@@ -67,51 +64,6 @@ export default function HomeHeader() {
 		});
 	}, []);
 
-	// function SearchComponent(props: {
-	// 	searchQuery;
-	// 	setSearchQuery;
-	// 	essayTitleArray;
-	// }) {
-	// 	// Define an event listener callback function
-	// 	const handleKeyDown = useCallback((event) => {
-	// 		setSearchFocus(true);
-	// 		if (event.key === "Enter") {
-	// 			setSearchFocus(false);
-	// 			navigate({
-	// 				pathname: "/",
-	// 				search: `?${createSearchParams({ searchQuery: props.searchQuery })}`,
-	// 			});
-	// 		}
-	// 	}, []);
-
-	// 	// Add the event listener
-	// 	const ref = useEventListener("keydown", handleKeyDown);
-
-	// 	return (
-	// 		<Autocomplete
-	// 			variant="default"
-	// 			autoFocus={searchFocus}
-	// 			ref={ref}
-	// 			value={searchQuery}
-	// 			radius={"md"}
-	// 			onChange={(event: string) => {
-	// 				setSearchQuery(event);
-	// 			}}
-	// 			className={classes.search}
-	// 			placeholder="Search"
-	// 			icon={<IconSearch size={16} stroke={1.5} />}
-	// 			data={essayTitleArray}
-	// 			limit={4}
-	// 			onItemSubmit={(item) => {
-	// 				navigate({
-	// 					pathname: "/compose",
-	// 					search: `?${createSearchParams({ essayId: item.key })}`,
-	// 				});
-	// 			}}
-	// 		/>
-	// 	);
-	// }
-
 	return (
 		<Header height={{ base: 50, md: 70 }} p="md">
 			<div className={classes.inner}>
@@ -120,13 +72,8 @@ export default function HomeHeader() {
 					<MantineLogo size={28} />
 				</Group>
 
-				{/* <SearchComponent
-					searchQuery={searchQuery}
-					setSearchQuery={setSearchQuery}
-					essayTitleArray={essayTitleArray}
-				/> */}
-
 				<Autocomplete
+					ref={searchInput}
 					variant="default"
 					value={searchQuery}
 					radius={"md"}
@@ -138,6 +85,17 @@ export default function HomeHeader() {
 					icon={<IconSearch size={16} stroke={1.5} />}
 					data={essayTitleArray}
 					limit={4}
+					onSearchQuery={() => {
+						if (searchQuery !== "") {
+							navigate({
+								pathname: "/",
+								search: `?${createSearchParams({ search: searchQuery })}`,
+							});
+						} else {
+							searchInput.current.blur();
+							navigate("/");
+						}
+					}}
 					onItemSubmit={(item) => {
 						navigate({
 							pathname: "/compose",
