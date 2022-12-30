@@ -79,7 +79,7 @@ const useStyles = createStyles((theme) => ({
 	},
 
 	cardContainer: {
-		height: "100%",
+		minHeight: "100%",
 		backgroundColor: `${theme.colors.gray[0]}`,
 	},
 }));
@@ -278,89 +278,87 @@ export default function DocumentCards(props: {
 	));
 
 	return (
-		<>
-			<Container fluid className={classes.cardContainer} py={"xl"} px={"5%"}>
-				<Stack spacing={0}>
+		<Container fluid className={classes.cardContainer} py={"xl"} px={"5%"}>
+			<Stack spacing={0}>
+				{searchParams.has("search") ? (
+					<></>
+				) : (
+					<SimpleGrid
+						cols={5}
+						breakpoints={[{ maxWidth: "sm", cols: 1 }]}
+						mb="xl"
+					>
+						{newDocCards}
+					</SimpleGrid>
+				)}
+				<Group mb="xl" position="apart">
 					{searchParams.has("search") ? (
+						<Title className={classes.title}> {"Search Results"} </Title>
+					) : (
 						<></>
-					) : (
-						<SimpleGrid
-							cols={5}
-							breakpoints={[{ maxWidth: "sm", cols: 1 }]}
-							mb="xl"
-						>
-							{newDocCards}
-						</SimpleGrid>
 					)}
-					<Group mb="xl" position="apart">
-						{searchParams.has("search") ? (
-							<Title className={classes.title}> {"Search Results"} </Title>
-						) : (
-							<></>
-						)}
-						<Group position="apart">
-							<Menu transitionDuration={150} transition="scale-y">
-								<Menu.Target>
-									<Button variant="default" radius="md">
-										<Group position="apart">
-											{ownerFilter} <IconChevronDown />
-										</Group>
-									</Button>
-								</Menu.Target>
-								<Menu.Dropdown>
-									<Menu.Item onClick={() => setOwnerFilter("Owned by anyone")}>
-										Owned by anyone
-									</Menu.Item>
-									<Menu.Item onClick={() => setOwnerFilter("Owned by me")}>
-										Owned by me
-									</Menu.Item>
-									<Menu.Item onClick={() => setOwnerFilter("Not owned by me")}>
-										Not owned by me
-									</Menu.Item>
-								</Menu.Dropdown>
-							</Menu>
-							<Menu transitionDuration={150} transition="scale-y">
-								<Menu.Target>
-									<Button variant="default" radius="md">
-										<Group position="apart">
-											{ageFilter} <IconChevronDown />
-										</Group>
-									</Button>
-								</Menu.Target>
-								<Menu.Dropdown>
-									<Menu.Item onClick={() => setAgeFilter("Newest")}>
-										Newest
-									</Menu.Item>
-									<Menu.Item onClick={() => setAgeFilter("Oldest")}>
-										Oldest
-									</Menu.Item>
-								</Menu.Dropdown>
-							</Menu>
-						</Group>
+					<Group position="apart">
+						<Menu transitionDuration={150} transition="scale-y">
+							<Menu.Target>
+								<Button variant="default" radius="md">
+									<Group position="apart">
+										{ownerFilter} <IconChevronDown />
+									</Group>
+								</Button>
+							</Menu.Target>
+							<Menu.Dropdown>
+								<Menu.Item onClick={() => setOwnerFilter("Owned by anyone")}>
+									Owned by anyone
+								</Menu.Item>
+								<Menu.Item onClick={() => setOwnerFilter("Owned by me")}>
+									Owned by me
+								</Menu.Item>
+								<Menu.Item onClick={() => setOwnerFilter("Not owned by me")}>
+									Not owned by me
+								</Menu.Item>
+							</Menu.Dropdown>
+						</Menu>
+						<Menu transitionDuration={150} transition="scale-y">
+							<Menu.Target>
+								<Button variant="default" radius="md">
+									<Group position="apart">
+										{ageFilter} <IconChevronDown />
+									</Group>
+								</Button>
+							</Menu.Target>
+							<Menu.Dropdown>
+								<Menu.Item onClick={() => setAgeFilter("Newest")}>
+									Newest
+								</Menu.Item>
+								<Menu.Item onClick={() => setAgeFilter("Oldest")}>
+									Oldest
+								</Menu.Item>
+							</Menu.Dropdown>
+						</Menu>
 					</Group>
-					{cards.length === 0 ? (
-						isSearchComplete ? (
-							<Center>
-								<Text color="dimmed" transform="uppercase" weight={700}>
-									{"no results match your query :("}
-								</Text>
-							</Center>
-						) : (
-							<Center>
-								<Loader />
-							</Center>
-						)
+				</Group>
+				{cards.length === 0 ? (
+					isSearchComplete ? (
+						<Center>
+							<Text color="dimmed" transform="uppercase" weight={700}>
+								{"no results match your query :("}
+							</Text>
+						</Center>
 					) : (
-						<SimpleGrid
-							cols={3}
-							breakpoints={[{ maxWidth: "sm", cols: 1 }]}
-							mb="xl"
-						>
-							{cards}
-						</SimpleGrid>
-					)}
-				</Stack>
-			</Container>
-		</>
+						<Center>
+							<Loader />
+						</Center>
+					)
+				) : (
+					<SimpleGrid
+						cols={3}
+						breakpoints={[{ maxWidth: "sm", cols: 1 }]}
+						mb="xl"
+					>
+						{cards}
+					</SimpleGrid>
+				)}
+			</Stack>
+		</Container>
 	);
 }
