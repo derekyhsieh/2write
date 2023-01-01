@@ -57,7 +57,12 @@ export default function HomeHeader() {
 				essayObject["key"] = essay.essayId;
 				let essayDate = convertFirebaseTimestampToDate(essay.lastEdit);
 				essayObject["group"] =
-					getMonthName(essayDate.getMonth()) + " " + essayDate.getDate();
+					getMonthName(essayDate.getMonth()) +
+					" " +
+					essayDate.getDate() +
+					(new Date().getFullYear() !== essayDate.getFullYear()
+						? ", " + essayDate.getFullYear()
+						: "");
 				essaySearch.push(essayObject);
 			});
 			setEssayTitleArray(essaySearch);
