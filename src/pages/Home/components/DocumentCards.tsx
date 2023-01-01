@@ -278,7 +278,14 @@ export default function DocumentCards(props: {
 	));
 
 	return (
-		<Container fluid className={classes.cardContainer} py={"xl"} px={"5%"}>
+		<Container
+			fluid
+			className={classes.cardContainer}
+			pb={24}
+			px={"5%"}
+			pt={{ base: 84, md: 94 }}
+		>
+			{/* for container, padding bottom is normal padding, padding top is normal padding plus breakpoint heights of header */}
 			<Stack spacing={0}>
 				{searchParams.has("search") ? (
 					<></>

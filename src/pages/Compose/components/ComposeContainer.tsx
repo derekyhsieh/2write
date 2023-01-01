@@ -64,7 +64,7 @@ export default function ComposeContainer() {
           </MediaQuery>
         }
         header={
-          <Header height={{ base: 50, md: 70 }} p="md">
+          <Header height={{ base: 60, md: 70 }} p="md" style={{ position: "fixed", top: 0}}>
               <DocumentHeader localDocData={localDocData}/>
           </Header>
         }
