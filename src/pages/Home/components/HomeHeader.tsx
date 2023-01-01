@@ -57,7 +57,12 @@ export default function HomeHeader() {
 				essayObject["key"] = essay.essayId;
 				let essayDate = convertFirebaseTimestampToDate(essay.lastEdit);
 				essayObject["group"] =
-					getMonthName(essayDate.getMonth()) + " " + essayDate.getDate();
+					getMonthName(essayDate.getMonth()) +
+					" " +
+					essayDate.getDate() +
+					(new Date().getFullYear() !== essayDate.getFullYear()
+						? ", " + essayDate.getFullYear()
+						: "");
 				essaySearch.push(essayObject);
 			});
 			setEssayTitleArray(essaySearch);
@@ -65,7 +70,7 @@ export default function HomeHeader() {
 	}, []);
 
 	return (
-		<Header height={{ base: 50, md: 70 }} p="md">
+		<Header height={{ base: 60, md: 70 }} p="md" style={{ position: "fixed", top: 0}}>
 			<div className={classes.inner}>
 				<Group>
 					<Burger opened={opened} onClick={toggle} size="sm" />
