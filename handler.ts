@@ -1,7 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import { Configuration, OpenAIApi } from "openai";
-import { Autocomplete } from '@mantine/core';
 
 const app = express();
 app.use(bodyParser.json());
@@ -42,6 +41,7 @@ function appendQuestionMarkToPrompt(prompt: string) {
 
 async function getAnswer(question: string, isAutocomplete: boolean = false) {
   const configuration = new Configuration({
+    // @ts-ignore
     apiKey: import.meta.env.VITE_OPENAI_API_KEY,
   });
 
@@ -69,4 +69,5 @@ async function getAnswer(question: string, isAutocomplete: boolean = false) {
 
   return isAutocomplete ? answerString?.replace(/\n/g, '') : answerString;
 }
+
 export const handler = app;
