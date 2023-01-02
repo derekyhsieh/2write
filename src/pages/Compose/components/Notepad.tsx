@@ -31,15 +31,16 @@ export default function Notepad(localDocData) {
 
 
     const [editorValue, setEditorValue] = useState(content)
-    const [debouncedEditor] = useDebounce(editorValue, 8000)
+    const [debouncedEditor] = useDebounce(editorValue, 5000)
 
     const {user} = UserAuth()
 
     useEffect(() => {
 
-        if(editorValue !== '') {
-            saveNotepad(user.uid, searchParams.get("essayId"), debouncedEditor)
-        }
+
+            console.log(editorValue)
+            console.log("saving notepad")
+            saveNotepad(user.uid, searchParams.get("essayId"), editorValue)
 
 
     }, [debouncedEditor])
@@ -118,7 +119,7 @@ export default function Notepad(localDocData) {
 
                 </Group>
 
-                <RichTextEditor value={editorValue} controls={[
+                <RichTextEditor value={editorValue} onChange={setEditorValue} controls={[
                     ['bold', 'italic', 'underline', 'link', 'image'],
                     
                 ]} id="rte"/>

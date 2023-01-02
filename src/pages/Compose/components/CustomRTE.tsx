@@ -24,22 +24,23 @@ import {
 } from "../../../services/FirestoreHelpers";
 import { UserAuth } from "../../../context/AuthContext";
 import { useSearchParams } from "react-router-dom";
+import { AutocompleteSnippets } from "./AutocompleteSnippets";
 
-function AutocompleteIconButton() {
-  const { editor } = useRichTextEditorContext();
-  return (
-    <RichTextEditor.Control
-      onClick={() => {
-        editor?.commands.insertContent(" /");
-        editor?.view.dom.focus();
-      }}
-      aria-label="AI autocomplete sentence"
-      title="AI autocomplete"
-    >
-      <IconDrone stroke={1.75} size={18} color={"blue"} />
-    </RichTextEditor.Control>
-  );
-}
+// function AutocompleteIconButton() {
+//   const { editor } = useRichTextEditorContext();
+//   return (
+//     <RichTextEditor.Control
+//       onClick={() => {
+//         editor?.commands.insertContent(" /");
+//         editor?.view.dom.focus();
+//       }}
+//       aria-label="AI autocomplete sentence"
+//       title="AI autocomplete"
+//     >
+//       <IconDrone stroke={1.75} size={18} color={"blue"} />
+//     </RichTextEditor.Control>
+//   );
+// }
 
 export default function CustomRTE({localDocData, setLocalDocData}) {
   // has data on timestamp etc 
@@ -51,15 +52,10 @@ export default function CustomRTE({localDocData, setLocalDocData}) {
   const { user } = UserAuth();
   const editor = useEditor({
     extensions: [
-      Mention.configure({
-        HTMLAttributes: {
-          class: "",
-        },
-        suggestion,
-      }),
       StarterKit,
       Underline,
       Link,
+      AutocompleteSnippets,
       Superscript,
       SubScript,
       Highlight,
@@ -79,10 +75,7 @@ export default function CustomRTE({localDocData, setLocalDocData}) {
   });
 
 
-
-  const [debouncedEditor] = useDebounce(editor?.state.doc.content, 3000);
-
-
+  const [debouncedEditor] = useDebounce(editor?.state.doc.content, 2500);
 
   useEffect(() => {
 
@@ -91,9 +84,12 @@ export default function CustomRTE({localDocData, setLocalDocData}) {
       // makes sure we don't save on first load when there aren't any acutal changes other than loading from db
 
       if(editor?.getHTML() !== initalContent) {
-        console.log("SAVING DOC")
 
-        saveEssay(editor?.getHTML(), user.uid, searchParams.get("essayId"))
+        if(editor?.getText() !== "") {
+          console.log("SAVING DOC")
+          saveEssay(editor?.getHTML(), user.uid, searchParams.get("essayId"))
+        }
+
       }
 
     }
@@ -139,7 +135,6 @@ export default function CustomRTE({localDocData, setLocalDocData}) {
       </RichTextEditor.ControlsGroup>
 
       <RichTextEditor.ControlsGroup>
-        <AutocompleteIconButton />
       </RichTextEditor.ControlsGroup>
     </RichTextEditor.Toolbar>
   );
@@ -164,11 +159,12 @@ export default function CustomRTE({localDocData, setLocalDocData}) {
               <Text
                 variant="gradient"
                 gradient={{ from: "indigo", to: "cyan", deg: 45 }}
-                weight="bold"
+                weight="semibold"
                 sx={{ fontFamily: "Greycliff CF, sans-serif" }}
                 p={5}
+                m={5}
               >
-                rewrite with AI
+                rewrite with ai
               </Text>
             </RichTextEditor.Control>
           </RichTextEditor.ControlsGroup>
