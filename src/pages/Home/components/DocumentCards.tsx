@@ -94,13 +94,15 @@ export default function DocumentCards(props: {
   dropzoneModalOnClick?: Function;
   promptModalOnClick?: Function;
 }) {
-  const [cards, setCards] = useState([]);
-  const navigate = useNavigate();
-  const { classes } = useStyles();
-  const [ownerFilter, setOwnerFilter] = useState("Owned by anyone");
-  const [ageFilter, setAgeFilter] = useState("Newest");
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [isSearchComplete, setIsSearchComplete] = useState(false);
+
+	const [cards, setCards] = useState([]);
+	const navigate = useNavigate();
+	const { classes } = useStyles();
+	const [ownerFilter, setOwnerFilter] = useState("Owned by anyone");
+	const [ageFilter, setAgeFilter] = useState("Newest");
+	const [searchParams, setSearchParams] = useSearchParams();
+	const [isOnRenderLoadingComplete, setIsOnRenderLoadingComplete] = useState(false);
+	const [noResultsMessage, setNoResultsMessage] = useState("sorry, we ran into an error retrieving your documents");
 
   const { user } = UserAuth();
 
@@ -113,6 +115,34 @@ export default function DocumentCards(props: {
 
     return preview;
   };
+
+	useEffect(() => {
+		loadEssayList(user.uid).then((essayList) => {
+			// sort essays by last edit and store in new array called sortedEssayList
+			let sortedEssayList =
+				ageFilter === "Newest"
+					? essayList.sort(
+							(a, b) => b.lastEdit.toMillis() - a.lastEdit.toMillis()
+					  )
+					: essayList.sort(
+							(a, b) => a.lastEdit.toMillis() - b.lastEdit.toMillis()
+					  );
+			if (searchParams.has("search")) {
+				let searchResults = searchDocumentList(
+					sortedEssayList,
+					searchParams.get("search")
+				);
+				setNoResultsMessage("no results match your query :(");
+				setEssayCards(searchResults);
+				setIsOnRenderLoadingComplete(true);
+			} else {
+				setNoResultsMessage("no documents found, create a new one using the buttons above");
+				setEssayCards(sortedEssayList);
+				setIsOnRenderLoadingComplete(true);
+			}
+		});
+	}, [ageFilter, ownerFilter, searchParams]);
+
 
   const setEssayCards = (essayList: DocumentData[]) => {
     setCards(
@@ -135,6 +165,7 @@ export default function DocumentCards(props: {
         >
 
 			<Stack>
+
 
 
 			<div dangerouslySetInnerHTML={{ __html: getPreview(essay.content) }} />
@@ -166,6 +197,96 @@ export default function DocumentCards(props: {
 
 
             </Stack>
+
+
+	return (
+		<Container
+			fluid
+			className={classes.cardContainer}
+			pb={24}
+			px={"5%"}
+			pt={{ base: 84, md: 94 }}
+		>
+			{/* for container, padding bottom is normal padding, padding top is normal padding plus breakpoint heights of header */}
+			<Stack spacing={0}>
+				{searchParams.has("search") ? (
+					<></>
+				) : (
+					<SimpleGrid
+						cols={5}
+						breakpoints={[{ maxWidth: "sm", cols: 1 }]}
+						mb="xl"
+					>
+						{newDocCards}
+					</SimpleGrid>
+				)}
+				<Group mb="xl" position="apart">
+					{searchParams.has("search") ? (
+						<Title className={classes.title}> {"Search Results"} </Title>
+					) : (
+						<></>
+					)}
+					<Group position="apart">
+						<Menu transitionDuration={150} transition="scale-y">
+							<Menu.Target>
+								<Button variant="default" radius="md">
+									<Group position="apart">
+										{ownerFilter} <IconChevronDown />
+									</Group>
+								</Button>
+							</Menu.Target>
+							<Menu.Dropdown>
+								<Menu.Item onClick={() => setOwnerFilter("Owned by anyone")}>
+									Owned by anyone
+								</Menu.Item>
+								<Menu.Item onClick={() => setOwnerFilter("Owned by me")}>
+									Owned by me
+								</Menu.Item>
+								<Menu.Item onClick={() => setOwnerFilter("Not owned by me")}>
+									Not owned by me
+								</Menu.Item>
+							</Menu.Dropdown>
+						</Menu>
+						<Menu transitionDuration={150} transition="scale-y">
+							<Menu.Target>
+								<Button variant="default" radius="md">
+									<Group position="apart">
+										{ageFilter} <IconChevronDown />
+									</Group>
+								</Button>
+							</Menu.Target>
+							<Menu.Dropdown>
+								<Menu.Item onClick={() => setAgeFilter("Newest")}>
+									Newest
+								</Menu.Item>
+								<Menu.Item onClick={() => setAgeFilter("Oldest")}>
+									Oldest
+								</Menu.Item>
+							</Menu.Dropdown>
+						</Menu>
+					</Group>
+				</Group>
+				{cards.length === 0 ? (
+					isOnRenderLoadingComplete ? (
+						<Center>
+							<Text color="dimmed" transform="uppercase" weight={700}>
+								{noResultsMessage}
+							</Text>
+						</Center>
+					) : (
+						<Center>
+							<Loader />
+						</Center>
+					)
+				) : (
+					<SimpleGrid
+						cols={3}
+						breakpoints={[{ maxWidth: "sm", cols: 1 }]}
+						mb="xl"
+					>
+						{cards}
+					</SimpleGrid>
+				)}
 
 			</Stack>
         </Card>
