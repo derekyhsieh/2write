@@ -4,7 +4,9 @@ import {
 	Autocomplete,
 	Group,
 	Burger,
+	Text,
 	ActionIcon,
+	Image,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconSearch, IconUser, IconBell } from "@tabler/icons";
@@ -17,6 +19,7 @@ import {
 	convertFirebaseTimestampToDate,
 } from "../../../utils/misc";
 import { createSearchParams, useNavigate } from "react-router-dom";
+import logo from "../../../img/logo.png"
 
 const useStyles = createStyles((theme) => ({
 	inner: {
@@ -72,9 +75,17 @@ export default function HomeHeader() {
 	return (
 		<Header height={{ base: 60, md: 70 }} p="md" style={{ position: "fixed", top: 0}}>
 			<div className={classes.inner}>
-				<Group>
+				<Group align={"center"}>
 					<Burger opened={opened} onClick={toggle} size="sm" />
-					<MantineLogo size={28} />
+					<Image src={logo} width={35} height={35} mb={4} mr={-10}/>
+					<Text
+					   variant="gradient"
+					   gradient={{ from: 'indigo', to: 'black', deg: 30 }}
+					   sx={{ fontFamily: 'Greycliff CF, sans-serif' }}
+					   ta="center"
+					   size={"xl"}
+					   fw={700}
+					>2write</Text>
 				</Group>
 
 				<Autocomplete
@@ -90,6 +101,7 @@ export default function HomeHeader() {
 					icon={<IconSearch size={16} stroke={1.5} />}
 					data={essayTitleArray}
 					limit={4}
+					// @ts-ignore
 					onSearchQuery={() => {
 						if (searchQuery !== "") {
 							navigate({
