@@ -97,7 +97,8 @@ export default function DocumentCards(props: {
 	const [ownerFilter, setOwnerFilter] = useState("Owned by anyone");
 	const [ageFilter, setAgeFilter] = useState("Newest");
 	const [searchParams, setSearchParams] = useSearchParams();
-	const [isSearchComplete, setIsSearchComplete] = useState(false);
+	const [isOnRenderLoadingComplete, setIsOnRenderLoadingComplete] = useState(false);
+	const [noResultsMessage, setNoResultsMessage] = useState("sorry, we ran into an error retrieving your documents");
 
 	const { user } = UserAuth();
 
@@ -168,10 +169,13 @@ export default function DocumentCards(props: {
 					sortedEssayList,
 					searchParams.get("search")
 				);
-				setIsSearchComplete(true);
+				setNoResultsMessage("no results match your query :(");
 				setEssayCards(searchResults);
+				setIsOnRenderLoadingComplete(true);
 			} else {
+				setNoResultsMessage("no documents found, create a new one using the buttons above");
 				setEssayCards(sortedEssayList);
+				setIsOnRenderLoadingComplete(true);
 			}
 		});
 	}, [ageFilter, ownerFilter, searchParams]);
@@ -345,10 +349,10 @@ export default function DocumentCards(props: {
 					</Group>
 				</Group>
 				{cards.length === 0 ? (
-					isSearchComplete ? (
+					isOnRenderLoadingComplete ? (
 						<Center>
 							<Text color="dimmed" transform="uppercase" weight={700}>
-								{"no results match your query :("}
+								{noResultsMessage}
 							</Text>
 						</Center>
 					) : (
