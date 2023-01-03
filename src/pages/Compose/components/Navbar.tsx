@@ -5,8 +5,8 @@ import {
   Tooltip,
   UnstyledButton,
   createStyles,
-  Text,
   Stack,
+  Image,
 } from "@mantine/core";
 import {
   TablerIcon,
@@ -21,8 +21,8 @@ import {
   IconLogout,
   IconSwitchHorizontal,
 } from "@tabler/icons";
-import { MantineLogo } from "@mantine/ds";
 import { CustomDrawer } from "./CustomDrawer";
+import logo from "../../../img/logo.png"
 import SettingsDrawer from "./SettingsDrawer";
 import AnalyticsDrawer from "./AnalyticsDrawer";
 import TodoDrawer from "./TodoDrawer";
@@ -115,7 +115,7 @@ export function NavbarMini() {
 
       <Navbar height={"100vh"} width={{ base: 80 }} p="md">
         <Center>
-          <MantineLogo type="mark" size={30} />
+          <Image src={logo} width={35} height={35}/>
         </Center>
         <Navbar.Section grow mt={50}>
           <Stack justify="center" spacing={0}>
