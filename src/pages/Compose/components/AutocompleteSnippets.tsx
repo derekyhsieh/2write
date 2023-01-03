@@ -94,16 +94,67 @@ export const AutocompleteSnippets = Extension.create({
 
 
 
-                        let convertedSelection = textContentOfCurrentParagraph?.length
+                      
+
+                        let textCount = 0;
+                            // console.log(`Converted Selection: ${convertedSelection}`)
+                        let nodeArray = []
+
+                        doc.nodesBetween(0, selection.$from.pos, (node, pos, ) => {
+
+                            if(nodeArray.length !== 0 && node.textContent !== nodeArray.at(-1).content) {
+                                textCount += node.nodeSize
+
+                                // get position of node at index with prosemirror
+    
+                                console.log(textCount, node.textContent)
+    
+                                const paraNode = {
+                                    content: node.textContent,
+                                    endCount: textCount,
+                                }
+
+                                
+    
+    
+    
+                                nodeArray.push(paraNode)
+                            } else if(nodeArray.length === 0) {
+                                textCount += node.nodeSize
+                                console.log(textCount, node.textContent)
+    
+                                const paraNode = {
+                                    content: node.textContent,
+                                    endCount: textCount,
+                                }
+
+                                nodeArray.push(paraNode)
+                            }
+                           
 
 
-                        if(doc.textContent.length > textContentOfCurrentParagraph?.length) {
-                            convertedSelection = (selection.$from.pos - 1)
-                        }
+                            // console.log(textCount)
+                            // console.log(`Text Count: ${textCount}`)
+                            // console.log(convertedSelection == textCount && selection.$from.pos !== 1 && lastSentenceLong(textContentOfCurrentParagraph) && textContentOfCurrentParagraph.slice(-1) == " ")
 
-                
-                        if (selection.$from.pos !== 1 && convertedSelection >= textContentOfCurrentParagraph?.length && lastSentenceLong(textContentOfCurrentParagraph) && textContentOfCurrentParagraph.slice(-1) == " ") {
+                            // && convertedSelection >= textContentOfCurrentParagraph?.length
+                            
+                            
+                        })
+
+
+
+
+
+                          const convertedSelection = selection.$to.pos + 1
+                          
+
+
+
+
+                        if (convertedSelection == nodeArray.at(-1).endCount && selection.$from.pos !== 1 && lastSentenceLong(textContentOfCurrentParagraph) && textContentOfCurrentParagraph.slice(-1) == " ") {
                             const decoration = Decoration.widget(selection.$from.pos, () => {
+                                console.log("DEBOUNCING")
                                 const placeholder = document.createElement("span");
                                 // give it element id of autocomplete-snippet
                                 placeholder.id = "autocomplete-snippet";
@@ -130,9 +181,15 @@ export const AutocompleteSnippets = Extension.create({
 
                                                 }
                             
-                                            }).finally(() => {
+                                            })
+                                            .catch((err) => {
+                                                console.log(err)
+                                            })
+                                            
+                                            .finally(() => {
                                                 placeholder.innerText = autocomplete
                                             }
+                                           
                                         )
                                     }, 500);
                                   }
@@ -149,7 +206,8 @@ export const AutocompleteSnippets = Extension.create({
                                 return placeholder;
                             });
                             decorations.push(decoration);
-                        }
+                        }  
+                       
 
                         return DecorationSet.create(doc, decorations);
                     },
