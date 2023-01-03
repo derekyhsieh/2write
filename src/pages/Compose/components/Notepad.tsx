@@ -38,9 +38,11 @@ export default function Notepad(localDocData) {
     useEffect(() => {
 
 
+        if(editorValue !== "") {
             console.log(editorValue)
             console.log("saving notepad")
             saveNotepad(user.uid, searchParams.get("essayId"), editorValue)
+        }
 
 
     }, [debouncedEditor])
@@ -49,6 +51,7 @@ export default function Notepad(localDocData) {
     useEffect(() => {
 
         setEditorValue(localDocData.localDocData.notepad)
+        console.log(localDocData.localDocData.notepad)
 
     }, [localDocData])
 
