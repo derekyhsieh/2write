@@ -10,7 +10,6 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconSearch, IconUser, IconBell } from "@tabler/icons";
-import { MantineLogo } from "@mantine/ds";
 import { loadEssayList } from "../../../services/FirestoreHelpers";
 import { UserAuth } from "../../../context/AuthContext";
 import { useEffect, useRef, useState } from "react";
