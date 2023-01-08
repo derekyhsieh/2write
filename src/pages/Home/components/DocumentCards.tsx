@@ -316,10 +316,8 @@ export default function DocumentCards(props: {
 					</SimpleGrid>
 				)}
 				<Group mb="xl" position="apart">
-					{searchParams.has("search") ? (
+					{searchParams.has("search") && (
 						<Title className={classes.title}> {"Search Results"} </Title>
-					) : (
-						<></>
 					)}
 					<Group position="apart">
 						<Menu transitionDuration={150} transition="scale-y">
