@@ -100,18 +100,21 @@ export default function DocumentCards(props: {
 	const [ownerFilter, setOwnerFilter] = useState("Owned by anyone");
 	const [ageFilter, setAgeFilter] = useState("Newest");
 	const [searchParams, setSearchParams] = useSearchParams();
-	const [isOnRenderLoadingComplete, setIsOnRenderLoadingComplete] = useState(false);
-	const [noResultsMessage, setNoResultsMessage] = useState("sorry, we ran into an error retrieving your documents");
+	const [isOnRenderLoadingComplete, setIsOnRenderLoadingComplete] =
+		useState(false);
+	const [noResultsMessage, setNoResultsMessage] = useState(
+		"sorry, we ran into an error retrieving your documents"
+	);
 
 	const { user } = UserAuth();
 
 	const getPreview = (html: string) => {
 		const preview = html.split(" ").slice(0, 30).join(" ");
-		if(preview === "") {
-			return "<p></p>"
+		if (preview === "") {
+			return "<p></p>";
 		}
-		return preview
-	}
+		return preview;
+	};
 
 	const setEssayCards = (essayList: DocumentData[]) => {
 		setCards(
@@ -133,23 +136,30 @@ export default function DocumentCards(props: {
 					}}
 				>
 					<Stack>
-				<div dangerouslySetInnerHTML={{ __html: getPreview(essay.content) }} />
-					<Stack>
-						<Group mt="md" position="apart">
-							<Text className={classes.title} mt={5} lineClamp={1}>
-								{essay.title ?? "Untitled Document"}
-							</Text>
-							<ActionIcon>
-								<IconDots />
-							</ActionIcon>
-						</Group>
-						<Group>
-							<IconUsers stroke={"1.75"} />
-							<Text color="dimmed" size="xs" transform="uppercase" weight={700}>
-								Shared with 2 groups
-							</Text>
-						</Group>
-					</Stack>
+						<div
+							dangerouslySetInnerHTML={{ __html: getPreview(essay.content) }}
+						/>
+						<Stack>
+							<Group mt="md" position="apart">
+								<Text className={classes.title} mt={5} lineClamp={1}>
+									{essay.title ?? "Untitled Document"}
+								</Text>
+								<ActionIcon>
+									<IconDots />
+								</ActionIcon>
+							</Group>
+							<Group>
+								<IconUsers stroke={"1.75"} />
+								<Text
+									color="dimmed"
+									size="xs"
+									transform="uppercase"
+									weight={700}
+								>
+									Shared with 2 groups
+								</Text>
+							</Group>
+						</Stack>
 					</Stack>
 				</Card>
 			))
@@ -176,7 +186,9 @@ export default function DocumentCards(props: {
 				setEssayCards(searchResults);
 				setIsOnRenderLoadingComplete(true);
 			} else {
-				setNoResultsMessage("no documents found, create a new one using the buttons above");
+				setNoResultsMessage(
+					"no documents found, create a new one using the buttons above"
+				);
 				setEssayCards(sortedEssayList);
 				setIsOnRenderLoadingComplete(true);
 			}
@@ -294,9 +306,7 @@ export default function DocumentCards(props: {
 		>
 			{/* for container, padding bottom is normal padding, padding top is normal padding plus breakpoint heights of header */}
 			<Stack spacing={0}>
-				{searchParams.has("search") ? (
-					<></>
-				) : (
+				{!searchParams.has("search") && (
 					<SimpleGrid
 						cols={5}
 						breakpoints={[{ maxWidth: "sm", cols: 1 }]}
