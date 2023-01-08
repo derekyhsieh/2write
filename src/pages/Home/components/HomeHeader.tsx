@@ -72,7 +72,7 @@ export default function HomeHeader() {
 	}, []);
 
 	return (
-		<Header height={{ base: 60, md: 70 }} p="md" style={{ position: "fixed", top: 0}}>
+		<Header height={{ base: 60, md: 70 }} p="md" style={{ position: "fixed", top: 0, zIndex: 1}}>
 			<div className={classes.inner}>
 				<Group align={"center"}>
 					<Burger opened={opened} onClick={toggle} size="sm" />
