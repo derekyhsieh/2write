@@ -15,7 +15,6 @@ import { useDebounce } from "use-debounce";
 
 import { Text, Group } from "@mantine/core";
 import Mention from "@tiptap/extension-mention";
-import suggestion from "./Suggestion";
 import { useEffect, useState } from "react";
 import {
   saveEssay,
