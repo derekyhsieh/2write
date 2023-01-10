@@ -167,8 +167,9 @@ export default function DocumentCards(props: {
 	};
 
 	useEffect(() => {
+		// load the user's essay list from firebase
 		loadEssayList(user.uid).then((essayList) => {
-			// sort essays by last edit and store in new array called sortedEssayList
+			// sort the essay list by last edit date
 			let sortedEssayList =
 				ageFilter === "Newest"
 					? essayList.sort(
@@ -178,14 +179,17 @@ export default function DocumentCards(props: {
 							(a, b) => a.lastEdit.toMillis() - b.lastEdit.toMillis()
 					  );
 			if (searchParams.has("search")) {
+				// search the essay list based on the search query
 				let searchResults = searchDocumentList(
 					sortedEssayList,
 					searchParams.get("search")
 				);
+				// set the search results as the essay cards
 				setNoResultsMessage("no results match your query :(");
 				setEssayCards(searchResults);
 				setIsOnRenderLoadingComplete(true);
 			} else {
+				// if the user is not searching, set the essay cards to the sorted essay list
 				setNoResultsMessage(
 					"no documents found, create a new one using the buttons above"
 				);
@@ -199,60 +203,64 @@ export default function DocumentCards(props: {
 		{
 			title: "Add document",
 			template: false,
-			onClickProps: "create",
-			icon: <IconPlus />,
+			onClick: "create",
+			icon: <IconPlus key={0} />,
 		},
 		{
 			title: "Upload document",
 			template: false,
-			onClickProps: "dropzone",
-			icon: <IconUpload />,
+			onClick: "dropzone",
+			icon: <IconUpload key={1} />,
 		},
 		{
 			title: "Research Essay",
 			template: true,
-			onClickProps: "prompt",
-			icon: <IconNews />,
+			onClick: "prompt",
+			icon: <IconNews key={2} />,
 		},
 		{
 			title: "Historical Essay",
 			template: true,
-			onClickProps: "prompt",
-			icon: <IconBuildingArch />,
+			onClick: "prompt",
+			icon: <IconBuildingArch key={3} />,
 		},
 		{
 			title: "Argumentative Essay",
 			template: true,
-			onClickProps: "prompt",
-			icon: <IconExclamationMark />,
+			onClick: "prompt",
+			icon: <IconExclamationMark key={4} />,
 		},
 	];
 
-	const TemplateCard = (props: {
-		children:
-			| string
-			| number
-			| boolean
-			| React.ReactElement<any, string | React.JSXElementConstructor<any>>
-			| React.ReactFragment
-			| React.ReactPortal
-			| null
-			| undefined;
-		templateTitle: string;
-		className: string;
-		onClick?: Function;
-	}) => {
-		return (
+	const newDocCards = React.Children.toArray(
+		newDocumentArray.map((newDocItem) => (
 			<Card
-				key={uuidv4()}
 				p="lg"
 				radius="lg"
 				component="a"
 				href="#"
 				withBorder
 				shadow={"sm"}
-				className={props.className}
-				onClick={() => (props.onClick ? props.onClick(true) : null)}
+				className={
+					newDocItem.template ? classes.templateCard : classes.addNewCard
+				}
+				onClick={() => {
+					// If the new document option has an onClick function, then
+					// the user clicked on a document that has a custom click
+					// behavior. If the value of the onClick property is
+					// "dropzone", then use the dropzone onClick function. If the value
+					// is "create", then show the create modal. Otherwise, show
+					// the prompt modal.
+					if (newDocItem.onClick) {
+						if (newDocItem.onClick === "dropzone") {
+							props.dropzoneModalOnClick(true);
+						} else if (newDocItem.onClick === "create") {
+							props.createModalOnClick(true);
+						} else {
+							props.promptModalOnClick(true);
+						}
+					}
+				}}
 			>
 				<Center>
 					<Stack>
@@ -264,37 +272,17 @@ export default function DocumentCards(props: {
 								variant="gradient"
 								p={10}
 							>
-								{props.children}
+								{newDocItem.icon}
 							</ActionIcon>
 						</Center>
 						<Text className={classes.templateTitle} mt={5} align="center">
-							{props.templateTitle}
+							{newDocItem.title}
 						</Text>
 					</Stack>
 				</Center>
 			</Card>
-		);
-	};
-
-	const newDocCards = newDocumentArray.map((newDocItem) => (
-		<TemplateCard
-			templateTitle={newDocItem.title}
-			className={
-				newDocItem.template ? classes.templateCard : classes.addNewCard
-			}
-			onClick={
-				newDocItem.onClickProps
-					? newDocItem.onClickProps === "dropzone"
-						? props.dropzoneModalOnClick
-						: newDocItem.onClickProps === "create"
-						? props.createModalOnClick
-						: props.promptModalOnClick
-					: undefined
-			}
-		>
-			{newDocItem.icon}
-		</TemplateCard>
-	));
+		))
+	);
 
 	return (
 		<Container
@@ -359,6 +347,11 @@ export default function DocumentCards(props: {
 						</Menu>
 					</Group>
 				</Group>
+				{/* 
+				displays cards
+				if there are no cards, checks if the on render loading is complete
+				if it is, displays the no results message, otherwise shows a loader 
+				*/}
 				{cards.length === 0 ? (
 					isOnRenderLoadingComplete ? (
 						<Center>

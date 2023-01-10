@@ -39,6 +39,7 @@ export default function DocumentHeader({ localDocData }) {
 					<ActionIcon onClick={navigateToHome} variant="light" size="lg">
 						<IconChevronLeft size={22} />
 					</ActionIcon>
+
 						<TextInput
 							value={documentTitle}
 							onChange={(event) => {
