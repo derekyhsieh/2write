@@ -45,8 +45,9 @@ export default function DocumentHeader({ localDocData }) {
 							saveTitle(user.uid, searchParams.get("essayId"), event.currentTarget.value);
 						}}
 						placeholder="Essay Title"
-						variant="default"
-						size="lg"
+						variant="filled"
+						size="md"
+						radius="md"
 					/>
 				</Group>
 				<ActionIcon variant="light" radius="xl" size="xl" color="blue">
