@@ -111,17 +111,17 @@ export default function HomeHeader() {
 					data={essayTitleArray}
 					limit={4}
 					// @ts-ignore
-					onSearchQuery={() => {
-						if (searchQuery !== "") {
-							navigate({
-								pathname: "/",
-								search: `?${createSearchParams({ search: searchQuery })}`,
-							});
-						} else {
-							searchInput.current.blur();
-							navigate("/");
-						}
-					}}
+					// onSearchQuery={() => {
+					// 	if (searchQuery !== "") {
+					// 		navigate({
+					// 			pathname: "/",
+					// 			search: `?${createSearchParams({ search: searchQuery })}`,
+					// 		});
+					// 	} else {
+					// 		searchInput.current.blur();
+					// 		navigate("/");
+					// 	}
+					// }}
 					onItemSubmit={(item) => {
 						navigate({
 							pathname: "/compose",

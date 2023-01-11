@@ -13,6 +13,7 @@ import {
 	Center,
 	Title,
 	Loader,
+	Image,
 } from "@mantine/core";
 import {
 	IconDots,
@@ -35,20 +36,9 @@ import { UserAuth } from "../../../context/AuthContext";
 import { v4 as uuidv4 } from "uuid";
 import { searchDocumentList } from "../../../utils/misc";
 import { DocumentData } from "firebase/firestore";
+import EssayCard from "./EssayCard";
 
 const useStyles = createStyles((theme) => ({
-	documentCard: {
-		transition: "transform 150ms ease, box-shadow 150ms ease",
-
-		"&:hover": {
-			transform: "scale(1.01)",
-			boxShadow: theme.shadows.md,
-		},
-
-		display: "flex",
-		alignItems: "flex-end",
-	},
-
 	addNewCard: {
 		transition: "transform 150ms ease, box-shadow 150ms ease",
 
@@ -87,9 +77,7 @@ const useStyles = createStyles((theme) => ({
 	},
 }));
 
-interface DocumentCardsProps {}
-
-export default function DocumentCards(props: {
+export default function HomePageCards(props: {
 	createModalOnClick?: Function;
 	dropzoneModalOnClick?: Function;
 	promptModalOnClick?: Function;
@@ -108,61 +96,17 @@ export default function DocumentCards(props: {
 
 	const { user } = UserAuth();
 
-	const getPreview = (html: string) => {
-		const preview = html.split(" ").slice(0, 30).join(" ");
-		if (preview === "") {
-			return "<p></p>";
-		}
-		return preview;
-	};
-
 	const setEssayCards = (essayList: DocumentData[]) => {
 		setCards(
-			essayList.map((essay) => (
-				<Card
-					key={essay.essayId}
-					p="lg"
-					radius="lg"
-					component="a"
-					href="#"
-					withBorder
-					shadow={"sm"}
-					className={classes.documentCard}
-					onClick={() => {
-						navigate({
-							pathname: "/compose",
-							search: `?${createSearchParams({ essayId: essay.essayId })}`,
-						});
-					}}
-				>
-					<Stack>
-						<div
-							dangerouslySetInnerHTML={{ __html: getPreview(essay.content) }}
-						/>
-						<Stack>
-							<Group mt="md" position="apart">
-								<Text className={classes.title} mt={5} lineClamp={1}>
-									{essay.title ?? "Untitled Document"}
-								</Text>
-								<ActionIcon>
-									<IconDots />
-								</ActionIcon>
-							</Group>
-							<Group>
-								<IconUsers stroke={"1.75"} />
-								<Text
-									color="dimmed"
-									size="xs"
-									transform="uppercase"
-									weight={700}
-								>
-									Shared with 2 groups
-								</Text>
-							</Group>
-						</Stack>
-					</Stack>
-				</Card>
-			))
+			React.Children.toArray(
+				essayList.map((essay) => (
+					<EssayCard
+						essayId={essay.essayId}
+						essayTitle={essay.title}
+						imgXmlString={essay.content}
+					/>
+				))
+			)
 		);
 	};
 
@@ -199,7 +143,7 @@ export default function DocumentCards(props: {
 		});
 	}, [ageFilter, ownerFilter, searchParams]);
 
-	const newDocumentArray = [
+	const templateArray = [
 		{
 			title: "Add document",
 			template: false,
@@ -232,8 +176,8 @@ export default function DocumentCards(props: {
 		},
 	];
 
-	const newDocCards = React.Children.toArray(
-		newDocumentArray.map((newDocItem) => (
+	const templateCards = React.Children.toArray(
+		templateArray.map((templateItem) => (
 			<Card
 				p="lg"
 				radius="lg"
@@ -242,7 +186,7 @@ export default function DocumentCards(props: {
 				withBorder
 				shadow={"sm"}
 				className={
-					newDocItem.template ? classes.templateCard : classes.addNewCard
+					templateItem.template ? classes.templateCard : classes.addNewCard
 				}
 				onClick={() => {
 					// If the new document option has an onClick function, then
@@ -251,10 +195,10 @@ export default function DocumentCards(props: {
 					// "dropzone", then use the dropzone onClick function. If the value
 					// is "create", then show the create modal. Otherwise, show
 					// the prompt modal.
-					if (newDocItem.onClick) {
-						if (newDocItem.onClick === "dropzone") {
+					if (templateItem.onClick) {
+						if (templateItem.onClick === "dropzone") {
 							props.dropzoneModalOnClick(true);
-						} else if (newDocItem.onClick === "create") {
+						} else if (templateItem.onClick === "create") {
 							props.createModalOnClick(true);
 						} else {
 							props.promptModalOnClick(true);
@@ -272,11 +216,11 @@ export default function DocumentCards(props: {
 								variant="gradient"
 								p={10}
 							>
-								{newDocItem.icon}
+								{templateItem.icon}
 							</ActionIcon>
 						</Center>
 						<Text className={classes.templateTitle} mt={5} align="center">
-							{newDocItem.title}
+							{templateItem.title}
 						</Text>
 					</Stack>
 				</Center>
@@ -300,7 +244,7 @@ export default function DocumentCards(props: {
 						breakpoints={[{ maxWidth: "sm", cols: 1 }]}
 						mb="xl"
 					>
-						{newDocCards}
+						{templateCards}
 					</SimpleGrid>
 				)}
 				<Group mb="xl" position="apart">
@@ -355,7 +299,12 @@ export default function DocumentCards(props: {
 				{cards.length === 0 ? (
 					isOnRenderLoadingComplete ? (
 						<Center>
-							<Text color="dimmed" transform="uppercase" weight={700}>
+							<Text
+								color="dimmed"
+								transform="uppercase"
+								weight={700}
+								align="center"
+							>
 								{noResultsMessage}
 							</Text>
 						</Center>
