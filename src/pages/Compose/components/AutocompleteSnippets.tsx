@@ -49,7 +49,7 @@ export const AutocompleteSnippets = Extension.create({
             // Split the last sentence into words
             const words = lastSentence.split(' ');
             // Return true if the last sentence has more than 5 words, false otherwise
-            return words.length > 6;
+            return words.length > 6
         }
 
         let debounceTimeout;

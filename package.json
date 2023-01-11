@@ -25,6 +25,7 @@
     "@mantine/spotlight": "^5.9.3",
     "@mantine/tiptap": "^5.9.4",
     "@tabler/icons": "^1.116.1",
+    "@tiptap/extension-character-count": "^2.0.0-beta.209",
     "@tiptap/extension-highlight": "^2.0.0-beta.204",
     "@tiptap/extension-link": "^2.0.0-beta.204",
     "@tiptap/extension-mention": "^2.0.0-beta.209",

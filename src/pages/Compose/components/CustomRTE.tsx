@@ -12,6 +12,7 @@ import Superscript from "@tiptap/extension-superscript";
 import SubScript from "@tiptap/extension-subscript";
 import { IconHighlight, IconDrone } from "@tabler/icons";
 import { useDebounce } from "use-debounce";
+import {CharacterCount} from "@tiptap/extension-character-count"
 
 import { Text, Group } from "@mantine/core";
 import Mention from "@tiptap/extension-mention";
@@ -57,6 +58,7 @@ export default function CustomRTE({localDocData, setLocalDocData}) {
       AutocompleteSnippets,
       Superscript,
       SubScript,
+      CharacterCount,
       Highlight,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
     ],
@@ -73,6 +75,10 @@ export default function CustomRTE({localDocData, setLocalDocData}) {
 
   });
 
+  const getWordCountFromString = (str: string) => {
+    console.log(str)
+      return str.split(" ").length;
+  }
 
   const [debouncedEditor] = useDebounce(editor?.state.doc.content, 2500);
 
@@ -155,6 +161,12 @@ export default function CustomRTE({localDocData, setLocalDocData}) {
               aria-label="Insert star emoji"
               title="Insert star emoji"
             >
+              <Text m={3} fz="md" weight={600}>
+                {
+                  getWordCountFromString(editor.state.doc.textBetween(editor.state.selection.from, editor.state.selection.to, " ")) + " "
+                }
+                 words
+              </Text>
               <Text
                 variant="gradient"
                 gradient={{ from: "indigo", to: "cyan", deg: 45 }}
