@@ -103,7 +103,7 @@ export default function HomePageCards(props: {
 					<EssayCard
 						essayId={essay.essayId}
 						essayTitle={essay.title}
-						imgXmlString={essay.content}
+						imgHtmlString={essay.content}
 					/>
 				))
 			)

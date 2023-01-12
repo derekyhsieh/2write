@@ -7,15 +7,9 @@ import {
 	ActionIcon,
 	Image,
 } from "@mantine/core";
-import {
-	IconDots,
-	IconUsers,
-} from "@tabler/icons";
+import { IconDots, IconUsers } from "@tabler/icons";
 import React, { useState, useEffect } from "react";
-import {
-	createSearchParams,
-	useNavigate,
-} from "react-router-dom";
+import { createSearchParams, useNavigate } from "react-router-dom";
 import html2canvas from "html2canvas";
 
 const useStyles = createStyles((theme) => ({
@@ -41,22 +35,39 @@ const useStyles = createStyles((theme) => ({
 export default function EssayCard(props: {
 	essayId: string;
 	essayTitle: string;
-	imgXmlString: string;
+	imgHtmlString: string;
 }) {
 	const [imgSrc, setImgSrc] = useState("");
-    const navigate = useNavigate();
-    const { classes } = useStyles();
+	const navigate = useNavigate();
+	const { classes } = useStyles();
 
-	// useEffect(() => {
-	// 	let xmlString = props.imgXmlString === "" ? "<p></p>" : props.imgXmlString;
-	// 	let doc = new DOMParser().parseFromString(xmlString, "text/xml");
-	// 	html2canvas(doc.body).then((canvas) => {
-	// 		canvas.width = 1920;
-	// 		canvas.height = 1080;
-	// 		let image = canvas.toDataURL("image/jpeg");
-	// 		setImgSrc(image);
-	// 	});
-	// }, []);
+	useEffect(() => {
+		let html = props.imgHtmlString === "" ? "<p></p>" : props.imgHtmlString;
+		let previewHtml = getPreview(html);
+		const iframe = document.createElement("iframe");
+		iframe.height = "200";
+		iframe.width = "620";
+		document.body.appendChild(iframe); // 👈 still required
+		iframe.contentWindow.document.open();
+		iframe.contentWindow.document.write(previewHtml);
+		iframe.contentWindow.document.close();
+		html2canvas(iframe.contentWindow.document.body).then(function (canvas) {
+			iframe.style.display = "none";
+			let image = canvas.toDataURL("image/jpeg");
+			setImgSrc(image);
+		});
+	}, []);
+
+	// Splits the HTML string into an array of words, then takes the first 120 words, and joins them back into a string.
+	// If the string is empty, it returns <p></p>.
+
+	const getPreview = (html: string): string => {
+		const preview = html.split(" ").slice(0, 120).join(" ");
+		if (preview === "") {
+			return "<p></p>";
+		}
+		return preview;
+	};
 
 	return (
 		<Card
@@ -75,9 +86,8 @@ export default function EssayCard(props: {
 				});
 			}}
 		>
-			<Stack>
-				{/* <Image src={imgSrc} /> */}
-				<div dangerouslySetInnerHTML={{ __html: props.imgXmlString }} />
+			<Stack spacing={0}>
+				<Image src={imgSrc} />
 				<Stack>
 					<Group mt="md" position="apart">
 						<Text className={classes.title} mt={5} lineClamp={1}>

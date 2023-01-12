@@ -110,18 +110,17 @@ export default function HomeHeader() {
 					icon={<IconSearch size={16} stroke={1.5} />}
 					data={essayTitleArray}
 					limit={4}
-					// @ts-ignore
-					// onSearchQuery={() => {
-					// 	if (searchQuery !== "") {
-					// 		navigate({
-					// 			pathname: "/",
-					// 			search: `?${createSearchParams({ search: searchQuery })}`,
-					// 		});
-					// 	} else {
-					// 		searchInput.current.blur();
-					// 		navigate("/");
-					// 	}
-					// }}
+					onSearchQuery={() => {
+						if (searchQuery !== "") {
+							navigate({
+								pathname: "/",
+								search: `?${createSearchParams({ search: searchQuery })}`,
+							});
+						} else {
+							searchInput.current.blur();
+							navigate("/");
+						}
+					}}
 					onItemSubmit={(item) => {
 						navigate({
 							pathname: "/compose",
