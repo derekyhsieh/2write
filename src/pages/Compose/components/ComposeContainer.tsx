@@ -1,4 +1,10 @@
 import { useState } from "react";
+import {useEditor} from "@tiptap/react"
+import {
+  RichTextEditor,
+  Link,
+  useRichTextEditorContext,
+} from "@mantine/tiptap";
 import {
   AppShell,
   Navbar,
@@ -10,16 +16,37 @@ import {
   Burger,
   useMantineTheme,
 } from "@mantine/core";
+import Highlight from "@tiptap/extension-highlight";
+import StarterKit from "@tiptap/starter-kit";
+import Underline from "@tiptap/extension-underline";
+import TextAlign from "@tiptap/extension-text-align";
+import Superscript from "@tiptap/extension-superscript";
+import SubScript from "@tiptap/extension-subscript";
+import { IconHighlight, IconDrone } from "@tabler/icons";
+import { useDebounce } from "use-debounce";
+import {CharacterCount} from "@tiptap/extension-character-count"
+import { AutocompleteSnippets } from "./AutocompleteSnippets";
+import { useSearchParams } from "react-router-dom";
+
+import {
+  saveEssay,
+  createEssay,
+  loadEssay,
+} from "../../../services/FirestoreHelpers";
+
 import { NavbarMini } from "./Navbar";
 import CustomRichContainer from "./CustomRTE";
 import CustomRTE from "./CustomRTE";
 import DocumentHeader from "./DocumentHeader";
 import Notepad from "./Notepad";
+  import { UserAuth } from "../../../context/AuthContext";
 
 export default function ComposeContainer() {  
 
-  
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [initalContent, setInitialContent] = useState("");
 
+  const { user } = UserAuth();
 
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
@@ -42,6 +69,33 @@ export default function ComposeContainer() {
   }
   )
 
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Underline,
+      Link,
+      AutocompleteSnippets,
+      Superscript,
+      SubScript,
+      CharacterCount,
+      Highlight,
+      TextAlign.configure({ types: ["heading", "paragraph"] }),
+    ],
+
+    onCreate: ({ editor }) => {
+      loadEssay(user.uid, searchParams.get("essayId")).then((doc) => {
+        // neeed to set intial content so debouncer isn't called on first load
+        setInitialContent(doc.content)
+        console.log({...doc})
+        setLocalDocData({...doc})
+        editor.commands.setContent(doc.content)
+      })
+    },
+
+  })
+
+ 
+
   return (
     <div>
       <AppShell
@@ -55,7 +109,7 @@ export default function ComposeContainer() {
         }}
         navbarOffsetBreakpoint="sm"
         asideOffsetBreakpoint="sm"
-        navbar={<NavbarMini />}
+        navbar={<NavbarMini editor={editor}/>}
         aside={
           <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
             <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 300, md: 350, lg: 400 }}>
@@ -69,7 +123,7 @@ export default function ComposeContainer() {
           </Header>
         }
       >
-        <CustomRTE localDocData={localDocData} setLocalDocData={setLocalDocData}/>
+        <CustomRTE localDocData={localDocData} setLocalDocData={setLocalDocData} editor={editor}/>
       </AppShell>
     </div>
   );

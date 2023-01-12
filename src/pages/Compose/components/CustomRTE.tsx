@@ -3,19 +3,11 @@ import {
   Link,
   useRichTextEditorContext,
 } from "@mantine/tiptap";
-import { useEditor, BubbleMenu } from "@tiptap/react";
-import Highlight from "@tiptap/extension-highlight";
-import StarterKit from "@tiptap/starter-kit";
-import Underline from "@tiptap/extension-underline";
-import TextAlign from "@tiptap/extension-text-align";
-import Superscript from "@tiptap/extension-superscript";
-import SubScript from "@tiptap/extension-subscript";
-import { IconHighlight, IconDrone } from "@tabler/icons";
+import { BubbleMenu } from "@tiptap/react";
 import { useDebounce } from "use-debounce";
-import {CharacterCount} from "@tiptap/extension-character-count"
 
 import { Text, Group } from "@mantine/core";
-import Mention from "@tiptap/extension-mention";
+
 import { useEffect, useState } from "react";
 import {
   saveEssay,
@@ -26,23 +18,7 @@ import { UserAuth } from "../../../context/AuthContext";
 import { useSearchParams } from "react-router-dom";
 import { AutocompleteSnippets } from "./AutocompleteSnippets";
 
-// function AutocompleteIconButton() {
-//   const { editor } = useRichTextEditorContext();
-//   return (
-//     <RichTextEditor.Control
-//       onClick={() => {
-//         editor?.commands.insertContent(" /");
-//         editor?.view.dom.focus();
-//       }}
-//       aria-label="AI autocomplete sentence"
-//       title="AI autocomplete"
-//     >
-//       <IconDrone stroke={1.75} size={18} color={"blue"} />
-//     </RichTextEditor.Control>
-//   );
-// }
-
-export default function CustomRTE({localDocData, setLocalDocData}) {
+export default function CustomRTE({localDocData, setLocalDocData, editor}) {
   // has data on timestamp etc 
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -50,30 +26,6 @@ export default function CustomRTE({localDocData, setLocalDocData}) {
 
 
   const { user } = UserAuth();
-  const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Underline,
-      Link,
-      AutocompleteSnippets,
-      Superscript,
-      SubScript,
-      CharacterCount,
-      Highlight,
-      TextAlign.configure({ types: ["heading", "paragraph"] }),
-    ],
-
-    onCreate: ({ editor }) => {
-      loadEssay(user.uid, searchParams.get("essayId")).then((doc) => {
-        // neeed to set intial content so debouncer isn't called on first load
-        setInitialContent(doc.content)
-        console.log({...doc})
-        setLocalDocData({...doc})
-        editor.commands.setContent(doc.content)
-      })
-    },
-
-  });
 
   const getWordCountFromString = (str: string) => {
     console.log(str)
