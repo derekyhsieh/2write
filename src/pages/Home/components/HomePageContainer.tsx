@@ -2,7 +2,7 @@ import {
 	Modal,
 	useMantineTheme,
 } from "@mantine/core";
-import DocumentCards from "./DocumentCards";
+import DocumentCards from "./HomePageCards";
 import HomeHeader from "./HomeHeader";
 import { useState } from "react";
 import { CreateDropzoneModalContent } from "./DropzoneButton";
