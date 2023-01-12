@@ -45,6 +45,8 @@ export default function EssayCard(props: {
 		let html = props.imgHtmlString === "" ? "<p></p>" : props.imgHtmlString;
 		let previewHtml = getPreview(html);
 		const iframe = document.createElement("iframe");
+		iframe.style.position = "absolute";
+		iframe.style.top = "-9999px";
 		iframe.height = "200";
 		iframe.width = "620";
 		document.body.appendChild(iframe); // 👈 still required
