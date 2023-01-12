@@ -89,7 +89,7 @@ const iconsData = [
   { icon: IconSettings, label: "Settings", name: "settings" },
 ];
 
-export function NavbarMini() {
+export function NavbarMini(editor) {
   const [active, setActive] = useState(0);
 
   const [openDrawer, setOpenDrawer] = useState("null");
@@ -109,7 +109,7 @@ export function NavbarMini() {
   return (
     <>
       <SettingsDrawer opened={openDrawer} setOpened={setOpenDrawer} />
-      <AnalyticsDrawer opened={openDrawer} setOpened={setOpenDrawer}/>
+      <AnalyticsDrawer opened={openDrawer} setOpened={setOpenDrawer} editor={editor}/>
       <TodoDrawer opened={openDrawer} setOpened={setOpenDrawer}/>
       <EssayDataDrawer opened={openDrawer} setOpened={setOpenDrawer} />
 

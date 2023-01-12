@@ -13,7 +13,7 @@ export function CustomDrawer({children, opened, setOpened }: DrawerProps) {
 
   return (
     <Drawer
-    size={"40%"}
+    size={"lg"}
       opened={opened}
       onClose={() => setOpened("null")}
       overlayColor={
