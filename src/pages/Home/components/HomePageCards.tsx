@@ -104,6 +104,9 @@ export default function HomePageCards(props: {
 						essayId={essay.essayId}
 						essayTitle={essay.title}
 						imgHtmlString={essay.content}
+						ageFilter={ageFilter}
+						ownerFilter={ownerFilter}
+						searchParams={searchParams}
 					/>
 				))
 			)
