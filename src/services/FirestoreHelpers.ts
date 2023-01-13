@@ -44,6 +44,18 @@ const saveTitle = async (userID: string, essayID: string, title: string) => {
 	}
 }
 
+const saveEssayPrompt = async (userID: string, essayID: string, essayPrompt: string) => {
+	const essayRef = doc(db, "users", userID, "essays", essayID)
+
+	try {
+		await updateDoc(essayRef, {
+			essayPrompt: essayPrompt
+		});
+	} catch (error) {
+		console.log(error)
+	}
+}
+
 const loadEssay = async (userID: string, essayID: string) => {
 	const essayRef = doc(db, "users", userID, "essays", essayID);
 
@@ -109,4 +121,4 @@ const saveNotepad = async (userID: string, essayID: string, notepadContent: stri
 
 }
 
-export { saveEssay, createEssay, loadEssay, loadEssayList, saveNotepad, saveTitle };
+export { saveEssay, createEssay, loadEssay, loadEssayList, saveNotepad, saveTitle, saveEssayPrompt};

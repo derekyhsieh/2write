@@ -1,5 +1,5 @@
 import { useState } from "react";
-import {useEditor} from "@tiptap/react"
+import { useEditor } from "@tiptap/react"
 import {
   RichTextEditor,
   Link,
@@ -24,9 +24,10 @@ import Superscript from "@tiptap/extension-superscript";
 import SubScript from "@tiptap/extension-subscript";
 import { IconHighlight, IconDrone } from "@tabler/icons";
 import { useDebounce } from "use-debounce";
-import {CharacterCount} from "@tiptap/extension-character-count"
+import { CharacterCount } from "@tiptap/extension-character-count"
 import { AutocompleteSnippets } from "./AutocompleteSnippets";
 import { useSearchParams } from "react-router-dom";
+import { LoginContext } from "../../../context/DocContext";
 
 import {
   saveEssay,
@@ -39,9 +40,9 @@ import CustomRichContainer from "./CustomRTE";
 import CustomRTE from "./CustomRTE";
 import DocumentHeader from "./DocumentHeader";
 import Notepad from "./Notepad";
-  import { UserAuth } from "../../../context/AuthContext";
+import { UserAuth } from "../../../context/AuthContext";
 
-export default function ComposeContainer() {  
+export default function ComposeContainer() {
 
   const [searchParams, setSearchParams] = useSearchParams();
   const [initalContent, setInitialContent] = useState("");
@@ -52,22 +53,23 @@ export default function ComposeContainer() {
   const [opened, setOpened] = useState(false);
   // document metadata
   const [localDocData, setLocalDocData] = useState<
-  {
-    content: string,
-    essayPrompt?: string,
-    timestamp: {
-      seconds: number, 
-      nanoseconds: number
-    }, 
-    lastEdit?: {
-      seconds: number,
-      nanoseconds: number
-    },
-    title?: string,
-  }>(
-    {content: "", timestamp: {seconds: 0, nanoseconds: 0}
-  }
-  )
+    {
+      content: string,
+      essayPrompt?: string,
+      timestamp: {
+        seconds: number,
+        nanoseconds: number
+      },
+      lastEdit?: {
+        seconds: number,
+        nanoseconds: number
+      },
+      title?: string,
+    }>(
+      {
+        content: "", timestamp: { seconds: 0, nanoseconds: 0 }
+      }
+    )
 
   const editor = useEditor({
     extensions: [
@@ -86,45 +88,47 @@ export default function ComposeContainer() {
       loadEssay(user.uid, searchParams.get("essayId")).then((doc) => {
         // neeed to set intial content so debouncer isn't called on first load
         setInitialContent(doc.content)
-        console.log({...doc})
-        setLocalDocData({...doc})
+        console.log({ ...doc })
+        setLocalDocData({ ...doc })
         editor.commands.setContent(doc.content)
       })
     },
 
   })
 
- 
+
 
   return (
     <div>
-      <AppShell
-        styles={{
-          main: {
-            background:
-              theme.colorScheme === "dark"
-                ? theme.colors.dark[8]
-                : theme.colors.gray[0],
-          },
-        }}
-        navbarOffsetBreakpoint="sm"
-        asideOffsetBreakpoint="sm"
-        navbar={<NavbarMini editor={editor}/>}
-        aside={
-          <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
-            <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 300, md: 350, lg: 400 }}>
-              <Notepad localDocData={localDocData}/>
-            </Aside>
-          </MediaQuery>
-        }
-        header={
-          <Header height={{ base: 60, md: 70 }} p="md" style={{ position: "fixed", top: 0}}>
-              <DocumentHeader localDocData={localDocData}/>
-          </Header>
-        }
-      >
-        <CustomRTE localDocData={localDocData} setLocalDocData={setLocalDocData} editor={editor}/>
-      </AppShell>
+      <LoginContext.Provider value={{localDocData, setLocalDocData}}>
+        <AppShell
+          styles={{
+            main: {
+              background:
+                theme.colorScheme === "dark"
+                  ? theme.colors.dark[8]
+                  : theme.colors.gray[0],
+            },
+          }}
+          navbarOffsetBreakpoint="sm"
+          asideOffsetBreakpoint="sm"
+          navbar={<NavbarMini editor={editor} />}
+          aside={
+            <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
+              <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 300, md: 350, lg: 400 }}>
+                <Notepad localDocData={localDocData} />
+              </Aside>
+            </MediaQuery>
+          }
+          header={
+            <Header height={{ base: 60, md: 70 }} p="md" style={{ position: "fixed", top: 0 }}>
+              <DocumentHeader localDocData={localDocData} />
+            </Header>
+          }
+        >
+          <CustomRTE localDocData={localDocData} setLocalDocData={setLocalDocData} editor={editor} />
+        </AppShell>
+      </LoginContext.Provider>
     </div>
   );
 }
