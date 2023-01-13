@@ -36,6 +36,9 @@ export default function EssayCard(props: {
 	essayId: string;
 	essayTitle: string;
 	imgHtmlString: string;
+	ageFilter: string;
+	ownerFilter: string;
+	searchParams: URLSearchParams;
 }) {
 	const [imgSrc, setImgSrc] = useState("");
 	const navigate = useNavigate();
@@ -58,7 +61,7 @@ export default function EssayCard(props: {
 			let image = canvas.toDataURL("image/jpeg");
 			setImgSrc(image);
 		});
-	}, []);
+	}, [props.ageFilter, props.ownerFilter, props.searchParams]);
 
 	// Splits the HTML string into an array of words, then takes the first 120 words, and joins them back into a string.
 	// If the string is empty, it returns <p></p>.
