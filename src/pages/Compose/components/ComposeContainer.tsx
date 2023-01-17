@@ -90,7 +90,7 @@ export default function ComposeContainer() {
         setInitialContent(doc.content)
         console.log({ ...doc })
         setLocalDocData({ ...doc })
-        editor.commands.setContent(doc.content)
+        editor.commands.setContent(doc.content == "" ? "    " : doc.content)
       })
     },
 
