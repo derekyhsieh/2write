@@ -78,7 +78,9 @@ export default function Notepad(localDocData) {
             .then((returnedData) => {
 
                 const cleanedHTML = convertStringIntoHTML(returnedData.answer)
-                setEditorValue(`<h3>AI Outline</h3> <p>${cleanedHTML}</p>`)
+                const notepadContent = `<h3>AI Outline</h3> <p>${cleanedHTML}</p>`
+                saveNotepad(user.uid, searchParams.get("essayId"), notepadContent)
+                setEditorValue(notepadContent)
                 
             }).finally(() => {
 
@@ -122,7 +124,7 @@ export default function Notepad(localDocData) {
 
                 </Group>
 
-                <RichTextEditor value={editorValue} onChange={setEditorValue} controls={[
+                <RichTextEditor styles={{root: {width: "100%"}}} value={editorValue} onChange={setEditorValue} controls={[
                     ['bold', 'italic', 'underline', 'link', 'image'],
                     
                 ]} id="rte"/>

@@ -92,12 +92,13 @@ export default function CustomRTE({ localDocData, setLocalDocData, editor }) {
 		<RichTextEditor
 			styles={{
 				root: {
+          // display: "flex",
 					minHeight: "100%",
 					backgroundColor: "#fff",
 				},
 				content: {
-					display: "flex",
-					flexGrow: 1,
+					// display: "flex",
+					// flexGrow: 1,
 					minHeight: "100%",
 					height: "100%",
 				},
