@@ -111,7 +111,7 @@ export default function LandingPage() {
 					</Group>
 				</Container>
 				<Container size={700} className={classes.inner}>
-					<div style={{ width: 240, marginLeft: 'auto', marginRight: 'auto' }}>
+					<div style={{ width: 240, marginLeft: 'auto' }}>
 						<Image
 							radius="md"
 							src="https://logos-world.net/wp-content/uploads/2021/10/Stanford-Emblem.png"
