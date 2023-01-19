@@ -110,7 +110,7 @@ export default function LandingPage() {
 						</Button>
 					</Group>
 				</Container>
-				<Container size={700} className={classes.inner}>
+				<Container size={700}>
 					<Text className={classes.description} color="dimmed">
 						AI generated autocomplete, snippets, outline creation, real-time collaboration, and much much more...
 					</Text>
