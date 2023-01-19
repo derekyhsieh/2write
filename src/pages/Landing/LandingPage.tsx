@@ -111,18 +111,20 @@ export default function LandingPage() {
 					</Group>
 				</Container>
 				<Container size={700} className={classes.inner}>
-					<div style={{ width: 240, marginLeft: 'auto', marginRight: 'auto' }}>
-						<Image
-							radius="md"
-							src="https://logos-world.net/wp-content/uploads/2021/10/Stanford-Emblem.png"
-							alt="Random unsplash image"
-						/>
-						<Image
-							radius="md"
-							src="https://logos-world.net/wp-content/uploads/2022/02/UC-Berkeley-Symbol.png"
-							alt="Random unsplash image"
-						/>
-					</div>
+					<Group>
+						<div style={{ width: 240, marginLeft: 'auto', marginRight: 'auto' }}>
+							<Image
+								radius="md"
+								src="https://logos-world.net/wp-content/uploads/2021/10/Stanford-Emblem.png"
+								alt="Random unsplash image"
+							/>
+							<Image
+								radius="md"
+								src="https://logos-world.net/wp-content/uploads/2022/02/UC-Berkeley-Symbol.png"
+								alt="Random unsplash image"
+							/>
+						</div>
+					</Group>
 				</Container>
 			</div>
 		</AppShell>
