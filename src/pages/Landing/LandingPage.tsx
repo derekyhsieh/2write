@@ -1,4 +1,4 @@
-import { createStyles, Container, Text, Button, Group, AppShell, Header } from '@mantine/core';
+import { createStyles, Container, Text, Button, Group, AppShell, Header, Image } from '@mantine/core';
 import { GithubIcon } from '@mantine/ds';
 import { HeaderMegaMenu } from './Header';
 
@@ -111,9 +111,13 @@ export default function LandingPage() {
 					</Group>
 				</Container>
 				<Container size={700} className={classes.inner}>
-					<Text className={classes.description} color="dimmed">
-						AI generated autocomplete, snippets, outline creation, real-time collaboration, and much much more...
-					</Text>
+					<div style={{ width: 240, marginLeft: 'auto', marginRight: 'auto' }}>
+						<Image
+							radius="md"
+							src="https://images.unsplash.com/photo-1511216335778-7cb8f49fa7a3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80"
+							alt="Random unsplash image"
+						/>
+					</div>
 				</Container>
 			</div>
 		</AppShell>
