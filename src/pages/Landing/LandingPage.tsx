@@ -73,7 +73,7 @@ export default function LandingPage() {
 
 	return (
 		<AppShell
-			header={<Header height={60} p={"sm"}><HeaderMegaMenu/></Header>}
+			header={<Header height={60} p={"sm"}><HeaderMegaMenu /></Header>}
 		>
 			<div className={classes.wrapper}>
 				<Container size={700} className={classes.inner}>
@@ -111,7 +111,9 @@ export default function LandingPage() {
 					</Group>
 				</Container>
 				<Container>
-
+					<Text className={classes.description} color="dimmed">
+						AI generated autocomplete, snippets, outline creation, real-time collaboration, and much much more...
+					</Text>
 				</Container>
 			</div>
 		</AppShell>
