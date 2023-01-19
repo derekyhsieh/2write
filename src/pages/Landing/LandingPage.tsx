@@ -117,6 +117,11 @@ export default function LandingPage() {
 							src="https://logos-world.net/wp-content/uploads/2021/10/Stanford-Emblem.png"
 							alt="Random unsplash image"
 						/>
+						<Image
+							radius="md"
+							src="https://logos-world.net/wp-content/uploads/2022/02/UC-Berkeley-Symbol.png"
+							alt="Random unsplash image"
+						/>
 					</div>
 				</Container>
 			</div>
