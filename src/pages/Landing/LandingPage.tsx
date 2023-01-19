@@ -76,7 +76,7 @@ export default function LandingPage() {
 			header={<Header height={60} p={"sm"}><HeaderMegaMenu/></Header>}
 		>
 			<div className={classes.wrapper}>
-				<Container size={500} className={classes.inner}>
+				<Container size={700} className={classes.inner}>
 					<h1 className={classes.title}>
 						<Text component="span" variant="gradient" gradient={{ from: 'blue', to: 'cyan' }} inherit>
 							Turbocharge
