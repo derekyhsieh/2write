@@ -79,7 +79,7 @@ export default function LandingPage() {
 				<Container size={700} className={classes.inner}>
 					<h1 className={classes.title}>
 						<Text component="span" variant="gradient" gradient={{ from: 'blue', to: 'cyan' }} inherit>
-							Supercharge
+							Turbocharge
 						</Text>{' '}
 						your writing with AI
 					</h1>
