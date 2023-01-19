@@ -81,7 +81,7 @@ export default function LandingPage() {
 						<Text component="span" variant="gradient" gradient={{ from: 'blue', to: 'cyan' }} inherit>
 							Supercharge
 						</Text>{' '}
-						your writing with AI
+						your pussy with AI
 					</h1>
 
 					<Text className={classes.description} color="dimmed">
