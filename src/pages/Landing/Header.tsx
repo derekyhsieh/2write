@@ -31,6 +31,7 @@ import {
     IconChevronDown,
   } from '@tabler/icons';
   import logo from "../../img/logo.png"
+import { ButtonToggle } from './Components/ColorSchemeToggle';
   
   const useStyles = createStyles((theme) => ({
     link: {
@@ -217,9 +218,8 @@ import {
                 Learn
               </a>
             </Group>
-  
+
             <Group className={classes.hiddenMobile}>
-              <Button variant="default">Log in</Button>
               <Button>Sign up</Button>
             </Group>
   

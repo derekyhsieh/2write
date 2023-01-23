@@ -1,6 +1,9 @@
-import { createStyles, Container, Text, Button, Group, AppShell, Header } from '@mantine/core';
+import { createStyles, Container, Text, Button, Group, AppShell, Header, Image, Center, Space } from '@mantine/core';
+import { Carousel } from '@mantine/carousel';
 import { GithubIcon } from '@mantine/ds';
 import { HeaderMegaMenu } from './Header';
+import { CollegeCarousel } from './Components/Carousel';
+import UseCaseGrid from './Components/UseCaseGrid';
 
 const BREAKPOINT = '@media (max-width: 755px)';
 
@@ -13,8 +16,8 @@ const useStyles = createStyles((theme) => ({
 
 	inner: {
 		position: 'relative',
-		paddingTop: 200,
-		paddingBottom: 120,
+		paddingTop: 150,
+		paddingBottom: 50,
 
 		[BREAKPOINT]: {
 			paddingBottom: 80,
@@ -38,7 +41,7 @@ const useStyles = createStyles((theme) => ({
 	},
 
 	description: {
-		marginTop: theme.spacing.xl,
+		marginTop: theme.spacing.md,
 		fontSize: 24,
 
 		[BREAKPOINT]: {
@@ -73,13 +76,14 @@ export default function LandingPage() {
 
 	return (
 		<AppShell
-			header={<Header height={60} p={"sm"}><HeaderMegaMenu/></Header>}
+			header={<Header height={60} p={"sm"}><HeaderMegaMenu /></Header>}
 		>
 			<div className={classes.wrapper}>
+
 				<Container size={700} className={classes.inner}>
 					<h1 className={classes.title}>
 						<Text component="span" variant="gradient" gradient={{ from: 'blue', to: 'cyan' }} inherit>
-							Supercharge
+							Turbocharge
 						</Text>{' '}
 						your writing with AI
 					</h1>
@@ -110,6 +114,23 @@ export default function LandingPage() {
 						</Button>
 					</Group>
 				</Container>
+
+				<Container className={classes.inner}>
+					<Center>
+						<Text className={classes.description} color="dimmed">
+							Loved by students from universities nationwide.
+						</Text>
+					</Center>
+					
+					<Space h="lg"/>
+
+				<CollegeCarousel />
+				</Container>
+
+				<Container>
+					<UseCaseGrid />
+				</Container>
+
 			</div>
 		</AppShell>
 	);
