@@ -92,7 +92,7 @@ export default function CustomRTE({ localDocData, setLocalDocData, editor }) {
 		<RichTextEditor
 			styles={{
 				root: {
-          // display: "flex",
+					// display: "flex",
 					minHeight: "100%",
 					backgroundColor: "#fff",
 				},
@@ -111,7 +111,21 @@ export default function CustomRTE({ localDocData, setLocalDocData, editor }) {
 				<BubbleMenu editor={editor}>
 					<RichTextEditor.ControlsGroup>
 						<RichTextEditor.Control
-							onClick={() => editor?.commands.insertContent("⭐")}
+							onClick={async () => {
+								const res = await fetch("/api/rewrite", {
+									method: "post",
+									headers: { "Content-Type": "application/json" },
+									body: JSON.stringify({
+										prompt: editor.state.doc.textBetween(
+											editor.state.selection.from,
+											editor.state.selection.to,
+											" "
+										),
+									}),
+								});
+								const data = await res.json();
+								editor?.commands.insertContent(data.answer);
+							}}
 							aria-label="Insert star emoji"
 							title="Insert star emoji"
 						>
