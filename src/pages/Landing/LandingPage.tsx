@@ -1,21 +1,32 @@
-import { createStyles, Container, Text, Button, Group, AppShell, Header, Image, Center, Space } from '@mantine/core';
-import { Carousel } from '@mantine/carousel';
-import { GithubIcon } from '@mantine/ds';
-import { HeaderMegaMenu } from './Header';
-import { CollegeCarousel } from './Components/Carousel';
-import UseCaseGrid from './Components/UseCaseGrid';
+import {
+	createStyles,
+	Container,
+	Text,
+	Button,
+	Group,
+	AppShell,
+	Header,
+	Image,
+	Center,
+	Space,
+} from "@mantine/core";
+import { GithubIcon } from "@mantine/ds";
+import { HeaderMegaMenu } from "./Header";
+import { CollegeCarousel } from "./Components/CollegeCarousel";
+import UseCaseGrid from "./Components/UseCaseGrid";
 
-const BREAKPOINT = '@media (max-width: 755px)';
+const BREAKPOINT = "@media (max-width: 755px)";
 
 const useStyles = createStyles((theme) => ({
 	wrapper: {
-		position: 'relative',
-		boxSizing: 'border-box',
-		backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.white,
+		position: "relative",
+		boxSizing: "border-box",
+		backgroundColor:
+			theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.white,
 	},
 
 	inner: {
-		position: 'relative',
+		position: "relative",
 		paddingTop: 150,
 		paddingBottom: 50,
 
@@ -32,7 +43,7 @@ const useStyles = createStyles((theme) => ({
 		lineHeight: 1.1,
 		margin: 0,
 		padding: 0,
-		color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+		color: theme.colorScheme === "dark" ? theme.white : theme.black,
 
 		[BREAKPOINT]: {
 			fontSize: 42,
@@ -76,20 +87,29 @@ export default function LandingPage() {
 
 	return (
 		<AppShell
-			header={<Header height={60} p={"sm"}><HeaderMegaMenu /></Header>}
+			header={
+				<Header height={60} p={"sm"}>
+					<HeaderMegaMenu />
+				</Header>
+			}
 		>
 			<div className={classes.wrapper}>
-
 				<Container size={700} className={classes.inner}>
 					<h1 className={classes.title}>
-						<Text component="span" variant="gradient" gradient={{ from: 'blue', to: 'cyan' }} inherit>
+						<Text
+							component="span"
+							variant="gradient"
+							gradient={{ from: "blue", to: "cyan" }}
+							inherit
+						>
 							Turbocharge
-						</Text>{' '}
+						</Text>{" "}
 						your writing with AI
 					</h1>
 
 					<Text className={classes.description} color="dimmed">
-						AI generated autocomplete, snippets, outline creation, real-time collaboration, and much much more...
+						AI generated autocomplete, snippets, outline creation, real-time
+						collaboration, and much much more...
 					</Text>
 
 					<Group className={classes.controls}>
@@ -97,7 +117,7 @@ export default function LandingPage() {
 							size="xl"
 							className={classes.control}
 							variant="gradient"
-							gradient={{ from: 'blue', to: 'cyan' }}
+							gradient={{ from: "blue", to: "cyan" }}
 						>
 							Get Started
 						</Button>
@@ -115,22 +135,19 @@ export default function LandingPage() {
 					</Group>
 				</Container>
 
-				<Container className={classes.inner}>
-					<Center>
-						<Text className={classes.description} color="dimmed">
-							Loved by students from universities nationwide.
-						</Text>
-					</Center>
-					
-					<Space h="lg"/>
+				<Center>
+					<Text className={classes.description} color="dimmed" align="center">
+						Loved by students from universities nationwide.
+					</Text>
+				</Center>
 
+				<Space h="lg" />
 				<CollegeCarousel />
-				</Container>
+				<Space h="lg" />
 
 				<Container>
 					<UseCaseGrid />
 				</Container>
-
 			</div>
 		</AppShell>
 	);
