@@ -1,12 +1,15 @@
 import { createStyles, Image } from "@mantine/core";
 import { Carousel, Embla } from "@mantine/carousel";
 import {
-	useRef,
 	useState,
 	useEffect,
-	useCallback,
-	useLayoutEffect,
 } from "react";
+
+import stanford from "../../../img/stanford.png"
+import cornell from "../../../img/cornell.png"
+import berkeley from "../../../img/berkeley.png"
+import mit from "../../../img/mit.png"
+import harvard from "../../../img/harvard.png"
 
 const useStyles = createStyles((theme, _params, getRef) => ({
 	price: {
@@ -65,7 +68,7 @@ export function CollegeCarousel() {
 			slideGap={0}
 			breakpoints={[
 				{ maxWidth: "md", slideSize: "50%" },
-				{ maxWidth: "sm", slideSize: "100%", slideGap: 0 },
+				{ maxWidth: "sm", slideSize: "100%" },
 			]}
 			loop
 			align="start"
@@ -77,8 +80,7 @@ export function CollegeCarousel() {
 					width={200}
 					height={80}
 					radius="md"
-					src="https://logos-world.net/wp-content/uploads/2021/10/Stanford-Emblem.png"
-					alt="Random unsplash image"
+					src={stanford}
 				/>
 			</Carousel.Slide>
 			<Carousel.Slide>
@@ -86,8 +88,7 @@ export function CollegeCarousel() {
 					width={200}
 					height={80}
 					radius="md"
-					src="https://logos-world.net/wp-content/uploads/2022/02/UC-Berkeley-Symbol.png"
-					alt="Random unsplash image"
+					src={berkeley}
 				/>
 			</Carousel.Slide>
 			<Carousel.Slide>
@@ -95,8 +96,7 @@ export function CollegeCarousel() {
 					width={200}
 					height={80}
 					radius="md"
-					src="https://logos-world.net/wp-content/uploads/2022/01/Cornell-University-Logo.png"
-					alt="Random unsplash image"
+					src={cornell}
 				/>
 			</Carousel.Slide>
 			<Carousel.Slide>
@@ -104,8 +104,7 @@ export function CollegeCarousel() {
 					width={200}
 					height={80}
 					radius="md"
-					src="https://1000logos.net/wp-content/uploads/2022/08/MIT-Logo.png"
-					alt="Random unsplash image"
+					src={mit}
 				/>
 			</Carousel.Slide>
 			<Carousel.Slide>
@@ -113,8 +112,7 @@ export function CollegeCarousel() {
 					width={200}
 					height={80}
 					radius="md"
-					src="https://logos-world.net/wp-content/uploads/2021/01/Harvard-Logo.png"
-					alt="Random unsplash image"
+					src={harvard}
 				/>
 			</Carousel.Slide>
 		</Carousel>

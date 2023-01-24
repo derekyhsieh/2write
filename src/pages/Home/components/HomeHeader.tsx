@@ -26,6 +26,7 @@ const useStyles = createStyles((theme) => ({
 		alignItems: "center",
 		justifyContent: "space-between",
 		height: "100%",
+		cursor: "pointer"
 	},
 
 	search: {
@@ -82,7 +83,7 @@ export default function HomeHeader() {
 			style={{ position: "fixed", top: 0, zIndex: 1 }}
 		>
 			<div className={classes.inner}>
-				<Group align={"center"}>
+				<Group align={"center"} onClick={() => window.location.reload()}>
 					<Burger opened={opened} onClick={toggle} size="sm" />
 					<Image src={logo} width={35} height={35} mb={4} mr={-10} />
 					<Text
