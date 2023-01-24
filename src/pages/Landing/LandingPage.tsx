@@ -14,6 +14,7 @@ import { GithubIcon } from "@mantine/ds";
 import { HeaderMegaMenu } from "./Header";
 import { CollegeCarousel } from "./Components/CollegeCarousel";
 import UseCaseGrid from "./Components/UseCaseGrid";
+import { Features } from "./Components/Features";
 
 const BREAKPOINT = "@media (max-width: 755px)";
 
@@ -145,9 +146,10 @@ export default function LandingPage() {
 				<CollegeCarousel />
 				<Space h="lg" />
 
-				<Container>
+				{/* <Container>
 					<UseCaseGrid />
-				</Container>
+				</Container> */}
+				<Features/>
 			</div>
 		</AppShell>
 	);

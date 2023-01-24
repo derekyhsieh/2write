@@ -1,14 +1,12 @@
 import {
     createStyles,
-    Badge,
-    Group,
     Title,
     Text,
     Card,
     SimpleGrid,
     Container,
   } from '@mantine/core';
-  import { IconGauge, IconUser, IconCookie } from '@tabler/icons';
+  import { IconGauge, IconUser, IconMessageChatbot, IconBallpen, IconFriends, IconClipboardTypography} from '@tabler/icons';
   
   const mockdata = [
     {
@@ -26,8 +24,27 @@ import {
     {
       title: 'Outline Assistant',
       description:
-      'Generate useful and structured essay outlines',
-      icon: IconCookie,
+      'Generate useful essay outlines to structure your essay.',
+      icon: IconMessageChatbot,
+    },
+    {
+      title: 'Rewrite Sentences',
+      description:
+      "Have a phrase that just doesn't flow? Have 2write rewrite it.",
+      icon: IconBallpen,
+    },
+  
+    {
+      title: 'Bibliography Generation',
+      description:
+      "Automatically create bibliography from a group of links",
+      icon: IconClipboardTypography,
+    },
+    {
+      title: 'Real-time collaboration',
+      description:
+      "Allows multiple users to work together on the same document or project at the same time.",
+      icon: IconFriends,
     },
   ];
   
