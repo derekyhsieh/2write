@@ -61,7 +61,6 @@ export default function EssayCard(props: {
 		html2canvas(iframe.contentWindow.document.body).then(function (canvas) {
 			iframe.style.display = "none";
 			let image = canvas.toDataURL("image/jpeg");
-			console.log(image);
 			setImgSrc(image);
 		});
 	}, [props.ageFilter, props.ownerFilter, props.searchParams]);
