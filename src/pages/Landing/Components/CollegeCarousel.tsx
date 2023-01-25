@@ -5,11 +5,11 @@ import {
 	useEffect,
 } from "react";
 
-import stanford from "../../../img/stanford.png"
-import cornell from "../../../img/cornell.png"
-import berkeley from "../../../img/berkeley.png"
-import mit from "../../../img/mit.png"
-import harvard from "../../../img/harvard.png"
+import stanford from "../../../../public/img/stanford.png"
+import cornell from "../../../../public/img/cornell.png"
+import berkeley from "../../../../public/img/berkeley.png"
+import mit from "../../../../public/img/mit.png"
+import harvard from  "../../../../public/img/harvard.png"
 
 export function CollegeCarousel() {
 	const [embla, setEmbla] = useState<Embla | null>(null);
