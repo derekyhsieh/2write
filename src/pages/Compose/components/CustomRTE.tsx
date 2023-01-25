@@ -6,7 +6,7 @@ import {
 import { BubbleMenu } from "@tiptap/react";
 import { useDebounce } from "use-debounce";
 
-import { Text, Group } from "@mantine/core";
+import { Text, Loader, Stack } from "@mantine/core";
 
 import { useEffect, useState } from "react";
 import {
@@ -23,6 +23,7 @@ export default function CustomRTE({ localDocData, setLocalDocData, editor }) {
 
 	const [searchParams, setSearchParams] = useSearchParams();
 	const [initalContent, setInitialContent] = useState("");
+	const [isRewriteLoading, setIsRewriteLoading] = useState(false);
 
 	const { user } = UserAuth();
 
@@ -110,13 +111,11 @@ export default function CustomRTE({ localDocData, setLocalDocData, editor }) {
 			{editor && (
 				<BubbleMenu editor={editor}>
 					<RichTextEditor.ControlsGroup>
-						<RichTextEditor.Control
-							onClick={async () => {
-								const res = await fetch("/api/rewrite", {
-									method: "post",
-									headers: { "Content-Type": "application/json" },
-									body: JSON.stringify({
-										prompt: editor.state.doc.textBetween(
+						<Stack spacing={0}>
+							<RichTextEditor.Control>
+								<Text m={3} fz="md" weight={600}>
+									{getWordCountFromString(
+										editor.state.doc.textBetween(
 											editor.state.selection.from,
 											editor.state.selection.to,
 											" "
