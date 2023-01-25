@@ -89,7 +89,6 @@ interface HomeHeaderProps {}
 export default function HomeHeader() {
 	const { user, logOut } = UserAuth();
 	const [opened, { toggle }] = useDisclosure(false);
-	const [tooltipOpened, setTooltipOpened] = useState(false);
 
 	const { classes, cx } = useStyles();
 	const [userMenuOpened, setUserMenuOpened] = useState(false);
@@ -185,8 +184,6 @@ export default function HomeHeader() {
 				<UserMenu
 					userMenuOpened={userMenuOpened}
 					setUserMenuOpened={setUserMenuOpened}
-					tooltipOpened={tooltipOpened}
-					setTooltipOpened={setTooltipOpened}
 					classes={classes}
 					user={user}
 					logOut={logOut}
