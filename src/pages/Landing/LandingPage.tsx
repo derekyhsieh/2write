@@ -15,6 +15,9 @@ import { HeaderMegaMenu } from "./Header";
 import { CollegeCarousel } from "./Components/CollegeCarousel";
 import UseCaseGrid from "./Components/UseCaseGrid";
 import { Features } from "./Components/Features";
+import VideoLooper from 'react-video-looper'
+import { useNavigate } from "react-router-dom";
+// import { getLandingPageVideo } from "../../services/FirestoreHelpers";
 
 const BREAKPOINT = "@media (max-width: 755px)";
 
@@ -28,12 +31,12 @@ const useStyles = createStyles((theme) => ({
 
 	inner: {
 		position: "relative",
-		paddingTop: 150,
+		paddingTop: -10,
 		paddingBottom: 50,
 
 		[BREAKPOINT]: {
 			paddingBottom: 80,
-			paddingTop: 80,
+			paddingTop: 20,
 		},
 	},
 
@@ -45,6 +48,7 @@ const useStyles = createStyles((theme) => ({
 		margin: 0,
 		padding: 0,
 		color: theme.colorScheme === "dark" ? theme.white : theme.black,
+		textAlign: "center",
 
 		[BREAKPOINT]: {
 			fontSize: 42,
@@ -53,7 +57,10 @@ const useStyles = createStyles((theme) => ({
 	},
 
 	description: {
-		marginTop: theme.spacing.md,
+		paddingTop: theme.spacing.sm,
+		paddingBottom: theme.spacing.sm,
+		textAlign: "center",
+		marginTop: theme.spacing.sm,
 		fontSize: 24,
 
 		[BREAKPOINT]: {
@@ -86,6 +93,8 @@ const useStyles = createStyles((theme) => ({
 export default function LandingPage() {
 	const { classes } = useStyles();
 
+	const navigate = useNavigate()
+
 	return (
 		<AppShell
 			header={
@@ -98,6 +107,7 @@ export default function LandingPage() {
 				<Container size={700} className={classes.inner}>
 					<h1 className={classes.title}>
 						<Text
+							ta="center"
 							component="span"
 							variant="gradient"
 							gradient={{ from: "blue", to: "cyan" }}
@@ -108,32 +118,54 @@ export default function LandingPage() {
 						your writing with AI
 					</h1>
 
+
+
+					<video
+						src="https://firebasestorage.googleapis.com/v0/b/write-dev.appspot.com/o/2write%20landing%20page%20video.mp4?alt=media&token=4fd3e374-3e92-4398-b22e-3c16b93802cb"
+						loop autoPlay muted playsInline style={{
+							width: "100%",
+							marginTop: "10px",
+							height: "100%",
+							borderRadius: "8px",
+							display: "block",
+							objectFit: "cover",
+							backgroundColor: "rgba(0,0,0,0)",
+							objectPosition: "50% 50%",
+							boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"
+
+						}}></video>
+
+
 					<Text className={classes.description} color="dimmed">
 						AI generated autocomplete, snippets, outline creation, real-time
 						collaboration, and much much more...
 					</Text>
 
-					<Group className={classes.controls}>
-						<Button
-							size="xl"
-							className={classes.control}
-							variant="gradient"
-							gradient={{ from: "blue", to: "cyan" }}
-						>
-							Get Started
-						</Button>
 
-						<Button
-							component="a"
-							href="https://youtube.com"
-							size="xl"
-							variant="default"
-							className={classes.control}
-							leftIcon={<GithubIcon size={20} />}
-						>
-							Need Help?
-						</Button>
-					</Group>
+					<Center>
+						<Group pt="md">
+							<Button
+
+								onClick={() => navigate("/auth")}
+								size="xl"
+								className={classes.control}
+								variant="gradient"
+								gradient={{ from: "blue", to: "cyan" }}
+							>
+								Get Started
+							</Button>
+
+							<Button
+								component="a"
+								href="https://youtube.com"
+								size="xl"
+								variant="default"
+								className={classes.control}
+							>
+								Need Help?
+							</Button>
+						</Group>
+					</Center>
 				</Container>
 
 				<Center>
@@ -149,7 +181,7 @@ export default function LandingPage() {
 				{/* <Container>
 					<UseCaseGrid />
 				</Container> */}
-				<Features/>
+				<Features />
 			</div>
 		</AppShell>
 	);

@@ -10,6 +10,16 @@ import {
 } from "firebase/firestore";
 import { db } from "./firebase";
 import { convertEditorJSONToPlainText } from "../utils/ExtractEditorJSON";
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
+
+const storage = getStorage();
+
+// export const getLandingPageVideo = () => {
+// 	storage.ref('image.jpg').getDownloadURL()
+// 	.then((url) => {
+// 	  // Do something with the URL ...
+// 	})
+// }
 
 // saving user essay document in firestore
 // documentation says tiptap sanitizes html to only allow tags so we should be ok with saving html output converted to string directly
@@ -68,6 +78,8 @@ const loadEssay = async (userID: string, essayID: string) => {
 		console.log("Essay does not exist");
 	}
 };
+
+
 
 const loadEssayList = async (userID: string) => {
 	const essayListRef = collection(db, "users", userID, "essays");

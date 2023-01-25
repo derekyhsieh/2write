@@ -126,8 +126,8 @@ export default function CustomRTE({ localDocData, setLocalDocData, editor }) {
 								const data = await res.json();
 								editor?.commands.insertContent(data.answer);
 							}}
-							aria-label="Insert star emoji"
-							title="Insert star emoji"
+							aria-label="Rewrite with AI"
+							title="Rewrite with AI"
 						>
 							<Text m={3} fz="md" weight={600}>
 								{getWordCountFromString(
