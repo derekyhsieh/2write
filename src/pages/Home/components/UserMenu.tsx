@@ -1,77 +1,67 @@
-import React from "react";
-import {
-	Group,
-	Menu,
-	Tooltip,
-	UnstyledButton,
-    Avatar,
-} from "@mantine/core";
+import { Group, Menu, UnstyledButton, Avatar } from "@mantine/core";
 import { convertURLToName } from "../../../utils/misc";
 import { IconLogout } from "@tabler/icons";
+import { IconMail, IconUser } from "@tabler/icons";
 
 function UserMenu(props: {
 	userMenuOpened: boolean;
 	setUserMenuOpened: any;
-	tooltipOpened: boolean;
-	setTooltipOpened: any;
 	classes: any;
 	user: any;
-    logOut: any;
+	logOut: any;
 }) {
+	let blankComponent;
+
 	return (
 		<Group>
 			<Menu
 				width={260}
-				position="bottom-end"
-				transition="pop-top-right"
+				position={"bottom-end"}
+				transition={"pop-top-right"}
+				transitionDuration={100}
 				onClose={() => props.setUserMenuOpened(false)}
-				onOpen={() => {
-					props.setUserMenuOpened(true);
-					props.setTooltipOpened(false);
-				}}
+				onOpen={() => props.setUserMenuOpened(true)}
 				opened={props.userMenuOpened}
 			>
 				<Menu.Target>
 					<UnstyledButton className={props.classes.user}>
 						<Group spacing={7}>
-							<Tooltip
-								label={
-									<>
-										<strong className={props.classes.tooltipTitle}>
-											{convertURLToName(props.user.providerData[0].providerId)}{" "}
-											Account
-										</strong>
-										{props.user.displayName === "" || props.user.displayName ? <br /> : ""}
-										{props.user.displayName}
-										{props.user.email ? <br /> : ""}
-										{props.user.email ? props.user.email : ""}
-									</>
+							<Avatar
+								className={
+									props.userMenuOpened
+										? props.classes.avatarMenu
+										: props.classes.avatarHover
 								}
-								multiline
-								transition="fade"
-								transitionDuration={200}
-								width={"auto"}
-								onMouseEnter={() =>
-									setTimeout(() => props.setTooltipOpened(true), 400)
-								}
-								onMouseLeave={() => props.setTooltipOpened(false)}
-								opened={props.userMenuOpened ? false : props.tooltipOpened}
-								style={{ backgroundColor: "#4B4B4B" }}
-							>
-								<Avatar
-									className={
-										props.userMenuOpened ? props.classes.avatarMenu : props.classes.avatarHover
-									}
-									src={props.user.photoURL}
-									alt={props.user.displayName}
-									radius="xl"
-									size={40}
-								/>
-							</Tooltip>
+								src={props.user.photoURL}
+								alt={props.user.displayName}
+								radius="xl"
+								size={40}
+							/>
 						</Group>
 					</UnstyledButton>
 				</Menu.Target>
 				<Menu.Dropdown>
+					<Menu.Label>
+						<strong className={props.classes.tooltipTitle}>
+							{convertURLToName(props.user.providerData[0].providerId)} Account
+						</strong>
+					</Menu.Label>
+					{props.user.displayName ? (
+						<Menu.Item icon={<IconUser size={14} stroke={1.5} />}>
+							{props.user.displayName}
+						</Menu.Item>
+					) : (
+						blankComponent
+					)}
+
+					{props.user.email ? (
+						<Menu.Item icon={<IconMail size={14} stroke={1.5} />}>
+							{props.user.email}
+						</Menu.Item>
+					) : (
+						blankComponent
+					)}
+					<Menu.Divider />
 					<Menu.Item
 						onClick={props.logOut}
 						icon={<IconLogout size={14} stroke={1.5} />}
