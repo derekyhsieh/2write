@@ -119,36 +119,52 @@ export default function CustomRTE({ localDocData, setLocalDocData, editor }) {
 											editor.state.selection.from,
 											editor.state.selection.to,
 											" "
-										),
-									}),
-								});
-								const data = await res.json();
-								editor?.commands.insertContent(data.answer);
-							}}
-							aria-label="Rewrite with AI"
-							title="Rewrite with AI"
-						>
-							<Text m={3} fz="md" weight={600}>
-								{getWordCountFromString(
-									editor.state.doc.textBetween(
-										editor.state.selection.from,
-										editor.state.selection.to,
-										" "
-									)
-								) + " "}
-								words
-							</Text>
-							<Text
-								variant="gradient"
-								gradient={{ from: "indigo", to: "cyan", deg: 45 }}
-								weight="semibold"
-								sx={{ fontFamily: "Greycliff CF, sans-serif" }}
-								p={5}
-								m={5}
-							>
-								rewrite with ai
-							</Text>
-						</RichTextEditor.Control>
+										)
+									) + " "}
+									words
+								</Text>
+							</RichTextEditor.Control>
+							<RichTextEditor.Control>
+								{isRewriteLoading ? (
+									<Loader h={20} w={20} />
+								) : (
+									<Text
+										variant="gradient"
+										gradient={{ from: "indigo", to: "cyan", deg: 45 }}
+										weight="semibold"
+										sx={{ fontFamily: "Greycliff CF, sans-serif" }}
+										p={5}
+										m={5}
+										onClick={async () => {
+											setIsRewriteLoading(true);
+											try {
+												const res = await fetch("/api/rewrite", {
+													method: "post",
+													headers: { "Content-Type": "application/json" },
+													body: JSON.stringify({
+														prompt: editor.state.doc.textBetween(
+															editor.state.selection.from,
+															editor.state.selection.to,
+															" "
+														),
+													}),
+												});
+												const data = await res.json();
+												setIsRewriteLoading(false);
+												editor?.commands.insertContent(data.answer);
+											} catch (e) {
+												setIsRewriteLoading(false);
+												console.error(e);
+											}
+										}}
+										aria-label="Rewrite with AI"
+										title="Rewrite with AI"
+									>
+										Rewrite with AI
+									</Text>
+								)}
+							</RichTextEditor.Control>
+						</Stack>
 					</RichTextEditor.ControlsGroup>
 				</BubbleMenu>
 			)}
