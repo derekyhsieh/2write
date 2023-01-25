@@ -60,6 +60,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.4.5",
     "react-video-looper": "^1.0.16",
+    "tiny-glob": "^0.2.9",
     "tippy.js": "^6.3.7",
     "use-debounce": "^9.0.2",
     "uuid": "^9.0.0",
