@@ -13,6 +13,7 @@ import { HeaderMegaMenu } from "./Header";
 import { CollegeCarousel } from "./Components/CollegeCarousel";
 import { Features } from "./Components/Features";
 import { useNavigate } from "react-router-dom";
+import { FooterLinks } from "./Footer";
 // import { getLandingPageVideo } from "../../services/FirestoreHelpers";
 
 const BREAKPOINT = "@media (max-width: 755px)";
@@ -90,7 +91,7 @@ const useStyles = createStyles((theme) => ({
 export default function LandingPage() {
 	const { classes } = useStyles();
 
-	const navigate = useNavigate()
+	const navigate = useNavigate();
 
 	return (
 		<AppShell
@@ -98,6 +99,19 @@ export default function LandingPage() {
 				<Header height={60} p={"sm"}>
 					<HeaderMegaMenu />
 				</Header>
+			}
+			footer={
+				<FooterLinks
+					data={[
+						{
+							title: "Privacy",
+							links: [
+								{ label: "Terms & Conditions", link: "" },
+								{ label: "Privacy Policy", link: "" },
+							],
+						},
+					]}
+				/>
 			}
 		>
 			<div className={classes.wrapper}>
@@ -115,11 +129,13 @@ export default function LandingPage() {
 						your writing with AI
 					</h1>
 
-
-
 					<video
 						src="https://firebasestorage.googleapis.com/v0/b/write-dev.appspot.com/o/2write%20landing%20page%20video.mp4?alt=media&token=4fd3e374-3e92-4398-b22e-3c16b93802cb"
-						loop autoPlay muted playsInline style={{
+						loop
+						autoPlay
+						muted
+						playsInline
+						style={{
 							width: "100%",
 							marginTop: "10px",
 							height: "100%",
@@ -128,21 +144,18 @@ export default function LandingPage() {
 							objectFit: "cover",
 							backgroundColor: "rgba(0,0,0,0)",
 							objectPosition: "50% 50%",
-							boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"
-
-						}}></video>
-
+							boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+						}}
+					></video>
 
 					<Text className={classes.description} color="dimmed">
 						AI generated autocomplete, snippets, outline creation, real-time
 						collaboration, and much much more...
 					</Text>
 
-
 					<Center>
 						<Group pt="md">
 							<Button
-
 								onClick={() => navigate("/auth")}
 								size="xl"
 								className={classes.control}
