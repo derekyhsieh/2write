@@ -1,6 +1,14 @@
-import express from "express";
-import bodyParser from "body-parser";
-import { Configuration, OpenAIApi } from "openai";
+// import express from "express";
+const express = require("express")
+
+const bodyParser = require("body-parser")
+
+// import bodyParser from "body-parser";
+
+
+const {Configuration, OpenAIApi} = require("openai")
+
+// import { Configuration, OpenAIApi } from "openai";
 
 const app = express();
 app.use(bodyParser.json());
