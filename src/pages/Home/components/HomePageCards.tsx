@@ -16,8 +16,6 @@ import {
 	Image,
 } from "@mantine/core";
 import {
-	IconDots,
-	IconUsers,
 	IconChevronDown,
 	IconPlus,
 	IconNews,
@@ -27,13 +25,10 @@ import {
 } from "@tabler/icons";
 import React, { useState, useEffect } from "react";
 import {
-	createSearchParams,
-	useNavigate,
 	useSearchParams,
 } from "react-router-dom";
 import { loadEssayList } from "../../../services/FirestoreHelpers";
 import { UserAuth } from "../../../context/AuthContext";
-import { v4 as uuidv4 } from "uuid";
 import { searchDocumentList } from "../../../utils/misc";
 import { DocumentData } from "firebase/firestore";
 import EssayCard from "./EssayCard";
@@ -83,7 +78,6 @@ export default function HomePageCards(props: {
 	promptModalOnClick?: Function;
 }) {
 	const [cards, setCards] = useState([]);
-	const navigate = useNavigate();
 	const { classes } = useStyles();
 	const [ownerFilter, setOwnerFilter] = useState("Owned by anyone");
 	const [ageFilter, setAgeFilter] = useState("Newest");
@@ -103,7 +97,7 @@ export default function HomePageCards(props: {
 					<EssayCard
 						essayId={essay.essayId}
 						essayTitle={essay.title}
-						imgHtmlString={essay.content}
+						essayContent={essay.content}
 						ageFilter={ageFilter}
 						ownerFilter={ownerFilter}
 						searchParams={searchParams}
