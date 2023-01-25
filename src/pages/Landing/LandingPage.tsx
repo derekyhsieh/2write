@@ -179,7 +179,7 @@ export default function LandingPage() {
 
 				<Center>
 					<Text className={classes.description} color="dimmed" align="center">
-						Loved by students from universities nationwide.
+						Loved by students from universities nationwide:
 					</Text>
 				</Center>
 

@@ -7,11 +7,6 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 export interface IAuthRouteProps {children: React.ReactNode}
 
-
-
-
-export interface IAuthRouteProps {}
-
 const ProtectedAuth: React.FunctionComponent<IAuthRouteProps> = (props) => {
   const { children } = props;
   const auth = getAuth();

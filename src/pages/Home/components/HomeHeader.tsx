@@ -10,6 +10,7 @@ import {
 	ActionIcon,
 	Menu,
 	Image,
+	Tooltip,
 } from "@mantine/core";
 import {
 	IconLogout,
@@ -21,7 +22,7 @@ import {
 	IconTrash,
 	IconSwitchHorizontal,
 	IconChevronDown,
-  } from '@tabler/icons';
+} from "@tabler/icons";
 import { useDisclosure } from "@mantine/hooks";
 import { IconSearch, IconUser, IconBell } from "@tabler/icons";
 import { loadEssayList } from "../../../services/FirestoreHelpers";
@@ -30,6 +31,7 @@ import { useEffect, useRef, useState } from "react";
 import {
 	getMonthName,
 	convertFirebaseTimestampToDate,
+	convertURLToName,
 } from "../../../utils/misc";
 import { createSearchParams, useNavigate } from "react-router-dom";
 import logo from "../../../img/logo.png";
@@ -40,28 +42,26 @@ const useStyles = createStyles((theme) => ({
 		alignItems: "center",
 		justifyContent: "space-between",
 		height: "100%",
-		cursor: "pointer"
+		cursor: "pointer",
 	},
 	user: {
 		color: theme.white,
 		padding: `${theme.spacing.xs}px ${theme.spacing.sm}px`,
 		borderRadius: theme.radius.sm,
-		transition: 'background-color 100ms ease',
-	
-	
-		[theme.fn.smallerThan('xs')]: {
-		  display: 'none',
+		transition: "background-color 100ms ease",
+
+		[theme.fn.smallerThan("xs")]: {
+			display: "none",
 		},
-	  },
-	
-	  burger: {
-		[theme.fn.largerThan('xs')]: {
-		  display: 'none',
+	},
+
+	burger: {
+		[theme.fn.largerThan("xs")]: {
+			display: "none",
 		},
-	  },
-	
-	  userActive: {
-	  },
+	},
+
+	userActive: {},
 
 	search: {
 		[theme.fn.smallerThan("sm")]: {
@@ -69,16 +69,30 @@ const useStyles = createStyles((theme) => ({
 		},
 		width: "60%",
 	},
+
+	tooltipTitle: {
+		fontSize: theme.fontSizes.md,
+	},
+
+	avatarHover: {
+		":hover": {
+			outline: "3px solid #E9E9E9",
+		},
+	},
+
+	avatarMenu: {
+		outline: "3px solid #D4D4D4",
+	}
 }));
 
-interface HomeHeaderProps { }
+interface HomeHeaderProps {}
 
 export default function HomeHeader() {
 	const { user, logOut } = UserAuth();
 	const [opened, { toggle }] = useDisclosure(false);
+	const [tooltipOpened, setTooltipOpened] = useState(false);
 
-
-	const { classes, theme, cx } = useStyles();
+	const { classes, cx } = useStyles();
 	const [userMenuOpened, setUserMenuOpened] = useState(false);
 
 	const [searchQuery, setSearchQuery] = useState("");
@@ -170,32 +184,77 @@ export default function HomeHeader() {
 				/>
 
 				<Group>
-				<Menu
-            width={260}
-            position="bottom-end"
-            transition="pop-top-right"
-            onClose={() => setUserMenuOpened(false)}
-            onOpen={() => setUserMenuOpened(true)}
-          >
-            <Menu.Target>
-              <UnstyledButton
-                className={cx(classes.user, { [classes.userActive]: userMenuOpened })}
-              >
-                <Group spacing={7}>
-                  <Avatar src={user.photoURL} alt={user.displayName} radius="xl" size={30} />
-                  <Text weight={500} size="sm" sx={{ lineHeight: 1, color: theme.black }} mr={3}>
-                    {user.displayName}
-                  </Text>
-                  <IconChevronDown size={12} stroke={1.5} />
-                </Group>
-              </UnstyledButton>
-            </Menu.Target>
-            <Menu.Dropdown>
-              <Menu.Item onClick={logOut} icon={<IconLogout size={14} stroke={1.5} />}>Logout</Menu.Item>
-
-            
-            </Menu.Dropdown>
-          </Menu>
+					<Menu
+						width={260}
+						position="bottom-end"
+						transition="pop-top-right"
+						onClose={() => setUserMenuOpened(false)}
+						onOpen={() => {
+							setUserMenuOpened(true);
+							setTooltipOpened(false);
+						}}
+						opened={userMenuOpened}
+					>
+						<Menu.Target>
+							<UnstyledButton
+								className={cx(classes.user, {
+									[classes.userActive]: userMenuOpened,
+								})}
+							>
+								<Group spacing={7}>
+									<Tooltip
+										label={
+											<>
+												<strong className={classes.tooltipTitle}>
+													{convertURLToName(user.providerData[0].providerId)}
+												</strong>
+												{user.displayName === "" || user.displayName ? (
+													<br />
+												) : (
+													""
+												)}
+												{user.displayName}
+												{user.email ? <br /> : ""}
+												{user.email ? user.email : ""}
+											</>
+										}
+										multiline
+										transition="fade"
+										transitionDuration={200}
+										width={"auto"}
+										onMouseEnter={() => setTooltipOpened(true)}
+										onMouseLeave={() => setTooltipOpened(false)}
+										opened={userMenuOpened ? false : tooltipOpened}
+										style={{ backgroundColor: "#4B4B4B" }}
+									>
+										<Avatar
+											className={userMenuOpened ? classes.avatarMenu : classes.avatarHover}
+											src={user.photoURL}
+											alt={user.displayName}
+											radius="xl"
+											size={40}
+										/>
+									</Tooltip>
+									{/* <Text
+										weight={500}
+										size="sm"
+										sx={{ lineHeight: 1, color: theme.black }}
+									>
+										{user.displayName}
+									</Text> */}
+									{/* <IconChevronDown size={25} stroke={1.5} color={theme.black}/> */}
+								</Group>
+							</UnstyledButton>
+						</Menu.Target>
+						<Menu.Dropdown>
+							<Menu.Item
+								onClick={logOut}
+								icon={<IconLogout size={14} stroke={1.5} />}
+							>
+								Logout
+							</Menu.Item>
+						</Menu.Dropdown>
+					</Menu>
 				</Group>
 			</div>
 		</Header>

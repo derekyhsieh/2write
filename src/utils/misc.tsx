@@ -40,4 +40,11 @@ function searchDocumentList(
 	return filteredResults.sort((a, b) => b.score - a.score);
 }
 
-export { getMonthName, convertFirebaseTimestampToDate, searchDocumentList };
+// function to convert company URLs such as "google.com" to "Google"
+function convertURLToName(url) {
+	let name = url.split(".")[0];
+	name = name.charAt(0).toUpperCase() + name.slice(1);
+	return name;
+}
+
+export { getMonthName, convertFirebaseTimestampToDate, searchDocumentList, convertURLToName };
