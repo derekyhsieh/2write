@@ -35,6 +35,7 @@ import {
 } from "../../../utils/misc";
 import { createSearchParams, useNavigate } from "react-router-dom";
 import logo from "../../../img/logo.png";
+import UserMenu from "./UserMenu";
 
 const useStyles = createStyles((theme) => ({
 	inner: {
@@ -61,8 +62,6 @@ const useStyles = createStyles((theme) => ({
 		},
 	},
 
-	userActive: {},
-
 	search: {
 		[theme.fn.smallerThan("sm")]: {
 			display: "none",
@@ -82,7 +81,7 @@ const useStyles = createStyles((theme) => ({
 
 	avatarMenu: {
 		outline: "3px solid #D4D4D4",
-	}
+	},
 }));
 
 interface HomeHeaderProps {}
@@ -183,79 +182,15 @@ export default function HomeHeader() {
 					}}
 				/>
 
-				<Group>
-					<Menu
-						width={260}
-						position="bottom-end"
-						transition="pop-top-right"
-						onClose={() => setUserMenuOpened(false)}
-						onOpen={() => {
-							setUserMenuOpened(true);
-							setTooltipOpened(false);
-						}}
-						opened={userMenuOpened}
-					>
-						<Menu.Target>
-							<UnstyledButton
-								className={cx(classes.user, {
-									[classes.userActive]: userMenuOpened,
-								})}
-							>
-								<Group spacing={7}>
-									<Tooltip
-										label={
-											<>
-												<strong className={classes.tooltipTitle}>
-													{convertURLToName(user.providerData[0].providerId)} Account
-												</strong>
-												{user.displayName === "" || user.displayName ? (
-													<br />
-												) : (
-													""
-												)}
-												{user.displayName}
-												{user.email ? <br /> : ""}
-												{user.email ? user.email : ""}
-											</>
-										}
-										multiline
-										transition="fade"
-										transitionDuration={200}
-										width={"auto"}
-										onMouseEnter={() => setTimeout(() => setTooltipOpened(true), 400)}
-										onMouseLeave={() => setTooltipOpened(false)}
-										opened={userMenuOpened ? false : tooltipOpened}
-										style={{ backgroundColor: "#4B4B4B" }}
-									>
-										<Avatar
-											className={userMenuOpened ? classes.avatarMenu : classes.avatarHover}
-											src={user.photoURL}
-											alt={user.displayName}
-											radius="xl"
-											size={40}
-										/>
-									</Tooltip>
-									{/* <Text
-										weight={500}
-										size="sm"
-										sx={{ lineHeight: 1, color: theme.black }}
-									>
-										{user.displayName}
-									</Text> */}
-									{/* <IconChevronDown size={25} stroke={1.5} color={theme.black}/> */}
-								</Group>
-							</UnstyledButton>
-						</Menu.Target>
-						<Menu.Dropdown>
-							<Menu.Item
-								onClick={logOut}
-								icon={<IconLogout size={14} stroke={1.5} />}
-							>
-								Logout
-							</Menu.Item>
-						</Menu.Dropdown>
-					</Menu>
-				</Group>
+				<UserMenu
+					userMenuOpened={userMenuOpened}
+					setUserMenuOpened={setUserMenuOpened}
+					tooltipOpened={tooltipOpened}
+					setTooltipOpened={setTooltipOpened}
+					classes={classes}
+					user={user}
+					logOut={logOut}
+				/>
 			</div>
 		</Header>
 	);
