@@ -89,6 +89,7 @@ export default function ComposeContainer() {
         // neeed to set intial content so debouncer isn't called on first load
         setInitialContent(doc.content)
         console.log({ ...doc })
+        // @ts-ignore
         setLocalDocData({ ...doc })
         editor.commands.setContent(doc.content == "" ? "    " : doc.content)
       })
@@ -116,7 +117,7 @@ export default function ComposeContainer() {
           aside={
             <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
               <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 300, md: 350, lg: 400 }}>
-                <Notepad localDocData={localDocData} />
+                <Notepad />
               </Aside>
             </MediaQuery>
           }
