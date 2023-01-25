@@ -34,7 +34,7 @@ import {
 	convertURLToName,
 } from "../../../utils/misc";
 import { createSearchParams, useNavigate } from "react-router-dom";
-import logo from "../../../img/logo.png";
+import logo from "../../../../public/logo.png"
 import UserMenu from "./UserMenu";
 
 const useStyles = createStyles((theme) => ({
