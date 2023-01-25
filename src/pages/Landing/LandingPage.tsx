@@ -186,10 +186,7 @@ export default function LandingPage() {
 				<Space h="lg" />
 				<CollegeCarousel />
 				<Space h="lg" />
-
-				{/* <Container>
-					<UseCaseGrid />
-				</Container> */}
+				
 				<Features />
 			</div>
 		</AppShell>

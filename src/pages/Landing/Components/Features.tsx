@@ -8,7 +8,7 @@ import {
   } from '@mantine/core';
   import { IconGauge, IconUser, IconMessageChatbot, IconBallpen, IconFriends, IconClipboardTypography} from '@tabler/icons';
   
-  const mockdata = [
+  const featuresArray = [
     {
       title: 'AI Autocomplete',
       description:
@@ -93,7 +93,7 @@ import {
   
   export function Features() {
     const { classes, theme } = useStyles();
-    const features = mockdata.map((feature) => (
+    const features = featuresArray.map((feature) => (
       <Card key={feature.title} shadow="md" radius="md" className={classes.card} p="xl">
         <feature.icon size={50} stroke={2} color={theme.fn.primaryColor()} />
         <Text size="lg" weight={500} className={classes.cardTitle} mt="md">
