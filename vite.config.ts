@@ -4,8 +4,16 @@ import mix, { vercelAdapter } from "vite-plugin-mix";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+	build: {
+		rollupOptions: {
+		  input: {
+			main: './index.html',
+		  }
+		},
+	},
 	plugins: [
 		react(),
+		
 		//@ts-ignore
 		mix.default({
 			adapter: vercelAdapter,
