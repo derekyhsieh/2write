@@ -5,9 +5,23 @@ import {
 	Group,
 	Burger,
 	Text,
+	Avatar,
+	UnstyledButton,
 	ActionIcon,
+	Menu,
 	Image,
 } from "@mantine/core";
+import {
+	IconLogout,
+	IconHeart,
+	IconStar,
+	IconMessage,
+	IconSettings,
+	IconPlayerPause,
+	IconTrash,
+	IconSwitchHorizontal,
+	IconChevronDown,
+  } from '@tabler/icons';
 import { useDisclosure } from "@mantine/hooks";
 import { IconSearch, IconUser, IconBell } from "@tabler/icons";
 import { loadEssayList } from "../../../services/FirestoreHelpers";
@@ -28,6 +42,26 @@ const useStyles = createStyles((theme) => ({
 		height: "100%",
 		cursor: "pointer"
 	},
+	user: {
+		color: theme.white,
+		padding: `${theme.spacing.xs}px ${theme.spacing.sm}px`,
+		borderRadius: theme.radius.sm,
+		transition: 'background-color 100ms ease',
+	
+	
+		[theme.fn.smallerThan('xs')]: {
+		  display: 'none',
+		},
+	  },
+	
+	  burger: {
+		[theme.fn.largerThan('xs')]: {
+		  display: 'none',
+		},
+	  },
+	
+	  userActive: {
+	  },
 
 	search: {
 		[theme.fn.smallerThan("sm")]: {
@@ -37,12 +71,16 @@ const useStyles = createStyles((theme) => ({
 	},
 }));
 
-interface HomeHeaderProps {}
+interface HomeHeaderProps { }
 
 export default function HomeHeader() {
-	const { user } = UserAuth();
+	const { user, logOut } = UserAuth();
 	const [opened, { toggle }] = useDisclosure(false);
-	const { classes } = useStyles();
+
+
+	const { classes, theme, cx } = useStyles();
+	const [userMenuOpened, setUserMenuOpened] = useState(false);
+
 	const [searchQuery, setSearchQuery] = useState("");
 	const [essayTitleArray, setEssayTitleArray] = useState([]);
 	const searchInput = useRef<HTMLInputElement>(null);
@@ -131,12 +169,32 @@ export default function HomeHeader() {
 				/>
 
 				<Group>
-					<ActionIcon>
-						<IconBell />
-					</ActionIcon>
-					<ActionIcon variant="light" radius="xl" size="xl" color="blue">
-						<IconUser />
-					</ActionIcon>
+				<Menu
+            width={260}
+            position="bottom-end"
+            transition="pop-top-right"
+            onClose={() => setUserMenuOpened(false)}
+            onOpen={() => setUserMenuOpened(true)}
+          >
+            <Menu.Target>
+              <UnstyledButton
+                className={cx(classes.user, { [classes.userActive]: userMenuOpened })}
+              >
+                <Group spacing={7}>
+                  <Avatar src={user.photoURL} alt={user.displayName} radius="xl" size={30} />
+                  <Text weight={500} size="sm" sx={{ lineHeight: 1, color: theme.black }} mr={3}>
+                    {user.displayName}
+                  </Text>
+                  <IconChevronDown size={12} stroke={1.5} />
+                </Group>
+              </UnstyledButton>
+            </Menu.Target>
+            <Menu.Dropdown>
+              <Menu.Item onClick={logOut} icon={<IconLogout size={14} stroke={1.5} />}>Logout</Menu.Item>
+
+            
+            </Menu.Dropdown>
+          </Menu>
 				</Group>
 			</div>
 		</Header>
