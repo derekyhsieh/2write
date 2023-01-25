@@ -24,6 +24,7 @@ import {
 	IconBrandTwitter,
 	IconBrandGithub,
 } from "@tabler/icons";
+import { FooterLinks } from "../Landing/Footer";
 
 export default function AuthPage() {
 	const { user, googleSignIn, twitterSignIn, githubSignIn, logOut } =
@@ -68,6 +69,19 @@ export default function AuthPage() {
 				<Header height={60} p={"sm"}>
 					<HeaderMegaMenu />
 				</Header>
+			}
+			footer={
+				<FooterLinks
+					data={[
+						{
+							title: "Privacy",
+							links: [
+								{ label: "Terms & Conditions", link: "" },
+								{ label: "Privacy Policy", link: "" },
+							],
+						},
+					]}
+				/>
 			}
 		>
 			{isLoading && user == null ? (
