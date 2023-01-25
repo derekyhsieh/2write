@@ -6,6 +6,9 @@ import mix from "vite-plugin-mix";
 export default defineConfig({
 	base: '',
 	// root: 'src',
+	build: {
+		outDir: '../'
+	},
 	plugins: [
 		react(),
 		mix.default({
