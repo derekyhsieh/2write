@@ -4,7 +4,8 @@ import mix from "vite-plugin-mix";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-	root: 'src',
+	base: '',
+	// root: 'src',
 	build: {
 	  outDir: '../dist'
 	},
