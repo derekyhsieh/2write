@@ -39,7 +39,7 @@ app.post("/api/autocomplete", (req, res) => {
 	});
 });
 
-function appendQuestionMarkToPrompt(prompt: string) {
+function appendQuestionMarkToPrompt(prompt) {
 	const lastChar = prompt[prompt.length - 1];
 	if (lastChar === ".") {
 		return prompt;
@@ -47,7 +47,7 @@ function appendQuestionMarkToPrompt(prompt: string) {
 	return prompt + ".";
 }
 
-async function getAnswer(question: string, isAutocomplete: boolean = false) {
+async function getAnswer(question, isAutocomplete = false) {
 	const configuration = new Configuration({
 		// @ts-ignore
 		apiKey: import.meta.env.VITE_OPENAI_API_KEY,
