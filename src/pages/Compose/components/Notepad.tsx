@@ -10,6 +10,9 @@ import { useDebounce } from "use-debounce";
 import { useSearchParams } from 'react-router-dom';
 import { saveNotepad } from '../../../services/FirestoreHelpers';
 import { UserAuth } from '../../../context/AuthContext';
+import { useContext } from 'react';
+import {LoginContext} from "../../../context/DocContext"
+
 
 
 
@@ -18,7 +21,7 @@ type NotepadProps = {
 }
 
 
-export default function Notepad(localDocData) {
+export default function Notepad() {
     const theme = useMantineTheme()
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -32,6 +35,8 @@ export default function Notepad(localDocData) {
 
     const [editorValue, setEditorValue] = useState(content)
     const [debouncedEditor] = useDebounce(editorValue, 5000)
+      // @ts-ignore
+  const { localDocData, setLocalDocData } = useContext(LoginContext)
 
     const {user} = UserAuth()
 
@@ -50,22 +55,21 @@ export default function Notepad(localDocData) {
 
     useEffect(() => {
 
-        setEditorValue(localDocData.localDocData.notepad)
-        console.log(localDocData.localDocData.notepad)
+        setEditorValue(localDocData.notepad)
+        console.log(localDocData.notepad)
 
     }, [localDocData])
 
     const handleCreateOutline = () => {
-        const data = localDocData
 
 
 
 
         
 
-        if(data.localDocData.hasOwnProperty('essayPrompt')) {
+        if(localDocData.hasOwnProperty('essayPrompt')) {
             // fetch outline 
-            const prompt = data.localDocData.essayPrompt
+            const prompt = localDocData.essayPrompt
 
             setIsLoading(true)
 
@@ -81,6 +85,10 @@ export default function Notepad(localDocData) {
                 const notepadContent = `<h3>AI Outline</h3> <p>${cleanedHTML}</p>`
                 saveNotepad(user.uid, searchParams.get("essayId"), notepadContent)
                 setEditorValue(notepadContent)
+
+                let newState = localDocData
+                newState.notepad = notepadContent
+                setLocalDocData(newState)
                 
             }).finally(() => {
 
