@@ -87,4 +87,4 @@ export function CollegeCarousel() {
 	);
 }
 
-export default Carousel;
+export default CollegeCarousel;

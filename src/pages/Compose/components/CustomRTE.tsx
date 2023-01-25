@@ -28,7 +28,6 @@ export default function CustomRTE({ localDocData, setLocalDocData, editor }) {
 	const { user } = UserAuth();
 
 	const getWordCountFromString = (str: string) => {
-		console.log(str);
 		return str.split(" ").length;
 	};
 

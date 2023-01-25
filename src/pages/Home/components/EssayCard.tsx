@@ -8,7 +8,7 @@ import {
 	Image,
 } from "@mantine/core";
 import { IconDots, IconUsers } from "@tabler/icons";
-import React, { useState, useEffect } from "react";
+import React, { useState, useLayoutEffect } from "react";
 import { createSearchParams, useNavigate } from "react-router-dom";
 import html2canvas from "html2canvas";
 
@@ -46,7 +46,7 @@ export default function EssayCard(props: {
 	const navigate = useNavigate();
 	const { classes } = useStyles();
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		let essayHtml = props.essayContent === "" ? "<p></p>" : props.essayContent;
 		let previewHtml = getPreview(essayHtml);
 		const iframe = document.createElement("iframe");

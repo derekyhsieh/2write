@@ -1,6 +1,10 @@
-import { ActionIcon, Flex, Group, Stack, TextInput } from "@mantine/core";
+import {
+	ActionIcon,
+	Group,
+	TextInput,
+} from "@mantine/core";
 import { useState, useEffect } from "react";
-import { IconChevronLeft, IconUser } from "@tabler/icons";
+import { IconChevronLeft } from "@tabler/icons";
 import { useNavigate } from "react-router-dom";
 import { UserAuth } from "../../../context/AuthContext";
 import { saveTitle, loadEssay } from "../../../services/FirestoreHelpers";
@@ -8,9 +12,9 @@ import { useSearchParams } from "react-router-dom";
 
 export default function DocumentHeader({ localDocData }) {
 	const [documentTitle, setDocumentTitle] = useState("Untitled Document");
-	const { user } = UserAuth();
+	const { user, logOut } = UserAuth();
 	const [searchParams, setSearchParams] = useSearchParams();
-	const [titleFocus, setTitleFocus] = useState(false)
+	const [titleFocus, setTitleFocus] = useState(false);
 
 	const navigate = useNavigate();
 
@@ -40,25 +44,28 @@ export default function DocumentHeader({ localDocData }) {
 						<IconChevronLeft size={22} />
 					</ActionIcon>
 
-						<TextInput
-							value={documentTitle}
-							onChange={(event) => {
-								setDocumentTitle(event.currentTarget.value);
-								saveTitle(user.uid, searchParams.get("essayId"), event.currentTarget.value);
-							}}
-							placeholder="Essay Title"
-							pl={titleFocus ? 0 : 11}
-							variant={titleFocus ? "default" : "unstyled"}
-
-							onFocus={() => {setTitleFocus(true)}}
-							onBlur={() => {setTitleFocus(false)}}
-							styles={{ root: {width: '700px'}, label: {width: "500px"}}}
-							
-						/>
+					<TextInput
+						value={documentTitle}
+						onChange={(event) => {
+							setDocumentTitle(event.currentTarget.value);
+							saveTitle(
+								user.uid,
+								searchParams.get("essayId"),
+								event.currentTarget.value
+							);
+						}}
+						placeholder="Essay Title"
+						pl={titleFocus ? 0 : 11}
+						variant={titleFocus ? "default" : "unstyled"}
+						onFocus={() => {
+							setTitleFocus(true);
+						}}
+						onBlur={() => {
+							setTitleFocus(false);
+						}}
+						styles={{ root: { width: "700px" }, label: { width: "500px" } }}
+					/>
 				</Group>
-				<ActionIcon variant="light" radius="xl" size="xl" color="blue">
-					<IconUser />
-				</ActionIcon>
 			</Group>
 		</div>
 	);
