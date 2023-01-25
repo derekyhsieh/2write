@@ -206,7 +206,7 @@ export default function HomeHeader() {
 										label={
 											<>
 												<strong className={classes.tooltipTitle}>
-													{convertURLToName(user.providerData[0].providerId)}
+													{convertURLToName(user.providerData[0].providerId)} Account
 												</strong>
 												{user.displayName === "" || user.displayName ? (
 													<br />
@@ -222,7 +222,7 @@ export default function HomeHeader() {
 										transition="fade"
 										transitionDuration={200}
 										width={"auto"}
-										onMouseEnter={() => setTooltipOpened(true)}
+										onMouseEnter={() => setTimeout(() => setTooltipOpened(true), 400)}
 										onMouseLeave={() => setTooltipOpened(false)}
 										opened={userMenuOpened ? false : tooltipOpened}
 										style={{ backgroundColor: "#4B4B4B" }}
