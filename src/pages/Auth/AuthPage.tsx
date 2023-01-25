@@ -105,7 +105,7 @@ export default function AuthPage() {
 										Sign in with Google
 									</Button>
 								</Center>
-								{/* <Center>
+								<Center>
 									<Button
 										onClick={async () => handleSignIn(twitterSignIn)}
 										variant={"filled"}
@@ -128,7 +128,7 @@ export default function AuthPage() {
 									>
 										Sign in with GitHub
 									</Button>
-								</Center> */}
+								</Center>
 							</Stack>
 
 							{user && (
