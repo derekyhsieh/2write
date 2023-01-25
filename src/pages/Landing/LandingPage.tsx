@@ -14,7 +14,6 @@ import { CollegeCarousel } from "./Components/CollegeCarousel";
 import { Features } from "./Components/Features";
 import { useNavigate } from "react-router-dom";
 import { FooterLinks } from "./Footer";
-// import { getLandingPageVideo } from "../../services/FirestoreHelpers";
 
 const BREAKPOINT = "@media (max-width: 755px)";
 
@@ -150,7 +149,7 @@ export default function LandingPage() {
 
 					<Text className={classes.description} color="dimmed">
 						AI generated autocomplete, snippets, outline creation, real-time
-						collaboration, and much much more...
+						collaboration, and much, much more...
 					</Text>
 
 					<Center>

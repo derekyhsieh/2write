@@ -12,13 +12,13 @@ import {
     {
       title: 'AI Autocomplete',
       description:
-      "Let artificial intelligence convert your ideas into real sentences",
+      "Let artificial intelligence convert your ideas into real sentences.",
       icon: IconGauge,
     },
     {
-      title: 'Plagarism-free',
+      title: 'Plagiarism-free',
       description:
-      "2write ensures all concent generated is original, checked against Turnitin",
+      "2write ensures all concent generated is original, checked against Turnitin.",
       icon: IconUser,
     },
     {
@@ -37,7 +37,7 @@ import {
     {
       title: 'Bibliography Generation',
       description:
-      "Automatically create bibliography from a group of links",
+      "Automatically create bibliography from a group of links.",
       icon: IconClipboardTypography,
     },
     {
