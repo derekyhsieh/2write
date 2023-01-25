@@ -147,7 +147,7 @@ export function FooterLinks({ data }: FooterLinksProps) {
 				<div className={classes.logo}>
 					<Image src={logo} height={30} width={30} />
 					<Text size="xs" color="dimmed" className={classes.description}>
-						Turbocharge your writing with AI powered tools
+						Turbocharge your writing with AI powered tools.
 					</Text>
 				</div>
 				<div className={classes.groups}>{groups}</div>
