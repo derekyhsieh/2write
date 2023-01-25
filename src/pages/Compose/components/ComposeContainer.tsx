@@ -44,6 +44,7 @@ import Notepad from "./Notepad";
 import { UserAuth } from "../../../context/AuthContext";
 import { IconLogout } from "@tabler/icons";
 import { convertURLToName } from "../../../utils/misc";
+import UserMenu from "../../Home/components/UserMenu";
 
 const useStyles = createStyles((theme) => ({
 	user: {
@@ -179,75 +180,16 @@ export default function ComposeContainer() {
 							>
 								<DocumentHeader localDocData={localDocData} />
 							</Header>
-							{/* This avatar needs to be here (outside of headers, etc), menus won't be accessible otherwise due to the way AppShell works */}
-							<Group>
-								<Menu
-									width={260}
-									position="bottom-end"
-									transition="pop-top-right"
-									onClose={() => setUserMenuOpened(false)}
-									onOpen={() => {
-										setUserMenuOpened(true);
-										setTooltipOpened(false);
-									}}
-									opened={userMenuOpened}
-								>
-									<Menu.Target>
-										<UnstyledButton className={classes.user}>
-											<Group spacing={7}>
-												<Tooltip
-													label={
-														<>
-															<strong className={classes.tooltipTitle}>
-																{convertURLToName(
-																	user.providerData[0].providerId
-																)}
-															</strong>
-															{user.displayName === "" || user.displayName ? (
-																<br />
-															) : (
-																""
-															)}
-															{user.displayName}
-															{user.email ? <br /> : ""}
-															{user.email ? user.email : ""}
-														</>
-													}
-													multiline
-													transition="fade"
-													transitionDuration={200}
-													width={"auto"}
-													onMouseEnter={() => setTooltipOpened(true)}
-													onMouseLeave={() => setTooltipOpened(false)}
-													opened={userMenuOpened ? false : tooltipOpened}
-													style={{ backgroundColor: "#4B4B4B" }}
-													zIndex={150000}
-												>
-													<Avatar
-														className={
-															userMenuOpened
-																? classes.avatarMenu
-																: classes.avatarHover
-														}
-														src={user.photoURL}
-														alt={user.displayName}
-														radius="xl"
-														size={40}
-													/>
-												</Tooltip>
-											</Group>
-										</UnstyledButton>
-									</Menu.Target>
-									<Menu.Dropdown>
-										<Menu.Item
-											onClick={logOut}
-											icon={<IconLogout size={14} stroke={1.5} />}
-										>
-											Logout
-										</Menu.Item>
-									</Menu.Dropdown>
-								</Menu>
-							</Group>
+							{/* This user menu needs to be here (outside of headers, etc), menus won't be accessible otherwise due to the way AppShell works */}
+							<UserMenu
+								userMenuOpened={userMenuOpened}
+								setUserMenuOpened={setUserMenuOpened}
+								tooltipOpened={tooltipOpened}
+								setTooltipOpened={setTooltipOpened}
+								classes={classes}
+								user={user}
+								logOut={logOut}
+							/>
 						</>
 					}
 				>
