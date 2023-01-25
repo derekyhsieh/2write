@@ -20,7 +20,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { HeaderMegaMenu } from "../Landing/Header";
 import {
-	IconBrandGoogleDrive,
+	IconBrandGoogle,
 	IconBrandTwitter,
 	IconBrandGithub,
 } from "@tabler/icons";
@@ -97,7 +97,7 @@ export default function AuthPage() {
 									<Button
 										onClick={async () => handleSignIn(googleSignIn)}
 										variant={"filled"}
-										leftIcon={<IconBrandGoogleDrive />}
+										leftIcon={<IconBrandGoogle />}
 										w={"80%"}
 										radius={"md"}
 										color={"ocean-blue"}
