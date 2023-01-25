@@ -6,16 +6,12 @@ import {
 	Group,
 	AppShell,
 	Header,
-	Image,
 	Center,
 	Space,
 } from "@mantine/core";
-import { GithubIcon } from "@mantine/ds";
 import { HeaderMegaMenu } from "./Header";
 import { CollegeCarousel } from "./Components/CollegeCarousel";
-import UseCaseGrid from "./Components/UseCaseGrid";
 import { Features } from "./Components/Features";
-import VideoLooper from 'react-video-looper'
 import { useNavigate } from "react-router-dom";
 // import { getLandingPageVideo } from "../../services/FirestoreHelpers";
 
@@ -46,6 +42,7 @@ const useStyles = createStyles((theme) => ({
 		fontWeight: 900,
 		lineHeight: 1.1,
 		margin: 0,
+		marginBottom: theme.spacing.xl,
 		padding: 0,
 		color: theme.colorScheme === "dark" ? theme.white : theme.black,
 		textAlign: "center",
