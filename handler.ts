@@ -67,12 +67,12 @@ async function getAnswer(question, isAutocomplete = false) {
 		temperature: 1.0,
 		max_tokens: isAutocomplete ? 20 : 150,
 
-		stop: isAutocomplete ? "\n" : "15",
+		stop: isAutocomplete ? "." : "15",
 	});
 
 	const answerString = completion?.data?.choices[0]?.text?.toString();
 
-	return isAutocomplete ? answerString?.replace(/\n/g, "") : answerString;
+	return isAutocomplete ? answerString?.replace(/\n/g, "") + "." : answerString;
 }
 
 export const handler = app;
