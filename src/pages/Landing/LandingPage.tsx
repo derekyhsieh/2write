@@ -129,6 +129,7 @@ export default function LandingPage() {
 					</h1>
 
 					<video
+						preload="auto"
 						src="https://firebasestorage.googleapis.com/v0/b/write-dev.appspot.com/o/2write%20landing%20page%20video.mp4?alt=media&token=4fd3e374-3e92-4398-b22e-3c16b93802cb"
 						loop
 						autoPlay
@@ -165,9 +166,10 @@ export default function LandingPage() {
 							</Button>
 
 							<Button
-								component="a"
-								href="https://youtube.com"
 								size="xl"
+								onClick={() =>
+									window.open("https://discord.gg/HRkKvbtr6j", "_blank").focus()
+								}
 								variant="default"
 								className={classes.control}
 							>
