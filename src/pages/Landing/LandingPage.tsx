@@ -136,7 +136,7 @@ export default function LandingPage() {
 					</h1>
 
 					<video
-						src="https://drive.google.com/uc?export=download&id=1qXCWjFnPYbjqiX8ct4DRTCqifJ7YlonL"
+						src="https://firebasestorage.googleapis.com/v0/b/discord-2db38.appspot.com/o/compressedversion.mp4?alt=media&token=a1f16773-b0b3-4b5a-99a1-3440cacf945e"
 						preload="auto"
 						loop
 						autoPlay
