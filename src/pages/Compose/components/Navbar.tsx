@@ -22,7 +22,7 @@ import {
   IconSwitchHorizontal,
 } from "@tabler/icons";
 import { CustomDrawer } from "./CustomDrawer";
-import logo from "../../../../public/logo.png"
+import logo from "../../../img/logo.png"
 import SettingsDrawer from "./SettingsDrawer";
 import AnalyticsDrawer from "./AnalyticsDrawer";
 import TodoDrawer from "./TodoDrawer";
