@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { FooterLinks } from "./Footer";
 
 const BREAKPOINT = "@media (max-width: 755px)";
+const wideMonitorBreakpoint = "@media (min-width: 2000px)";
 
 const useStyles = createStyles((theme) => ({
 	wrapper: {
@@ -29,10 +30,15 @@ const useStyles = createStyles((theme) => ({
 		position: "relative",
 		paddingTop: -10,
 		paddingBottom: 50,
+		maxWidth: 720,
 
 		[BREAKPOINT]: {
 			paddingBottom: 80,
 			paddingTop: 20,
+		},
+
+		[wideMonitorBreakpoint]: {
+			maxWidth: 1050,
 		},
 	},
 
@@ -89,6 +95,7 @@ const useStyles = createStyles((theme) => ({
 
 export default function LandingPage() {
 	const { classes } = useStyles();
+	
 
 	const navigate = useNavigate();
 
@@ -114,7 +121,7 @@ export default function LandingPage() {
 			}
 		>
 			<div className={classes.wrapper}>
-				<Container size={window.screen.width / 2} className={classes.inner}>
+				<Container className={classes.inner}>
 					<h1 className={classes.title}>
 						<Text
 							ta="center"
