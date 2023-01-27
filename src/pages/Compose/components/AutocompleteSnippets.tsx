@@ -4,6 +4,7 @@ import { Node as ProsemirrorNode } from "prosemirror-model";
 import { Plugin } from "prosemirror-state";
 import { Decoration, DecorationSet } from "prosemirror-view";
 import { useDebounce } from "use-debounce";
+import "./Loader.css"
 
 
 const snippet = " resulting in distinct and profound patterns of social development."
@@ -18,7 +19,7 @@ export const AutocompleteSnippets = Extension.create({
 
                 let snippet;
 
-                if(document.getElementById("autocomplete-snippet")) {
+                if (document.getElementById("autocomplete-snippet")) {
                     snippet = document.getElementById("autocomplete-snippet").innerText
                 }
 
@@ -54,7 +55,7 @@ export const AutocompleteSnippets = Extension.create({
 
         let debounceTimeout;
 
-    
+
 
 
         return [
@@ -79,8 +80,8 @@ export const AutocompleteSnippets = Extension.create({
                         editor.applyTransaction(replace)
 
                         // editor.view.updateState(newState);
-                    
-                      
+
+
 
                         // console.log(doc.nodeAt(selection.$from.pos.toString())
 
@@ -94,35 +95,35 @@ export const AutocompleteSnippets = Extension.create({
 
 
 
-                      
+
 
                         let textCount = 0;
-                            // console.log(`Converted Selection: ${convertedSelection}`)
+                        // console.log(`Converted Selection: ${convertedSelection}`)
                         let nodeArray = []
 
-                        doc.nodesBetween(0, selection.$from.pos, (node, pos, ) => {
+                        doc.nodesBetween(0, selection.$from.pos, (node, pos,) => {
 
-                            if(nodeArray.length !== 0 && node.textContent !== nodeArray.at(-1).content) {
+                            if (nodeArray.length !== 0 && node.textContent !== nodeArray.at(-1).content) {
                                 textCount += node.nodeSize
 
                                 // get position of node at index with prosemirror
-    
+
                                 console.log(textCount, node.textContent)
-    
+
                                 const paraNode = {
                                     content: node.textContent,
                                     endCount: textCount,
                                 }
 
-                                
-    
-    
-    
+
+
+
+
                                 nodeArray.push(paraNode)
-                            } else if(nodeArray.length === 0) {
+                            } else if (nodeArray.length === 0) {
                                 textCount += node.nodeSize
                                 console.log(textCount, node.textContent)
-    
+
                                 const paraNode = {
                                     content: node.textContent,
                                     endCount: textCount,
@@ -130,7 +131,7 @@ export const AutocompleteSnippets = Extension.create({
 
                                 nodeArray.push(paraNode)
                             }
-                           
+
 
 
                             // console.log(textCount)
@@ -138,16 +139,16 @@ export const AutocompleteSnippets = Extension.create({
                             // console.log(convertedSelection == textCount && selection.$from.pos !== 1 && lastSentenceLong(textContentOfCurrentParagraph) && textContentOfCurrentParagraph.slice(-1) == " ")
 
                             // && convertedSelection >= textContentOfCurrentParagraph?.length
-                            
-                            
+
+
                         })
 
 
 
 
 
-                          const convertedSelection = selection.$to.pos + 1
-                          
+                        const convertedSelection = selection.$to.pos + 1
+
 
 
 
@@ -155,16 +156,30 @@ export const AutocompleteSnippets = Extension.create({
                         if (convertedSelection == nodeArray.at(-1).endCount && selection.$from.pos !== 1 && lastSentenceLong(textContentOfCurrentParagraph) && textContentOfCurrentParagraph.slice(-1) == " ") {
                             const decoration = Decoration.widget(selection.$from.pos, () => {
                                 console.log("DEBOUNCING")
+
+                                // const loader = document.createElement("span");
                                 const placeholder = document.createElement("span");
                                 // give it element id of autocomplete-snippet
                                 placeholder.id = "autocomplete-snippet";
+                                placeholder.className = "dot-flashing"
+
+
+                                const textEditor = document.getElementsByClassName("mantine-RichTextEditor-content mantine-3f8va4")
+
+                                textEditor[0].classList.add("hide-cursor")
+
+
 
 
                                 function debounce(_editorText: string) {
                                     clearTimeout(debounceTimeout);
-                                  
+
                                     debounceTimeout = setTimeout(() => {
                                         console.log("AUTOCOMPLETE")
+
+
+
+
                                         let autocomplete = ""
                                         fetch("/api/autocomplete", {
                                             method: "post",
@@ -176,38 +191,57 @@ export const AutocompleteSnippets = Extension.create({
 
                                                 autocomplete = data.answer
 
-                                                if(autocomplete[0] === " ") {
+                                                if (autocomplete[0] === " ") {
                                                     autocomplete = autocomplete.substring(1)
 
                                                 }
-                            
+
                                             })
                                             .catch((err) => {
                                                 console.log(err)
+                                                var elems = document.querySelectorAll(".widget.hover");
+
+                                                [].forEach.call(elems, function (el) {
+                                                    el.classList.remove("hover");
+                                                });
                                             })
-                                            
+
                                             .finally(() => {
+                                                placeholder.className = ""
                                                 placeholder.innerText = autocomplete
+                                                const input = document.getElementsByClassName("hide-cursor")
+                                                // input[0].remove("hide-cursor")
+
+
+                                                // remove hid cursor class
+
+
+                                                var elems = document.querySelectorAll(".hide-cursor");
+
+                                                [].forEach.call(elems, function (el) {
+                                                    el.classList.remove("hide-cursor");
+                                                });
+
+                                                return placeholder
                                             }
-                                           
-                                        )
+
+                                            )
                                     }, 500);
-                                  }
+                                }
 
 
-                                  debounce(doc.textContent)
+                                debounce(doc.textContent)
 
 
                                 placeholder.style.color = "gray";
 
-
-
-
                                 return placeholder;
+
+
                             });
                             decorations.push(decoration);
-                        }  
-                       
+                        }
+
 
                         return DecorationSet.create(doc, decorations);
                     },
