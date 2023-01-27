@@ -1,18 +1,5 @@
-import {
-	Stack,
-	Modal,
-	useMantineTheme,
-	createStyles,
-	TextInput,
-	Select,
-	Center,
-	Title,
-	Button,
-} from "@mantine/core";
-import DocumentCards from "./HomePageCards";
-import HomeHeader from "./HomeHeader";
+import { Stack, createStyles, TextInput, Title, Button } from "@mantine/core";
 import { useState } from "react";
-import { DropzoneButton } from "./DropzoneButton";
 import { createEssay } from "../../../services/FirestoreHelpers";
 import { UserAuth } from "../../../context/AuthContext";
 import { createSearchParams, useNavigate } from "react-router-dom";
@@ -58,7 +45,11 @@ export function CreatePromptModalContent({ setIsActive }: Props) {
 		).then(() => {
 			navigate({
 				pathname: "/compose",
-				search: `?${createSearchParams({ essayId: essayID, isNewDoc: "true", placeholder: "1" })}`,
+				search: `?${createSearchParams({
+					essayId: essayID,
+					isNewDoc: "true",
+					placeholder: "1",
+				})}`,
 			});
 		});
 	};

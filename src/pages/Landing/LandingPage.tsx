@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { FooterLinks } from "./Footer";
 
 const BREAKPOINT = "@media (max-width: 755px)";
+const wideMonitorBreakpoint = "@media (min-width: 2000px)";
 
 const useStyles = createStyles((theme) => ({
 	wrapper: {
@@ -29,10 +30,15 @@ const useStyles = createStyles((theme) => ({
 		position: "relative",
 		paddingTop: -10,
 		paddingBottom: 50,
+		maxWidth: 720,
 
 		[BREAKPOINT]: {
 			paddingBottom: 80,
 			paddingTop: 20,
+		},
+
+		[wideMonitorBreakpoint]: {
+			maxWidth: 1050,
 		},
 	},
 
@@ -89,6 +95,7 @@ const useStyles = createStyles((theme) => ({
 
 export default function LandingPage() {
 	const { classes } = useStyles();
+	
 
 	const navigate = useNavigate();
 
@@ -114,7 +121,7 @@ export default function LandingPage() {
 			}
 		>
 			<div className={classes.wrapper}>
-				<Container size={700} className={classes.inner}>
+				<Container className={classes.inner}>
 					<h1 className={classes.title}>
 						<Text
 							ta="center"
@@ -129,8 +136,8 @@ export default function LandingPage() {
 					</h1>
 
 					<video
+						src="https://drive.google.com/uc?export=download&id=1qXCWjFnPYbjqiX8ct4DRTCqifJ7YlonL"
 						preload="auto"
-						src="https://firebasestorage.googleapis.com/v0/b/write-dev.appspot.com/o/2write%20landing%20page%20video.mp4?alt=media&token=4fd3e374-3e92-4398-b22e-3c16b93802cb"
 						loop
 						autoPlay
 						muted
@@ -188,7 +195,7 @@ export default function LandingPage() {
 				<Space h="lg" />
 				<CollegeCarousel />
 				<Space h="lg" />
-				
+
 				<Features />
 			</div>
 		</AppShell>

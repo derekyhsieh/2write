@@ -1,30 +1,37 @@
 import { createStyles, Image } from "@mantine/core";
 import { Carousel, Embla } from "@mantine/carousel";
-import {
-	useState,
-	useEffect,
-} from "react";
+import { useState, useEffect } from "react";
+import { useInterval } from "@mantine/hooks";
 
-import stanford from "../../../../public/img/stanford.png"
-import cornell from "../../../../public/img/cornell.png"
-import berkeley from "../../../../public/img/berkeley.png"
-import mit from "../../../../public/img/mit.png"
-import harvard from  "../../../../public/img/harvard.png"
+import stanford from "../../../img/stanford.png";
+import cornell from "../../../img/cornell.png";
+import berkeley from "../../../img/berkeley.png";
+import mit from "../../../img/mit.png";
+import harvard from "../../../img/harvard.png";
 
 export function CollegeCarousel() {
 	const [embla, setEmbla] = useState<Embla | null>(null);
+	const [slideWidth, setSlideWidth] = useState(200);
+	const [slideHeight, setSlideHeight] = useState(80);
+
+	const interval = useInterval(() => {
+		// Start scrolling slowly
+		const engine = embla.internalEngine();
+		engine.scrollBody.useSpeed(0.04);
+		engine.scrollTo.index(embla.scrollSnapList().length - 1, -1);
+	}, 500);
 
 	useEffect(() => {
-		const interval = setInterval(() => {
-			if (!embla) return;
+		if (!embla) return;
 
-			// Start scrolling slowly
-			const engine = embla.internalEngine();
-			engine.scrollBody.useSpeed(0.03);
-			engine.scrollTo.index(99999, -1);
-		}, 500);
+		// Start scrolling slowly
+		const engine = embla.internalEngine();
+		engine.scrollBody.useSpeed(0.04);
+		engine.scrollTo.index(embla.scrollSnapList().length - 1, -1);
 
-		return () => clearInterval(interval);
+		interval.start();
+
+		return interval.stop;
 	}, [embla]);
 
 	return (
@@ -32,11 +39,11 @@ export function CollegeCarousel() {
 			withIndicators={false}
 			withControls={false}
 			draggable={false}
-			slideSize="33.333333%"
 			slideGap={0}
+			slideSize={"25%"}
 			breakpoints={[
-				{ maxWidth: "md", slideSize: "50%" },
-				{ maxWidth: "sm", slideSize: "100%" },
+				{ maxWidth: "md", slideSize: "30%" },
+				{ maxWidth: "sm", slideSize: "70%" },
 			]}
 			loop
 			align="start"

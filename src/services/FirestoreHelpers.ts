@@ -7,6 +7,7 @@ import {
 	setDoc,
 	getDoc,
 	getDocs,
+	deleteDoc,
 } from "firebase/firestore";
 import { db } from "./firebase";
 import { convertEditorJSONToPlainText } from "../utils/ExtractEditorJSON";
@@ -27,7 +28,7 @@ const storage = getStorage();
 const saveEssay = async (
 	docContent: string,
 	userID: string,
-	essayID: string,
+	essayID: string
 ) => {
 	// creating document ref
 
@@ -52,19 +53,23 @@ const saveTitle = async (userID: string, essayID: string, title: string) => {
 	} catch (error) {
 		console.log(error);
 	}
-}
+};
 
-const saveEssayPrompt = async (userID: string, essayID: string, essayPrompt: string) => {
-	const essayRef = doc(db, "users", userID, "essays", essayID)
+const saveEssayPrompt = async (
+	userID: string,
+	essayID: string,
+	essayPrompt: string
+) => {
+	const essayRef = doc(db, "users", userID, "essays", essayID);
 
 	try {
 		await updateDoc(essayRef, {
-			essayPrompt: essayPrompt
+			essayPrompt: essayPrompt,
 		});
 	} catch (error) {
-		console.log(error)
+		console.log(error);
 	}
-}
+};
 
 const loadEssay = async (userID: string, essayID: string) => {
 	const essayRef = doc(db, "users", userID, "essays", essayID);
@@ -78,8 +83,6 @@ const loadEssay = async (userID: string, essayID: string) => {
 		console.log("Essay does not exist");
 	}
 };
-
-
 
 const loadEssayList = async (userID: string) => {
 	const essayListRef = collection(db, "users", userID, "essays");
@@ -118,19 +121,40 @@ const createEssay = async (
 	}
 };
 
+const removeEssay = async (userID: string, essayID: string) => {
+	const essayRef = doc(db, "users", userID, "essays", essayID);
 
-const saveNotepad = async (userID: string, essayID: string, notepadContent: string) => {
+	// Delete the document from the collection
+	try {
+		await deleteDoc(essayRef);
+	} catch (error) {
+		console.log(error);
+	}
+};
 
+const saveNotepad = async (
+	userID: string,
+	essayID: string,
+	notepadContent: string
+) => {
 	const essayRef = doc(db, "users", userID, "essays", essayID);
 
 	try {
 		await updateDoc(essayRef, {
-			notepad: notepadContent
-		})
+			notepad: notepadContent,
+		});
 	} catch (error) {
-		console.log(error)
+		console.log(error);
 	}
+};
 
-}
-
-export { saveEssay, createEssay, loadEssay, loadEssayList, saveNotepad, saveTitle, saveEssayPrompt};
+export {
+	saveEssay,
+	createEssay,
+	loadEssay,
+	loadEssayList,
+	saveNotepad,
+	saveTitle,
+	saveEssayPrompt,
+	removeEssay,
+};
