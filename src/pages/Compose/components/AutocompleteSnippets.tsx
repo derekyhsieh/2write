@@ -143,15 +143,7 @@ export const AutocompleteSnippets = Extension.create({
 
                         })
 
-
-
-
-
                         const convertedSelection = selection.$to.pos + 1
-
-
-
-
 
                         if (convertedSelection == nodeArray.at(-1).endCount && selection.$from.pos !== 1 && lastSentenceLong(textContentOfCurrentParagraph) && textContentOfCurrentParagraph.slice(-1) == " ") {
                             const decoration = Decoration.widget(selection.$from.pos, () => {
@@ -163,13 +155,9 @@ export const AutocompleteSnippets = Extension.create({
                                 placeholder.id = "autocomplete-snippet";
                                 placeholder.className = "dot-flashing"
 
-
                                 const textEditor = document.getElementsByClassName("mantine-RichTextEditor-content mantine-3f8va4")
 
                                 textEditor[0].classList.add("hide-cursor")
-
-
-
 
                                 function debounce(_editorText: string) {
                                     clearTimeout(debounceTimeout);
@@ -234,6 +222,11 @@ export const AutocompleteSnippets = Extension.create({
 
 
                                 placeholder.style.color = "gray";
+                                var elems = document.querySelectorAll(".hide-cursor");
+
+                                [].forEach.call(elems, function (el) {
+                                    el.classList.remove("hide-cursor");
+                                });
 
                                 return placeholder;
 
