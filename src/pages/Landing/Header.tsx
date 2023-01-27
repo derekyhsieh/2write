@@ -29,7 +29,7 @@ import {
   IconCoin,
   IconChevronDown,
 } from "@tabler/icons";
-import logo from "../../img/logo.png";
+import logo from "../../../public/logo.png";
 import { useNavigate } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({

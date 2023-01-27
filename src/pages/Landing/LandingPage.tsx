@@ -137,6 +137,7 @@ export default function LandingPage() {
 
 					<video
 						src="https://drive.google.com/uc?export=download&id=1qXCWjFnPYbjqiX8ct4DRTCqifJ7YlonL"
+						preload="auto"
 						loop
 						autoPlay
 						muted
@@ -172,9 +173,10 @@ export default function LandingPage() {
 							</Button>
 
 							<Button
-								component="a"
-								href="https://youtube.com"
 								size="xl"
+								onClick={() =>
+									window.open("https://discord.gg/HRkKvbtr6j", "_blank").focus()
+								}
 								variant="default"
 								className={classes.control}
 							>

@@ -8,7 +8,6 @@ import cornell from "../../../img/cornell.png";
 import berkeley from "../../../img/berkeley.png";
 import mit from "../../../img/mit.png";
 import harvard from "../../../img/harvard.png";
-import { ThemeContext } from "@emotion/react";
 
 export function CollegeCarousel() {
 	const [embla, setEmbla] = useState<Embla | null>(null);

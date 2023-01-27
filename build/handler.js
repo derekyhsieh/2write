@@ -41,7 +41,7 @@ function appendQuestionMarkToPrompt(prompt) {
 async function getAnswer(question, isAutocomplete = false) {
   var _a, _b, _c;
   const configuration = new Configuration({
-    apiKey: "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"
+    apiKey: "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"
   });
   const openai = new OpenAIApi(configuration);
   let questionPrompt = question;
