@@ -137,7 +137,6 @@ export default function LandingPage() {
 
 					<video
 						src="https://firebasestorage.googleapis.com/v0/b/discord-2db38.appspot.com/o/compressedversion.mp4?alt=media&token=a1f16773-b0b3-4b5a-99a1-3440cacf945e"
-						preload="auto"
 						loop
 						autoPlay
 						muted

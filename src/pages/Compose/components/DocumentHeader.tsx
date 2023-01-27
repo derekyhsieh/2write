@@ -9,12 +9,14 @@ import { useNavigate } from "react-router-dom";
 import { UserAuth } from "../../../context/AuthContext";
 import { saveTitle, loadEssay } from "../../../services/FirestoreHelpers";
 import { useSearchParams } from "react-router-dom";
+import useWindowSize from "../../../hooks/useWindowSize";
 
 export default function DocumentHeader({ localDocData }) {
 	const [documentTitle, setDocumentTitle] = useState("Untitled Document");
 	const { user, logOut } = UserAuth();
 	const [searchParams, setSearchParams] = useSearchParams();
 	const [titleFocus, setTitleFocus] = useState(false);
+	const windowSize = useWindowSize();
 
 	const navigate = useNavigate();
 
@@ -63,7 +65,7 @@ export default function DocumentHeader({ localDocData }) {
 						onBlur={() => {
 							setTitleFocus(false);
 						}}
-						styles={{ root: { width: "700px" }, label: { width: "500px" } }}
+						styles={{ root: { width: windowSize.width * 0.6 } }}
 					/>
 				</Group>
 			</Group>

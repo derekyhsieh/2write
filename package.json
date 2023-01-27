@@ -11,7 +11,7 @@
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@mantine/carousel": "^5.9.3",
-    "@mantine/core": "^5.9.4",
+    "@mantine/core": "https://github.com/aidanbunch/mantine-patch.git",
     "@mantine/dates": "^5.9.3",
     "@mantine/dropzone": "^5.9.3",
     "@mantine/ds": "^5.9.3",

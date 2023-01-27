@@ -8,6 +8,7 @@ import {
 	Image,
 	Button,
 	Menu,
+	Portal,
 } from "@mantine/core";
 import {
 	IconDots,
@@ -145,35 +146,38 @@ export default function EssayCard(props: {
 						<Text className={classes.title} mt={5} lineClamp={1}>
 							{props.essayTitle ?? "Untitled Document"}
 						</Text>
-						<Menu transitionDuration={100} transition="pop-top-right">
+						<Menu transitionDuration={100} transition="pop-top-right" position="top">
 							<Menu.Target>
 								<ActionIcon onClick={(event) => event.stopPropagation()}>
 									<IconDots />
 								</ActionIcon>
 							</Menu.Target>
-							<Menu.Dropdown>
-								<Menu.Item onClick={handleRename}>
-									<Group>
-										<IconTextSize size={20} /> Rename
-									</Group>
-								</Menu.Item>
-								<Menu.Item onClick={handleRemove}>
-									<Group>
-										<IconTrash size={20} /> Remove
-									</Group>
-								</Menu.Item>
-								<Menu.Item onClick={handleOpenInNewTab}>
-									<Group>
-										<IconBrowser size={20} /> Open in new tab
-									</Group>
-								</Menu.Item>
-							</Menu.Dropdown>
+							<Portal>
+								<Menu.Dropdown>
+									<Menu.Item onClick={handleRename}>
+										<Group>
+											<IconTextSize size={20} /> Rename
+										</Group>
+									</Menu.Item>
+									<Menu.Item onClick={handleRemove}>
+										<Group>
+											<IconTrash size={20} /> Remove
+										</Group>
+									</Menu.Item>
+									<Menu.Item onClick={handleOpenInNewTab}>
+										<Group>
+											<IconBrowser size={20} /> Open in new tab
+										</Group>
+									</Menu.Item>
+								</Menu.Dropdown>
+							</Portal>
 						</Menu>
 					</Group>
 					<Group>
 						<IconUsers stroke={"1.75"} />
 						<Text color="dimmed" size="xs" transform="uppercase" weight={700}>
-							Shared with 2 groups
+							Owned by me
+							{/* Shared with 2 groups */}
 						</Text>
 					</Group>
 				</Stack>

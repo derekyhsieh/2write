@@ -31,13 +31,15 @@ const useStyles = createStyles((theme) => ({
 
 export function CreatePromptModalContent({ setIsActive }: Props) {
 	const [essayPromptValue, setEssayPromptValue] = useState<string>("");
+	const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
+
 	const navigate = useNavigate();
 
 	const { user } = UserAuth();
 
 	const generateEssay = () => {
+		setHasSubmitted(true);
 		const essayID = uuidv4();
-		const params = [["essayId", essayID]];
 		createEssay(
 			user.uid,
 			essayID,
@@ -48,7 +50,6 @@ export function CreatePromptModalContent({ setIsActive }: Props) {
 				search: `?${createSearchParams({
 					essayId: essayID,
 					isNewDoc: "true",
-					placeholder: "1",
 				})}`,
 			});
 		});
@@ -63,13 +64,14 @@ export function CreatePromptModalContent({ setIsActive }: Props) {
 			<PromptContainedInputs
 				setEssayPromptValue={setEssayPromptValue}
 				essayPromptValue={essayPromptValue}
+				generateEssay={generateEssay}
 			/>
 
 			<Button
 				onClick={() => {
 					generateEssay();
-					// setIsActive(false);
 				}}
+				disabled={hasSubmitted}
 			>
 				Generate ✨
 			</Button>
@@ -80,11 +82,13 @@ export function CreatePromptModalContent({ setIsActive }: Props) {
 type PromptContainedInputsProps = {
 	essayPromptValue: string;
 	setEssayPromptValue: (value: string) => void;
+	generateEssay: () => void;
 };
 
 function PromptContainedInputs({
 	setEssayPromptValue,
 	essayPromptValue,
+	generateEssay,
 }: PromptContainedInputsProps) {
 	const { classes } = useStyles();
 
@@ -96,6 +100,11 @@ function PromptContainedInputs({
 				label="Enter the prompt for your essay"
 				placeholder="Why is 2Write the best app?"
 				classNames={classes}
+				onKeyDown={(event) => {
+					if (event.key === "Enter") {
+						generateEssay();
+					}
+				}}
 			/>
 		</div>
 	);

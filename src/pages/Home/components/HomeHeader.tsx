@@ -5,36 +5,18 @@ import {
 	Group,
 	Burger,
 	Text,
-	Avatar,
-	UnstyledButton,
-	ActionIcon,
-	Menu,
 	Image,
-	Tooltip,
 } from "@mantine/core";
-import {
-	IconLogout,
-	IconHeart,
-	IconStar,
-	IconMessage,
-	IconSettings,
-	IconPlayerPause,
-	IconTrash,
-	IconSwitchHorizontal,
-	IconChevronDown,
-} from "@tabler/icons";
 import { useDisclosure } from "@mantine/hooks";
-import { IconSearch, IconUser, IconBell } from "@tabler/icons";
-import { loadEssayList } from "../../../services/FirestoreHelpers";
+import { IconSearch } from "@tabler/icons";
 import { UserAuth } from "../../../context/AuthContext";
 import { useEffect, useRef, useState } from "react";
 import {
 	getMonthName,
 	convertFirebaseTimestampToDate,
-	convertURLToName,
 } from "../../../utils/misc";
 import { createSearchParams, useNavigate } from "react-router-dom";
-import logo from "../../../img/logo.png"
+import logo from "../../../img/logo.png";
 import UserMenu from "./UserMenu";
 import { DocumentData } from "firebase/firestore";
 
@@ -85,11 +67,11 @@ const useStyles = createStyles((theme) => ({
 	},
 }));
 
-export default function HomeHeader(props: {essayList: DocumentData[]}) {
+export default function HomeHeader(props: { essayList: DocumentData[] }) {
 	const { user, logOut } = UserAuth();
 	const [opened, { toggle }] = useDisclosure(false);
 
-	const { classes, cx } = useStyles();
+	const { classes } = useStyles();
 	const [userMenuOpened, setUserMenuOpened] = useState(false);
 
 	const [searchQuery, setSearchQuery] = useState("");
@@ -98,29 +80,29 @@ export default function HomeHeader(props: {essayList: DocumentData[]}) {
 	const navigate = useNavigate();
 
 	useEffect(() => {
-			let essaySearch = [];
-			// Sort the essay list by the last edit date
-			let sortedEssayList = props.essayList.sort(
-				(a, b) => b.lastEdit.toMillis() - a.lastEdit.toMillis()
-			);
-			sortedEssayList.map((essay) => {
-				const essayObject = {};
-				// "Value" is used because it is the key that the Mantine AC (Autocomplete) component uses to search
-				essayObject["value"] = essay.title ?? "Untitled Document";
-				// "Key" is used because it is the key that AC uses to identify the selected item
-				essayObject["key"] = essay.essayId;
-				// "Group" is used because it is the key that AC uses to group the items
-				let essayDate = convertFirebaseTimestampToDate(essay.lastEdit);
-				essayObject["group"] =
-					getMonthName(essayDate.getMonth()) +
-					" " +
-					essayDate.getDate() +
-					(new Date().getFullYear() !== essayDate.getFullYear()
-						? ", " + essayDate.getFullYear()
-						: "");
-				essaySearch.push(essayObject);
-			});
-			setEssayTitleArray(essaySearch);
+		let essaySearch = [];
+		// Sort the essay list by the last edit date
+		let sortedEssayList = props.essayList.sort(
+			(a, b) => b.lastEdit.toMillis() - a.lastEdit.toMillis()
+		);
+		sortedEssayList.map((essay) => {
+			const essayObject = {};
+			// "Value" is used because it is the key that the Mantine AC (Autocomplete) component uses to search
+			essayObject["value"] = essay.title ?? "Untitled Document";
+			// "Key" is used because it is the key that AC uses to identify the selected item
+			essayObject["key"] = essay.essayId;
+			// "Group" is used because it is the key that AC uses to group the items
+			let essayDate = convertFirebaseTimestampToDate(essay.lastEdit);
+			essayObject["group"] =
+				getMonthName(essayDate.getMonth()) +
+				" " +
+				essayDate.getDate() +
+				(new Date().getFullYear() !== essayDate.getFullYear()
+					? ", " + essayDate.getFullYear()
+					: "");
+			essaySearch.push(essayObject);
+		});
+		setEssayTitleArray(essaySearch);
 	}, [props.essayList]);
 
 	return (
@@ -130,7 +112,7 @@ export default function HomeHeader(props: {essayList: DocumentData[]}) {
 			style={{ position: "fixed", top: 0, zIndex: 1 }}
 		>
 			<div className={classes.inner}>
-				<Group align={"center"} onClick={() => window.location.reload()}>
+				<Group align={"center"} onClick={() => navigate("/")}>
 					<Burger opened={opened} onClick={toggle} size="sm" />
 					<Image src={logo} width={35} height={35} mb={4} mr={-10} />
 					<Text
@@ -158,13 +140,13 @@ export default function HomeHeader(props: {essayList: DocumentData[]}) {
 					icon={<IconSearch size={16} stroke={1.5} />}
 					data={essayTitleArray}
 					limit={4}
-					// @ts-ignore
 					onSearchQuery={() => {
 						if (searchQuery !== "") {
 							navigate({
 								pathname: "/",
 								search: `?${createSearchParams({ search: searchQuery })}`,
 							});
+							searchInput.current.blur();
 						} else {
 							searchInput.current.blur();
 							navigate("/");

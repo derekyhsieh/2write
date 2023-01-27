@@ -14,12 +14,11 @@ export default function HomePageContainer() {
 	const [promptModalIsOpen, setPromptModalIsOpen] = useState(false);
 	const [createModalIsOpen, setCreateModalIsOpen] = useState(false);
 	const [renameModalIsOpen, setRenameModalIsOpen] = useState(false);
-	const [isOnRenderLoading, setIsOnRenderLoading] = useState(true);
-	const [essayId, setEssayId] = useState("");
-	const [oldTitle, setOldTitle] = useState("");
-	const [essayList, setEssayList] = useState<DocumentData[]>([]);
-	const theme = useMantineTheme();
 
+	const [isOnRenderLoading, setIsOnRenderLoading] = useState(true);
+	const [essayList, setEssayList] = useState<DocumentData[]>([]);
+
+	const theme = useMantineTheme();
 	const { user } = UserAuth();
 
 	useLayoutEffect(() => {
@@ -28,6 +27,9 @@ export default function HomePageContainer() {
 			setIsOnRenderLoading(false);
 		});
 	}, []);
+
+	const [essayId, setEssayId] = useState("");
+	const [oldTitle, setOldTitle] = useState("");
 
 	const setCurrentEssayCallback = (essayId: string, oldTitle: string) => {
 		setEssayId(essayId);
