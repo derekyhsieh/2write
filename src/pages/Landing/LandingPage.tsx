@@ -136,7 +136,7 @@ export default function LandingPage() {
 					</h1>
 
 					<video
-						src="https://firebasestorage.googleapis.com/v0/b/write-dev.appspot.com/o/2write%20landing%20page%20video.mp4?alt=media&token=4fd3e374-3e92-4398-b22e-3c16b93802cb"
+						src="https://drive.google.com/uc?export=download&id=1qXCWjFnPYbjqiX8ct4DRTCqifJ7YlonL"
 						loop
 						autoPlay
 						muted
