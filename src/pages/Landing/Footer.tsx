@@ -7,7 +7,7 @@ import {
 	Image,
 } from "@mantine/core";
 import { IconBrandDiscord } from "@tabler/icons";
-import logo from "../../../public/logo.png";
+import logo from "../../img/logo.png"
 
 const useStyles = createStyles((theme) => ({
 	footer: {
