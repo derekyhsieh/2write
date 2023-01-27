@@ -49,10 +49,10 @@ export function CreateRenameModalContent({
 	setEssayList,
 }: Props) {
 	const [renameEssayValue, setRenameEssayValue] = useState<string>("");
-	const [renameLoading, setRenameLoading] = useState(false);
+	const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
 
 	const handleRenameEssay = () => {
-		setRenameLoading(true);
+		setHasSubmitted(true);
 		if (renameEssayValue === "") {
 			setIsActive(false);
 		} else {
@@ -74,24 +74,13 @@ export function CreateRenameModalContent({
 			</Title>
 
 			<RenameContainedInputs
+				handleRenameEssay={handleRenameEssay}
 				setRenameEssayValue={setRenameEssayValue}
 				renameEssayValue={renameEssayValue}
 				oldTitle={oldTitle}
 			/>
 
-			{renameLoading ? (
-				<Center>
-					<Loader />
-				</Center>
-			) : (
-				<Button
-					onClick={() => {
-						handleRenameEssay();
-					}}
-				>
-					Rename
-				</Button>
-			)}
+			<Button onClick={() => handleRenameEssay()} disabled={hasSubmitted}>Rename</Button>
 		</Stack>
 	);
 }
@@ -99,6 +88,7 @@ export function CreateRenameModalContent({
 type RenameContainedInputsProps = {
 	renameEssayValue: string;
 	setRenameEssayValue: (value: string) => void;
+	handleRenameEssay: () => void;
 	oldTitle: string;
 };
 
@@ -106,6 +96,7 @@ function RenameContainedInputs({
 	setRenameEssayValue,
 	renameEssayValue,
 	oldTitle,
+	handleRenameEssay,
 }: RenameContainedInputsProps) {
 	const { classes } = useStyles();
 
@@ -115,6 +106,9 @@ function RenameContainedInputs({
 				value={renameEssayValue}
 				onChange={(event) => setRenameEssayValue(event.currentTarget.value)}
 				label={"New Title"}
+				onKeyDown={(event) => {
+					if (event.key === "Enter") handleRenameEssay();
+				}}
 				placeholder={oldTitle}
 				classNames={classes}
 			/>

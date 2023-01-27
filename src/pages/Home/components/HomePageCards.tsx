@@ -84,12 +84,9 @@ export default function HomePageCards(props: {
 }) {
 	const [cards, setCards] = useState([]);
 	const { classes } = useStyles();
-	const [ownerFilter, setOwnerFilter] = useState("Owned by anyone");
+	const [ownerFilter, setOwnerFilter] = useState("Owned by me");
 	const [ageFilter, setAgeFilter] = useState("Newest");
 	const [searchParams, setSearchParams] = useSearchParams();
-	const [noResultsMessage, setNoResultsMessage] = useState("");
-
-	const { user } = UserAuth();
 
 	const setEssayCards = (essayList: DocumentData[]) => {
 		setCards(
@@ -130,13 +127,9 @@ export default function HomePageCards(props: {
 				searchParams.get("search")
 			);
 			// set the search results as the essay cards
-			setNoResultsMessage("no results match your query :(");
 			setEssayCards(searchResults);
 		} else {
 			// if the user is not searching, set the essay cards to the sorted essay list
-			setNoResultsMessage(
-				"no documents found, create a new one using the buttons above"
-			);
 			setEssayCards(sortedEssayList);
 		}
 	}, [
@@ -265,15 +258,15 @@ export default function HomePageCards(props: {
 								</Button>
 							</Menu.Target>
 							<Menu.Dropdown>
-								<Menu.Item onClick={() => setOwnerFilter("Owned by anyone")}>
+								{/* <Menu.Item onClick={() => setOwnerFilter("Owned by anyone")}>
 									Owned by anyone
-								</Menu.Item>
+								</Menu.Item> */}
 								<Menu.Item onClick={() => setOwnerFilter("Owned by me")}>
 									Owned by me
 								</Menu.Item>
-								<Menu.Item onClick={() => setOwnerFilter("Not owned by me")}>
+								{/* <Menu.Item onClick={() => setOwnerFilter("Not owned by me")}>
 									Not owned by me
-								</Menu.Item>
+								</Menu.Item> */}
 							</Menu.Dropdown>
 						</Menu>
 						<Menu transitionDuration={150} transition="scale-y">
@@ -295,6 +288,18 @@ export default function HomePageCards(props: {
 						</Menu>
 					</Group>
 				</Group>
+				{searchParams.has("search") && cards.length === 0 && (
+					<Center>
+						<Text
+							color="dimmed"
+							transform="uppercase"
+							weight={700}
+							align="center"
+						>
+							{"no results match your query :("}
+						</Text>
+					</Center>
+				)}
 				{/* 
 				displays cards
 				if there are no cards, checks if the on render loading is complete
@@ -306,16 +311,20 @@ export default function HomePageCards(props: {
 							<Loader />
 						</Center>
 					) : (
-						<Center>
-							<Text
-								color="dimmed"
-								transform="uppercase"
-								weight={700}
-								align="center"
-							>
-								{noResultsMessage}
-							</Text>
-						</Center>
+						!searchParams.has("search") && (
+							<Center>
+								<Text
+									color="dimmed"
+									transform="uppercase"
+									weight={700}
+									align="center"
+								>
+									{
+										"no documents found, create a new one using the buttons above"
+									}
+								</Text>
+							</Center>
+						)
 					)
 				) : (
 					<SimpleGrid

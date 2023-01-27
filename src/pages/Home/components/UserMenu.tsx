@@ -47,7 +47,7 @@ function UserMenu(props: {
 						</strong>
 					</Menu.Label>
 					{props.user.displayName ? (
-						<Menu.Item icon={<IconUser size={14} stroke={1.5} />}>
+						<Menu.Item icon={<IconUser size={14} stroke={1.5} />} closeMenuOnClick={false}>
 							{props.user.displayName}
 						</Menu.Item>
 					) : (
@@ -55,7 +55,7 @@ function UserMenu(props: {
 					)}
 
 					{props.user.email ? (
-						<Menu.Item icon={<IconMail size={14} stroke={1.5} />}>
+						<Menu.Item icon={<IconMail size={14} stroke={1.5} />} closeMenuOnClick={false}>
 							{props.user.email}
 						</Menu.Item>
 					) : (

@@ -11,8 +11,6 @@ import harvard from "../../../img/harvard.png";
 
 export function CollegeCarousel() {
 	const [embla, setEmbla] = useState<Embla | null>(null);
-	const [slideWidth, setSlideWidth] = useState(200);
-	const [slideHeight, setSlideHeight] = useState(80);
 
 	const interval = useInterval(() => {
 		// Start scrolling slowly
