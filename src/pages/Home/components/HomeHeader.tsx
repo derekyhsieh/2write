@@ -36,6 +36,7 @@ import {
 import { createSearchParams, useNavigate } from "react-router-dom";
 import logo from "../../../img/logo.png";
 import UserMenu from "./UserMenu";
+import { DocumentData } from "firebase/firestore";
 
 const useStyles = createStyles((theme) => ({
 	inner: {
@@ -84,9 +85,7 @@ const useStyles = createStyles((theme) => ({
 	},
 }));
 
-interface HomeHeaderProps {}
-
-export default function HomeHeader() {
+export default function HomeHeader(props: {essayList: DocumentData[]}) {
 	const { user, logOut } = UserAuth();
 	const [opened, { toggle }] = useDisclosure(false);
 
@@ -99,10 +98,9 @@ export default function HomeHeader() {
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		loadEssayList(user.uid).then((essayList) => {
 			let essaySearch = [];
 			// Sort the essay list by the last edit date
-			let sortedEssayList = essayList.sort(
+			let sortedEssayList = props.essayList.sort(
 				(a, b) => b.lastEdit.toMillis() - a.lastEdit.toMillis()
 			);
 			sortedEssayList.map((essay) => {
@@ -123,8 +121,7 @@ export default function HomeHeader() {
 				essaySearch.push(essayObject);
 			});
 			setEssayTitleArray(essaySearch);
-		});
-	}, []);
+	}, [props.essayList]);
 
 	return (
 		<Header

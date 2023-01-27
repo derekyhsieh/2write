@@ -24,9 +24,7 @@ import {
 	IconUpload,
 } from "@tabler/icons";
 import React, { useState, useEffect } from "react";
-import {
-	useSearchParams,
-} from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { loadEssayList } from "../../../services/FirestoreHelpers";
 import { UserAuth } from "../../../context/AuthContext";
 import { searchDocumentList } from "../../../utils/misc";
@@ -76,17 +74,20 @@ export default function HomePageCards(props: {
 	createModalOnClick?: Function;
 	dropzoneModalOnClick?: Function;
 	promptModalOnClick?: Function;
+	renameModalOnClick?: Function;
+	setCurrentEssayCallback: (essayId: string, oldTitle: string) => void;
+	isRenameModalActive: boolean;
+	essayList: DocumentData[];
+	setEssayList: Function;
+	isOnRenderLoading: boolean;
+	setIsOnRenderLoading: Function;
 }) {
 	const [cards, setCards] = useState([]);
 	const { classes } = useStyles();
 	const [ownerFilter, setOwnerFilter] = useState("Owned by anyone");
 	const [ageFilter, setAgeFilter] = useState("Newest");
 	const [searchParams, setSearchParams] = useSearchParams();
-	const [isOnRenderLoadingComplete, setIsOnRenderLoadingComplete] =
-		useState(false);
-	const [noResultsMessage, setNoResultsMessage] = useState(
-		"sorry, we ran into an error retrieving your documents"
-	);
+	const [noResultsMessage, setNoResultsMessage] = useState("");
 
 	const { user } = UserAuth();
 
@@ -101,6 +102,11 @@ export default function HomePageCards(props: {
 						ageFilter={ageFilter}
 						ownerFilter={ownerFilter}
 						searchParams={searchParams}
+						setCurrentEssayCallback={props.setCurrentEssayCallback}
+						isRenameModalActive={props.isRenameModalActive}
+						setRenameModalIsOpen={props.renameModalOnClick}
+						essayList={props.essayList}
+						setEssayList={props.setEssayList}
 					/>
 				))
 			)
@@ -108,37 +114,38 @@ export default function HomePageCards(props: {
 	};
 
 	useEffect(() => {
-		// load the user's essay list from firebase
-		loadEssayList(user.uid).then((essayList) => {
-			// sort the essay list by last edit date
-			let sortedEssayList =
-				ageFilter === "Newest"
-					? essayList.sort(
-							(a, b) => b.lastEdit.toMillis() - a.lastEdit.toMillis()
-					  )
-					: essayList.sort(
-							(a, b) => a.lastEdit.toMillis() - b.lastEdit.toMillis()
-					  );
-			if (searchParams.has("search")) {
-				// search the essay list based on the search query
-				let searchResults = searchDocumentList(
-					sortedEssayList,
-					searchParams.get("search")
-				);
-				// set the search results as the essay cards
-				setNoResultsMessage("no results match your query :(");
-				setEssayCards(searchResults);
-				setIsOnRenderLoadingComplete(true);
-			} else {
-				// if the user is not searching, set the essay cards to the sorted essay list
-				setNoResultsMessage(
-					"no documents found, create a new one using the buttons above"
-				);
-				setEssayCards(sortedEssayList);
-				setIsOnRenderLoadingComplete(true);
-			}
-		});
-	}, [ageFilter, ownerFilter, searchParams]);
+		// sort the essay list by last edit date
+		let sortedEssayList =
+			ageFilter === "Newest"
+				? props.essayList.sort(
+						(a, b) => b.lastEdit.toMillis() - a.lastEdit.toMillis()
+				  )
+				: props.essayList.sort(
+						(a, b) => a.lastEdit.toMillis() - b.lastEdit.toMillis()
+				  );
+		if (searchParams.has("search")) {
+			// search the essay list based on the search query
+			let searchResults = searchDocumentList(
+				sortedEssayList,
+				searchParams.get("search")
+			);
+			// set the search results as the essay cards
+			setNoResultsMessage("no results match your query :(");
+			setEssayCards(searchResults);
+		} else {
+			// if the user is not searching, set the essay cards to the sorted essay list
+			setNoResultsMessage(
+				"no documents found, create a new one using the buttons above"
+			);
+			setEssayCards(sortedEssayList);
+		}
+	}, [
+		ageFilter,
+		ownerFilter,
+		searchParams,
+		props.isRenameModalActive,
+		props.essayList,
+	]);
 
 	const templateArray = [
 		{
@@ -293,8 +300,12 @@ export default function HomePageCards(props: {
 				if there are no cards, checks if the on render loading is complete
 				if it is, displays the no results message, otherwise shows a loader 
 				*/}
-				{cards.length === 0 ? (
-					isOnRenderLoadingComplete ? (
+				{props.essayList.length === 0 ? (
+					props.isOnRenderLoading ? (
+						<Center>
+							<Loader />
+						</Center>
+					) : (
 						<Center>
 							<Text
 								color="dimmed"
@@ -304,10 +315,6 @@ export default function HomePageCards(props: {
 							>
 								{noResultsMessage}
 							</Text>
-						</Center>
-					) : (
-						<Center>
-							<Loader />
 						</Center>
 					)
 				) : (

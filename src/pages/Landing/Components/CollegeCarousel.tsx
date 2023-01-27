@@ -1,15 +1,12 @@
 import { createStyles, Image } from "@mantine/core";
 import { Carousel, Embla } from "@mantine/carousel";
-import {
-	useState,
-	useEffect,
-} from "react";
+import { useState, useEffect } from "react";
 
-import stanford from "../../../img/stanford.png"
-import cornell from "../../../img/cornell.png"
-import berkeley from "../../../img/berkeley.png"
-import mit from "../../../img/mit.png"
-import harvard from "../../../img/harvard.png"
+import stanford from "../../../img/stanford.png";
+import cornell from "../../../img/cornell.png";
+import berkeley from "../../../img/berkeley.png";
+import mit from "../../../img/mit.png";
+import harvard from "../../../img/harvard.png";
 
 export function CollegeCarousel() {
 	const [embla, setEmbla] = useState<Embla | null>(null);
@@ -21,7 +18,7 @@ export function CollegeCarousel() {
 			// Start scrolling slowly
 			const engine = embla.internalEngine();
 			engine.scrollBody.useSpeed(0.03);
-			engine.scrollTo.index(99999, -1);
+			engine.scrollTo.index(embla.scrollSnapList().length - 1, -1);
 		}, 500);
 
 		return () => clearInterval(interval);
@@ -44,44 +41,19 @@ export function CollegeCarousel() {
 			getEmblaApi={setEmbla}
 		>
 			<Carousel.Slide>
-				<Image
-					width={200}
-					height={80}
-					radius="md"
-					src={stanford}
-				/>
+				<Image width={200} height={80} radius="md" src={stanford} />
 			</Carousel.Slide>
 			<Carousel.Slide>
-				<Image
-					width={200}
-					height={80}
-					radius="md"
-					src={berkeley}
-				/>
+				<Image width={200} height={80} radius="md" src={berkeley} />
 			</Carousel.Slide>
 			<Carousel.Slide>
-				<Image
-					width={200}
-					height={80}
-					radius="md"
-					src={cornell}
-				/>
+				<Image width={200} height={80} radius="md" src={cornell} />
 			</Carousel.Slide>
 			<Carousel.Slide>
-				<Image
-					width={200}
-					height={80}
-					radius="md"
-					src={mit}
-				/>
+				<Image width={200} height={80} radius="md" src={mit} />
 			</Carousel.Slide>
 			<Carousel.Slide>
-				<Image
-					width={200}
-					height={80}
-					radius="md"
-					src={harvard}
-				/>
+				<Image width={200} height={80} radius="md" src={harvard} />
 			</Carousel.Slide>
 		</Carousel>
 	);

@@ -114,7 +114,7 @@ export default function LandingPage() {
 			}
 		>
 			<div className={classes.wrapper}>
-				<Container size={700} className={classes.inner}>
+				<Container size={window.screen.width / 2} className={classes.inner}>
 					<h1 className={classes.title}>
 						<Text
 							ta="center"
@@ -186,7 +186,7 @@ export default function LandingPage() {
 				<Space h="lg" />
 				<CollegeCarousel />
 				<Space h="lg" />
-				
+
 				<Features />
 			</div>
 		</AppShell>
