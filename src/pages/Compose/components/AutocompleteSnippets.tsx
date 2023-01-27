@@ -144,28 +144,27 @@ export const AutocompleteSnippets = Extension.create({
                         })
 
                         const convertedSelection = selection.$to.pos + 1
-
                         if (convertedSelection == nodeArray.at(-1).endCount && selection.$from.pos !== 1 && lastSentenceLong(textContentOfCurrentParagraph) && textContentOfCurrentParagraph.slice(-1) == " ") {
                             const decoration = Decoration.widget(selection.$from.pos, () => {
-                                console.log("DEBOUNCING")
-
-                                // const loader = document.createElement("span");
                                 const placeholder = document.createElement("span");
-                                // give it element id of autocomplete-snippet
-                                placeholder.id = "autocomplete-snippet";
-                                placeholder.className = "dot-flashing"
 
-                                const textEditor = document.getElementsByClassName("mantine-RichTextEditor-content mantine-3f8va4")
-
-                                textEditor[0].classList.add("hide-cursor")
 
                                 function debounce(_editorText: string) {
                                     clearTimeout(debounceTimeout);
 
                                     debounceTimeout = setTimeout(() => {
-                                        console.log("AUTOCOMPLETE")
 
+                                        console.log("DEBOUNCING")
 
+                                        // const loader = document.createElement("span");
+
+                                        // give it element id of autocomplete-snippet
+                                        placeholder.id = "autocomplete-snippet";
+                                        placeholder.className = "dot-flashing"
+
+                                        const textEditor = document.getElementsByClassName("mantine-RichTextEditor-content mantine-3f8va4")
+
+                                        textEditor[0].classList.add("hide-cursor")
 
 
                                         let autocomplete = ""
@@ -214,7 +213,7 @@ export const AutocompleteSnippets = Extension.create({
                                             }
 
                                             )
-                                    }, 500);
+                                    }, 750);
                                 }
 
 
