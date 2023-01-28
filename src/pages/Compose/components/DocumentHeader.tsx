@@ -1,8 +1,4 @@
-import {
-	ActionIcon,
-	Group,
-	TextInput,
-} from "@mantine/core";
+import { ActionIcon, Group, TextInput, Button, Tooltip, Portal } from "@mantine/core";
 import { useState, useEffect } from "react";
 import { IconChevronLeft } from "@tabler/icons";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +7,7 @@ import { saveTitle, loadEssay } from "../../../services/FirestoreHelpers";
 import { useSearchParams } from "react-router-dom";
 import useWindowSize from "../../../hooks/useWindowSize";
 
-export default function DocumentHeader({ localDocData }) {
+export default function DocumentHeader({ localDocData, editor }) {
 	const [documentTitle, setDocumentTitle] = useState("Untitled Document");
 	const { user, logOut } = UserAuth();
 	const [searchParams, setSearchParams] = useSearchParams();
@@ -65,7 +61,7 @@ export default function DocumentHeader({ localDocData }) {
 						onBlur={() => {
 							setTitleFocus(false);
 						}}
-						styles={{ root: { width: windowSize.width * 0.6 } }}
+						styles={{ root: { width: windowSize.width * 0.45 } }}
 					/>
 				</Group>
 			</Group>
