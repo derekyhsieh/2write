@@ -292,7 +292,7 @@ export default function ComposeContainer() {
 											}),
 										})
 											.then((res) => res.json())
-											.then((data) => {
+											.then((data: any) => {
 												setCurrentClassification(data.label);
 												setCurrentClassificationPercentage(data.score);
 												setPlagiarismModalIsOpen(true);

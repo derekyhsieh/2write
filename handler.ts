@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import { Configuration, OpenAIApi } from "openai";
 import admin from "firebase-admin";
 import mongoose from "mongoose";
+import fetch from "node-fetch";
 
 
 // @ts-ignore
