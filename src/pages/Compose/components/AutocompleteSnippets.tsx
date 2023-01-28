@@ -5,6 +5,7 @@ import { Plugin } from "prosemirror-state";
 import { Decoration, DecorationSet } from "prosemirror-view";
 import { useDebounce } from "use-debounce";
 import "./Loader.css"
+import { auth } from "../../../services/firebase";
 
 
 const snippet = " resulting in distinct and profound patterns of social development."
@@ -168,51 +169,57 @@ export const AutocompleteSnippets = Extension.create({
 
 
                                         let autocomplete = ""
-                                        fetch("/api/autocomplete", {
-                                            method: "post",
-                                            headers: { 'Content-Type': 'application/json' },
-                                            body: JSON.stringify({ "prompt": textContentOfCurrentParagraph })
-                                        })
-                                            .then((res) => res.json())
-                                            .then((data) => {
-
-                                                autocomplete = data.answer
-
-                                                if (autocomplete[0] === " ") {
-                                                    autocomplete = autocomplete.substring(1)
-
+                                        // get jwt token
+                                        auth.currentUser?.getIdToken(true).then((token) => {
+                                            fetch("/api/autocomplete", {
+                                                method: "post",
+                                                headers: { 'Content-Type': 'application/json' },
+                                                body: JSON.stringify({ "idToken": token,"prompt": textContentOfCurrentParagraph })
+                                            })
+                                                .then((res) => res.json())
+                                                .then((data) => {
+    
+                                                    autocomplete = data.answer
+    
+                                                    if (autocomplete[0] === " ") {
+                                                        autocomplete = autocomplete.substring(1)
+    
+                                                    }
+    
+                                                })
+                                                .catch((err) => {
+                                                    console.log(err)
+                                                    var elems = document.querySelectorAll(".widget.hover");
+    
+                                                    [].forEach.call(elems, function (el) {
+                                                        el.classList.remove("hover");
+                                                    });
+                                                })
+    
+                                                .finally(() => {
+                                                    placeholder.className = ""
+                                                    placeholder.innerText = autocomplete
+                                                    const input = document.getElementsByClassName("hide-cursor")
+                                                    // input[0].remove("hide-cursor")
+    
+    
+                                                    // remove hid cursor class
+    
+    
+                                                    var elems = document.querySelectorAll(".hide-cursor");
+    
+                                                    [].forEach.call(elems, function (el) {
+                                                        el.classList.remove("hide-cursor");
+                                                    });
+    
+                                                    return placeholder
                                                 }
+    
+                                                )
+                                        })
+                                        
 
-                                            })
-                                            .catch((err) => {
-                                                console.log(err)
-                                                var elems = document.querySelectorAll(".widget.hover");
-
-                                                [].forEach.call(elems, function (el) {
-                                                    el.classList.remove("hover");
-                                                });
-                                            })
-
-                                            .finally(() => {
-                                                placeholder.className = ""
-                                                placeholder.innerText = autocomplete
-                                                const input = document.getElementsByClassName("hide-cursor")
-                                                // input[0].remove("hide-cursor")
-
-
-                                                // remove hid cursor class
-
-
-                                                var elems = document.querySelectorAll(".hide-cursor");
-
-                                                [].forEach.call(elems, function (el) {
-                                                    el.classList.remove("hide-cursor");
-                                                });
-
-                                                return placeholder
-                                            }
-
-                                            )
+                                      
                                     }, 750);
                                 }
 

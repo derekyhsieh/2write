@@ -12,6 +12,7 @@ import { saveNotepad } from '../../../services/FirestoreHelpers';
 import { UserAuth } from '../../../context/AuthContext';
 import { useContext } from 'react';
 import {LoginContext} from "../../../context/DocContext"
+import { auth } from '../../../services/firebase';
 
 
 
@@ -73,28 +74,32 @@ export default function Notepad() {
 
             setIsLoading(true)
 
-            fetch("/api/outline", {
-                method: "post",
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({"prompt": prompt}),
+            auth.currentUser?.getIdToken(true).then((token) =>  {
+                fetch("/api/outline", {
+                    method: "post",
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({"idToken": token, "prompt": prompt}),
+                })
+                .then((res) => res.json())
+                .then((returnedData) => {
+    
+                    const cleanedHTML = convertStringIntoHTML(returnedData.answer)
+                    const notepadContent = `<h3>AI Outline</h3> <p>${cleanedHTML}</p>`
+                    saveNotepad(user.uid, searchParams.get("essayId"), notepadContent)
+                    setEditorValue(notepadContent)
+    
+                    let newState = localDocData
+                    newState.notepad = notepadContent
+                    setLocalDocData(newState)
+                    
+                }).finally(() => {
+    
+                    setIsLoading(false)
+    
+                })
             })
-            .then((res) => res.json())
-            .then((returnedData) => {
 
-                const cleanedHTML = convertStringIntoHTML(returnedData.answer)
-                const notepadContent = `<h3>AI Outline</h3> <p>${cleanedHTML}</p>`
-                saveNotepad(user.uid, searchParams.get("essayId"), notepadContent)
-                setEditorValue(notepadContent)
-
-                let newState = localDocData
-                newState.notepad = notepadContent
-                setLocalDocData(newState)
-                
-            }).finally(() => {
-
-                setIsLoading(false)
-
-            })
+      
 
 
 
