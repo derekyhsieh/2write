@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 
 
 // @ts-ignore
-// const uri = import.meta.env.VITE_MONGODB_URI
+const uri = import.meta.env.VITE_MONGODB_URI
 
 
 const serviceAccount = JSON.parse(
@@ -14,7 +14,7 @@ const serviceAccount = JSON.parse(
   import.meta.env.VITE_FIREBASE_SERVICE_ACCOUNT_KEY
 );
 
-// if (admin.apps.length === 0) {
+if (admin.apps.length === 0) {
   admin.initializeApp({
     credential: admin.credential.cert({
       projectId: serviceAccount.project_id,
@@ -22,7 +22,7 @@ const serviceAccount = JSON.parse(
       privateKey: serviceAccount.private_key.replace(/\\n/g, "\n"),
     }),
   });
-// }
+}
 
 const app = express();
 app.use(bodyParser.json());
@@ -42,13 +42,13 @@ app.use("/api", (req, res, next) => {
 
 	  claims.last_ip = req.socket.remoteAddress;
 	  claims.time_stamp = new Date().toUTCString();
-	  // mongoose.connect(uri, function (err, db) {
-		// db.collection("User_requests").insertOne(claims, (err, result) => {
-		// 	console.log(result)
-		// 	db.close()
-		// })
+	  mongoose.connect(uri, function (err, db) {
+		db.collection("User_requests").insertOne(claims, (err, result) => {
+			console.log(result)
+			db.close()
+		})
 
-	  // })
+	  })
      
 
 
