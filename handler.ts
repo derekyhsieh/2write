@@ -27,7 +27,7 @@ app.post("/api/autocomplete", (req, res) => {
 	// {"prompt": "In the fifteenth and sixteenth centuries, European nations began to claim "}
 
 	if (req.body.prompt.length < 1) {
-		res.status(200).json({
+		res.status(400).json({
 			error: "Autocomplete sentence must be longer",
 			answer: "",
 		});
@@ -37,6 +37,22 @@ app.post("/api/autocomplete", (req, res) => {
 	getAnswer(req.body.prompt, true).then((answerString) => {
 		res.status(200).json({ answer: answerString });
 	});
+});
+
+app.post("/api/classify", (req, res) => {
+	// if (req.body.prompt.split(" ").length >= 100) {
+	fetch("https://aiwritingcheck.org/classify", {
+		method: "post",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify({ instances: [{ data: req.body.prompt }] }),
+	})
+		.then((response) => response.json())
+		.then((data) => {
+			res.status(200).json(data);
+		})
+		.catch((error) => {
+			res.status(400).json({ error: "Error: bad request" });
+		});
 });
 
 function appendQuestionMarkToPrompt(prompt) {
