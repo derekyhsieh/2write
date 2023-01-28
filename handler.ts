@@ -14,7 +14,7 @@ const serviceAccount = JSON.parse(
   import.meta.env.VITE_FIREBASE_SERVICE_ACCOUNT_KEY
 );
 
-if (admin.apps.length === 0) {
+// if (admin.apps.length === 0) {
   admin.initializeApp({
     credential: admin.credential.cert({
       projectId: serviceAccount.project_id,
@@ -22,7 +22,7 @@ if (admin.apps.length === 0) {
       privateKey: serviceAccount.private_key.replace(/\\n/g, "\n"),
     }),
   });
-}
+// }
 
 const app = express();
 app.use(bodyParser.json());
