@@ -2,11 +2,16 @@ import express from "express";
 import bodyParser from "body-parser";
 import { Configuration, OpenAIApi } from "openai";
 import * as admin from "firebase-admin";
+import mongoose from "mongoose";
+import {Timestamp} from "firebase/firestore"
 
+
+// @ts-ignore
+const uri = import.meta.env.VITE_MONGODB_URI
 
 
 const serviceAccount = JSON.parse(
-	// @ts-ignore
+  // @ts-ignore
   import.meta.env.VITE_FIREBASE_SERVICE_ACCOUNT_KEY
 );
 
@@ -33,7 +38,20 @@ app.use("/api", (req, res, next) => {
     .then((claims) => {
       console.log(claims);
       // console.log(req.socket.remoteAddress)
+
       // save uid and ip
+
+	  claims.last_ip = req.socket.remoteAddress;
+	  claims.time_stamp = new Date().toUTCString();
+	  mongoose.connect(uri, function (err, db) {
+		db.collection("User_requests").insertOne(claims, (err, result) => {
+			console.log(result)
+			db.close()
+		})
+
+	  })
+     
+
 
       next();
     })
