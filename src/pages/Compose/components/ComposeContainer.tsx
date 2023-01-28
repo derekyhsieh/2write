@@ -85,7 +85,7 @@ const useStyles = createStyles((theme) => ({
 		},
 
 		zIndex: 10000,
-		position: "absolute",
+		position: "fixed",
 		top: "1.99%",
 		right: "7%",
 	},
