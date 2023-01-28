@@ -12,8 +12,8 @@
   height: 5px;
   border-radius: 5px;
   caret-color: transparent;
-  background-color: #339af0;
-  color: #339af0;
+  background-color: #BCBCBC;
+  color: #BCBCBC;
   animation: dot-flashing 1s infinite linear alternate;
   animation-delay: 0.5s;
   margin-left: 12px ;
@@ -30,7 +30,7 @@
   height: 5px;
   border-radius: 5px;
   background-color: #6b67809e;
-  color: #339af0;
+  color: #BCBCBC;
   animation: dot-flashing 1s infinite alternate;
   animation-delay: 0s;
 }
@@ -39,15 +39,15 @@
   width: 5px;
   height: 5px;
   border-radius: 5px;
-  background-color: #339af0;
-  color: #339af0;
+  background-color: #BCBCBC;
+  color: #BCBCBC;
   animation: dot-flashing 1s infinite alternate;
   animation-delay: 1s;
 }
 
 @keyframes dot-flashing {
   0% {
-    background-color: #339af0;
+    background-color: #BCBCBC;
   }
   50%, 100% {
     background-color: rgba(152, 128, 255, 0.2);
