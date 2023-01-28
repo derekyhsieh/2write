@@ -17,6 +17,7 @@ import {
 import { UserAuth } from "../../../context/AuthContext";
 import { useSearchParams } from "react-router-dom";
 import { AutocompleteSnippets } from "./AutocompleteSnippets";
+import { auth } from "../../../services/firebase";
 
 export default function CustomRTE({ localDocData, setLocalDocData, editor }) {
 	// has data on timestamp etc
@@ -30,6 +31,30 @@ export default function CustomRTE({ localDocData, setLocalDocData, editor }) {
 	const getWordCountFromString = (str: string) => {
 		return str.split(" ").length;
 	};
+
+
+	const getRewrite = async (token) => {
+		try {
+			const res = await fetch("/api/rewrite", {
+				method: "post",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					idToken: token,
+					prompt: editor.state.doc.textBetween(
+						editor.state.selection.from,
+						editor.state.selection.to,
+						" "
+					),
+				}),
+			});
+			const data = await res.json();
+			setIsRewriteLoading(false);
+			editor?.commands.insertContent(data.answer);
+		} catch (e) {
+			setIsRewriteLoading(false);
+			console.error(e);
+		}
+	}
 
 	const [debouncedEditor] = useDebounce(editor?.state.doc.content, 2500);
 
@@ -136,25 +161,10 @@ export default function CustomRTE({ localDocData, setLocalDocData, editor }) {
 										m={5}
 										onClick={async () => {
 											setIsRewriteLoading(true);
-											try {
-												const res = await fetch("/api/rewrite", {
-													method: "post",
-													headers: { "Content-Type": "application/json" },
-													body: JSON.stringify({
-														prompt: editor.state.doc.textBetween(
-															editor.state.selection.from,
-															editor.state.selection.to,
-															" "
-														),
-													}),
-												});
-												const data = await res.json();
-												setIsRewriteLoading(false);
-												editor?.commands.insertContent(data.answer);
-											} catch (e) {
-												setIsRewriteLoading(false);
-												console.error(e);
-											}
+											auth.currentUser.getIdToken(true).then((idToken) => {
+												getRewrite(idToken)
+											})
+										
 										}}
 										aria-label="Rewrite with AI"
 										title="Rewrite with AI"
