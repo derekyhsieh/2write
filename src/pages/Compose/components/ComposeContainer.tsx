@@ -52,7 +52,6 @@ import useWindowSize from "../../../hooks/useWindowSize";
 import { StatsRingCard } from "./plagiarism-feature/StatsRingCard";
 import { CreatePlagiarismModalContent } from "./plagiarism-feature/PlagiarismModal";
 import { auth } from "../../../services/firebase";
-import fetch from "node-fetch";
 
 const useStyles = createStyles((theme) => ({
 	user: {
