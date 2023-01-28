@@ -1,7 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import { Configuration, OpenAIApi } from "openai";
-import * as admin from "firebase-admin";
+import admin from "firebase-admin";
 import mongoose from "mongoose";
 
 
