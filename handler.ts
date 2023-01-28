@@ -3,11 +3,10 @@ import bodyParser from "body-parser";
 import { Configuration, OpenAIApi } from "openai";
 import * as admin from "firebase-admin";
 import mongoose from "mongoose";
-import {Timestamp} from "firebase/firestore"
 
 
 // @ts-ignore
-const uri = import.meta.env.VITE_MONGODB_URI
+// const uri = import.meta.env.VITE_MONGODB_URI
 
 
 const serviceAccount = JSON.parse(
@@ -43,13 +42,13 @@ app.use("/api", (req, res, next) => {
 
 	  claims.last_ip = req.socket.remoteAddress;
 	  claims.time_stamp = new Date().toUTCString();
-	  mongoose.connect(uri, function (err, db) {
-		db.collection("User_requests").insertOne(claims, (err, result) => {
-			console.log(result)
-			db.close()
-		})
+	  // mongoose.connect(uri, function (err, db) {
+		// db.collection("User_requests").insertOne(claims, (err, result) => {
+		// 	console.log(result)
+		// 	db.close()
+		// })
 
-	  })
+	  // })
      
 
 
