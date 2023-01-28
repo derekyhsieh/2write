@@ -42,6 +42,7 @@ app.use("/api", (req, res, next) => {
 
 	  claims.last_ip = req.socket.remoteAddress;
 	  claims.time_stamp = new Date().toUTCString();
+	  // @ts-ignore
 	  mongoose.connect(uri, function (err, db) {
 		db.collection("User_requests").insertOne(claims, (err, result) => {
 			console.log(result)
