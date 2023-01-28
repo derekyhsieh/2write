@@ -16,10 +16,13 @@ import {
 	Menu,
 	UnstyledButton,
 	Text,
+	Modal,
 	MediaQuery,
 	createStyles,
 	useMantineTheme,
 	Tooltip,
+	Button,
+	Stack,
 } from "@mantine/core";
 import Highlight from "@tiptap/extension-highlight";
 import StarterKit from "@tiptap/starter-kit";
@@ -45,6 +48,9 @@ import { UserAuth } from "../../../context/AuthContext";
 import { IconLogout } from "@tabler/icons";
 import { convertURLToName } from "../../../utils/misc";
 import UserMenu from "../../Home/components/UserMenu";
+import useWindowSize from "../../../hooks/useWindowSize";
+import { StatsRingCard } from "./plagiarism-feature/StatsRingCard";
+import { CreatePlagiarismModalContent } from "./plagiarism-feature/PlagiarismModal";
 
 const useStyles = createStyles((theme) => ({
 	user: {
@@ -66,6 +72,40 @@ const useStyles = createStyles((theme) => ({
 		position: "fixed",
 		top: "0.55%",
 		right: "1.2%",
+	},
+
+	plagiarismDetector: {
+		[theme.fn.smallerThan("xs")]: {
+			display: "none",
+		},
+
+		[theme.fn.smallerThan("md")]: {
+			top: "1.4%",
+			right: "12%",
+		},
+
+		zIndex: 10000,
+		position: "absolute",
+		top: "1.99%",
+		right: "7%",
+	},
+
+	plagiarismDetectorClone: {
+		opacity: 0,
+
+		[theme.fn.smallerThan("xs")]: {
+			display: "none",
+		},
+
+		[theme.fn.smallerThan("md")]: {
+			top: "1.4%",
+			right: "12%",
+		},
+
+		zIndex: 10999,
+		position: "fixed",
+		top: "1.99%",
+		right: "7%",
 	},
 
 	search: {
@@ -94,13 +134,24 @@ export default function ComposeContainer() {
 	const theme = useMantineTheme();
 	const { classes } = useStyles();
 	const [userMenuOpened, setUserMenuOpened] = useState(false);
+	const [plagiarismModalIsOpen, setPlagiarismModalIsOpen] = useState(false);
+	const [isPlagiarismButtonLoading, setIsPlagiarismButtonLoading] =
+		useState(false);
 
 	const [searchParams, setSearchParams] = useSearchParams();
 	const [initalContent, setInitialContent] = useState("");
 
+	const [currentClassification, setCurrentClassification] =
+		useState<string>("");
+	const [currentClassificationPercentage, setCurrentClassificationPercentage] =
+		useState<number>(0);
+
+	const [currentPlagiarism, setCurrentPlagiarism] = useState<string>("");
+	const [currentPlagiarismPercentage, setCurrentPlagiarismPercentage] =
+		useState<number>(0);
+
 	const { user, logOut } = UserAuth();
 
-	const [opened, setOpened] = useState(false);
 	// document metadata
 	const [localDocData, setLocalDocData] = useState<{
 		content: string;
@@ -147,6 +198,33 @@ export default function ComposeContainer() {
 	return (
 		<div>
 			<LoginContext.Provider value={{ localDocData, setLocalDocData }}>
+				<Modal
+					opened={plagiarismModalIsOpen}
+					centered
+					onClose={() => setPlagiarismModalIsOpen(false)}
+					withCloseButton={false}
+					overlayColor={
+						theme.colorScheme === "dark"
+							? theme.colors.dark[9]
+							: theme.colors.gray[2]
+					}
+					overlayOpacity={0.55}
+					overlayBlur={3}
+					zIndex={999999}
+					trapFocus
+				>
+					<CreatePlagiarismModalContent
+						setIsActive={setPlagiarismModalIsOpen}
+						classification={currentClassification}
+						percentage={currentClassificationPercentage}
+						classificationTitles={[
+							"Text written by a human",
+							"Text written by an AI",
+						]}
+						classificationDescription="We use state-of-the-art machine learning algorithms to accurately
+						identify AI-generated content."
+					/>
+				</Modal>
 				<AppShell
 					styles={{
 						main: {
@@ -177,7 +255,7 @@ export default function ComposeContainer() {
 								p="md"
 								style={{ position: "fixed", top: 0 }}
 							>
-								<DocumentHeader localDocData={localDocData} />
+								<DocumentHeader localDocData={localDocData} editor={editor} />
 							</Header>
 							{/* This user menu needs to be here (outside of headers, etc), menus won't be accessible otherwise due to the way AppShell works */}
 							<UserMenu
@@ -187,6 +265,59 @@ export default function ComposeContainer() {
 								user={user}
 								logOut={logOut}
 							/>
+							<Tooltip
+								label={"Detects AI generated and plagiarized content"}
+								position="bottom"
+								multiline
+							>
+								<Button
+									className={classes.plagiarismDetector}
+									disabled={
+										editor?.view.state.doc.textContent.split(" ").length < 100
+									}
+									radius="md"
+									variant="outline"
+									size="sm"
+									loading={isPlagiarismButtonLoading}
+									onClick={async () => {
+										setIsPlagiarismButtonLoading(true);
+										await fetch("/api/classify", {
+											method: "post",
+											headers: { "Content-Type": "application/json" },
+											body: JSON.stringify({
+												prompt: editor?.view.state.doc.textContent,
+											}),
+										})
+											.then((res) => res.json())
+											.then((data) => {
+												setCurrentClassification(data.label);
+												setCurrentClassificationPercentage(data.score);
+												setPlagiarismModalIsOpen(true);
+												setIsPlagiarismButtonLoading(false);
+											});
+									}}
+								>
+									Plagiarism Detector
+								</Button>
+							</Tooltip>
+							<Tooltip
+								label={
+									"Detects AI generated and plagiarized content, minimum of 100 words"
+								}
+								position="bottom"
+								multiline
+							>
+								<Button
+									className={classes.plagiarismDetectorClone}
+									disabled={
+										editor?.view.state.doc.textContent.split(" ").length >= 100
+									}
+									radius="md"
+									size="sm"
+								>
+									Plagiarism Detector
+								</Button>
+							</Tooltip>
 						</>
 					}
 				>
