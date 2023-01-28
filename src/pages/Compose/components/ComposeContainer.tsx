@@ -51,6 +51,7 @@ import UserMenu from "../../Home/components/UserMenu";
 import useWindowSize from "../../../hooks/useWindowSize";
 import { StatsRingCard } from "./plagiarism-feature/StatsRingCard";
 import { CreatePlagiarismModalContent } from "./plagiarism-feature/PlagiarismModal";
+import { auth } from "../../../services/firebase";
 
 const useStyles = createStyles((theme) => ({
 	user: {
@@ -281,10 +282,12 @@ export default function ComposeContainer() {
 									loading={isPlagiarismButtonLoading}
 									onClick={async () => {
 										setIsPlagiarismButtonLoading(true);
+										const idToken = await auth.currentUser?.getIdToken();
 										await fetch("/api/classify", {
 											method: "post",
 											headers: { "Content-Type": "application/json" },
 											body: JSON.stringify({
+												idToken: idToken,
 												prompt: editor?.view.state.doc.textContent,
 											}),
 										})
