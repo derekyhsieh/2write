@@ -94,6 +94,22 @@ app.post("/api/autocomplete", (req, res) => {
   });
 });
 
+app.post("/api/classify", (req, res) => {
+	// if (req.body.prompt.split(" ").length >= 100) {
+	fetch("https://aiwritingcheck.org/classify", {
+		method: "post",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify({ instances: [{ data: req.body.prompt }] }),
+	})
+		.then((response) => response.json())
+		.then((data) => {
+			res.status(200).json(data);
+		})
+		.catch((error) => {
+			res.status(400).json({ error: "Error: bad request" });
+		});
+});
+
 function appendQuestionMarkToPrompt(prompt) {
   const lastChar = prompt[prompt.length - 1];
   if (lastChar === ".") {
