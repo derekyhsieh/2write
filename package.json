@@ -45,6 +45,7 @@
     "firebase-admin": "^11.5.0",
     "html2canvas": "^1.4.1",
     "mongoose": "^6.9.0",
+    "node-fetch": "^3.3.0",
     "openai": "^3.1.0",
     "patch-package": "^6.5.1",
     "postinstall-postinstall": "^2.1.0",
