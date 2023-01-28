@@ -69,7 +69,7 @@ const useStyles = createStyles((theme) => ({
 			right: "1.8%",
 		},
 
-		zIndex: 10000,
+		zIndex: 1000,
 		position: "fixed",
 		top: "0.55%",
 		right: "1.2%",
@@ -85,7 +85,7 @@ const useStyles = createStyles((theme) => ({
 			right: "12%",
 		},
 
-		zIndex: 10000,
+		zIndex: 1000,
 		position: "fixed",
 		top: "1.99%",
 		right: "7%",
@@ -103,7 +103,7 @@ const useStyles = createStyles((theme) => ({
 			right: "12%",
 		},
 
-		zIndex: 10999,
+		zIndex: 1099,
 		position: "fixed",
 		top: "1.99%",
 		right: "7%",

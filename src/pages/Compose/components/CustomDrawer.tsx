@@ -23,6 +23,7 @@ export function CustomDrawer({children, opened, setOpened }: DrawerProps) {
       }
       overlayOpacity={0.55}
       overlayBlur={3}
+      zIndex={9999}
     >
         {children}
     </Drawer>
