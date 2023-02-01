@@ -71,7 +71,7 @@ app.post("/api/outline", (req, res) => {
 
 app.post("/api/rewrite", (req, res) => {
   getAnswer(
-    "Rewrite the following text in a more professional tone: ".concat(
+    "Rewrite the following text in a more professional tone, with every sentence having a high perplexity over 100: ".concat(
       req.body.prompt
     )
   ).then((answerString) => {
