@@ -136,7 +136,7 @@ export default function LandingPage() {
 					</h1>
 
 					<video
-						src="https://firebasestorage.googleapis.com/v0/b/discord-2db38.appspot.com/o/compressed-final.mp4?alt=media&token=40f4d774-ff49-43d6-9bf4-636a5d25e125"
+						src="https://firebasestorage.googleapis.com/v0/b/discord-2db38.appspot.com/o/compressed-final.mp4?alt=media&token=1f435eb3-097a-4386-a769-d8af20d1fa33"
 						loop
 						autoPlay
 						muted
