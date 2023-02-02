@@ -76,15 +76,29 @@ export default function EssayCard(props: {
 		return preview;
 	};
 
+	const getWidePreview = (html: string): string => {
+		const preview = html.split(" ").slice(0, 500).join(" ");
+		if (preview === "") {
+			return "<p></p>";
+		}
+		return preview;
+	};
+
 	useLayoutEffect(() => {
 		let essayHtml = props.essayContent === "" ? "<p></p>" : props.essayContent;
-		let previewHtml = getPreview(essayHtml);
+		let previewHtml;
 		const iframe = document.createElement("iframe");
 		iframe.style.position = "absolute";
 		iframe.style.top = "-9999px";
-		iframe.height = "200";
-		// iframe.width = "620";
-		iframe.width = essayCardRef.current.offsetWidth.toString();
+		if (window.innerWidth >= 4300) {
+			previewHtml = getWidePreview(essayHtml);
+			iframe.height = "200";
+			iframe.width = "1400";
+		} else {
+			previewHtml = getPreview(essayHtml);
+			iframe.height = "200";
+			iframe.width = "620";
+		}
 		document.body.appendChild(iframe); // 👈 still required
 		iframe.contentWindow.document.open();
 		iframe.contentWindow.document.write(previewHtml);
@@ -149,7 +163,11 @@ export default function EssayCard(props: {
 						<Text className={classes.title} mt={5} lineClamp={1}>
 							{props.essayTitle ?? "Untitled Document"}
 						</Text>
-						<Menu transitionDuration={100} transition="pop-top-right" position="top">
+						<Menu
+							transitionDuration={100}
+							transition="pop-top-right"
+							position="top"
+						>
 							<Menu.Target>
 								<ActionIcon onClick={(event) => event.stopPropagation()}>
 									<IconDots />
