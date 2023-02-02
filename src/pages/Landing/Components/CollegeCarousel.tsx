@@ -40,10 +40,9 @@ export function CollegeCarousel() {
 			withControls={false}
 			draggable={false}
 			slideGap={0}
-			slideSize={"25%"}
+			slideSize={"17%"}
 			breakpoints={[
-				{ maxWidth: "md", slideSize: "30%" },
-				{ maxWidth: "sm", slideSize: "70%" },
+				{ maxWidth: "sm", slideSize: "30%", slideGap: 15 },
 			]}
 			loop
 			align="start"
