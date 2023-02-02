@@ -10,7 +10,6 @@ import mit from "../../../img/mit.png";
 import harvard from "../../../img/harvard.png";
 import dartmouth from "../../../img/dartmouth.png";
 import usc from "../../../img/usc.png";
-import princeton from "../../../img/princeton.png";
 
 export function CollegeCarousel() {
 	const [embla, setEmbla] = useState<Embla | null>(null);
@@ -27,7 +26,7 @@ export function CollegeCarousel() {
 
 		// Start scrolling slowly
 		const engine = embla.internalEngine();
-		engine.scrollBody.useSpeed(0.04);
+		engine.scrollBody.useSpeed(0.03);
 		engine.scrollTo.index(embla.scrollSnapList().length - 1, -1);
 
 		interval.start();

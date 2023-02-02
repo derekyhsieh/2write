@@ -17,7 +17,7 @@ import {
 	IconTrash,
 	IconBrowser,
 } from "@tabler/icons";
-import React, { useState, useLayoutEffect } from "react";
+import React, { useState, useLayoutEffect, useRef } from "react";
 import { createSearchParams, useNavigate } from "react-router-dom";
 import { removeEssay } from "../../../services/FirestoreHelpers";
 import html2canvas from "html2canvas";
@@ -63,6 +63,7 @@ export default function EssayCard(props: {
 	const navigate = useNavigate();
 	const { classes } = useStyles();
 	const { user } = UserAuth();
+	const essayCardRef = useRef<HTMLAnchorElement>();
 
 	// Splits the html string into an array of words, then takes the first 120 words, and joins them back into a string.
 	// If the string is empty, it returns <p></p>.
@@ -82,7 +83,8 @@ export default function EssayCard(props: {
 		iframe.style.position = "absolute";
 		iframe.style.top = "-9999px";
 		iframe.height = "200";
-		iframe.width = "620";
+		// iframe.width = "620";
+		iframe.width = essayCardRef.current.offsetWidth.toString();
 		document.body.appendChild(iframe); // 👈 still required
 		iframe.contentWindow.document.open();
 		iframe.contentWindow.document.write(previewHtml);
@@ -125,6 +127,7 @@ export default function EssayCard(props: {
 	return (
 		<Card
 			key={props.essayId}
+			ref={essayCardRef}
 			p="lg"
 			radius="lg"
 			component="a"
