@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useLayoutEffect } from "react";
 import { useEditor } from "@tiptap/react";
 import {
 	RichTextEditor,
@@ -30,14 +30,17 @@ import Underline from "@tiptap/extension-underline";
 import TextAlign from "@tiptap/extension-text-align";
 import Superscript from "@tiptap/extension-superscript";
 import SubScript from "@tiptap/extension-subscript";
+import Typography from "@tiptap/extension-typography";
+import TextStyle from '@tiptap/extension-text-style'
+import FontFamily from '@tiptap/extension-font-family'
 import { IconHighlight, IconDrone } from "@tabler/icons";
 import { useDebounce } from "use-debounce";
 import { CharacterCount } from "@tiptap/extension-character-count";
 import { AutocompleteSnippets } from "./AutocompleteSnippets";
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { LoginContext } from "../../../context/DocContext";
 
-import { loadEssay } from "../../../services/FirestoreHelpers";
+import { createEssay, loadEssay, checkIfEssayExists } from "../../../services/FirestoreHelpers";
 
 import { NavbarMini } from "./Navbar";
 import CustomRichContainer from "./CustomRTE";
@@ -52,6 +55,7 @@ import useWindowSize from "../../../hooks/useWindowSize";
 import { StatsRingCard } from "./plagiarism-feature/StatsRingCard";
 import { CreatePlagiarismModalContent } from "./plagiarism-feature/PlagiarismModal";
 import { auth } from "../../../services/firebase";
+import Tour from "reactour";
 
 const useStyles = createStyles((theme) => ({
 	user: {
@@ -152,6 +156,17 @@ export default function ComposeContainer() {
 		useState<number>(0);
 
 	const { user, logOut } = UserAuth();
+	const [onboardingOpen, setOnboardingOpen] = useState(false);
+
+	useLayoutEffect(() => {
+		checkIfEssayExists(user.uid, "hasSeenOnboarding").then((exists) => {
+			if(exists) {
+				setOnboardingOpen(false);
+			} else {
+				setOnboardingOpen(true);
+			}
+		})
+	}, []);
 
 	// document metadata
 	const [localDocData, setLocalDocData] = useState<{
@@ -181,6 +196,9 @@ export default function ComposeContainer() {
 			SubScript,
 			CharacterCount,
 			Highlight,
+			Typography,
+			TextStyle,
+			FontFamily,
 			TextAlign.configure({ types: ["heading", "paragraph"] }),
 		],
 
@@ -196,8 +214,34 @@ export default function ComposeContainer() {
 		},
 	});
 
+	const steps = [
+		{
+			selector: ".mantine-3f8va4",
+			content:
+				"Type your documents here. You can use the Tab key to accept an autcomplete suggestion or just keep typing to ignore it. Suggestions are made after you've written at least 6 words.",
+		},
+		{
+			selector: ".mantine-g0wba",
+			content: "Use this button to create an outline for your essay. Make sure you have a prompt!",
+		},
+		{
+			selector: ".mantine-hhjyz1",
+			content: "Use the toolbar to edit different aspects of your document. You can also keep track of statistics about your document here.",
+		},
+	];
+
 	return (
 		<div>
+			<Tour
+				steps={steps}
+				isOpen={onboardingOpen}
+				onRequestClose={() => {
+					setOnboardingOpen(false);
+					createEssay(user.uid, "hasSeenOnboarding", "").then(()=>{
+						console.log("saved hasSeenOnboarding")
+					});
+				}}
+			/>
 			<LoginContext.Provider value={{ localDocData, setLocalDocData }}>
 				<Modal
 					opened={plagiarismModalIsOpen}
