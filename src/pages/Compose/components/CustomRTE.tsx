@@ -4,9 +4,10 @@ import {
 	useRichTextEditorContext,
 } from "@mantine/tiptap";
 import { BubbleMenu } from "@tiptap/react";
+import History from "@tiptap/extension-history";
 import { useDebounce } from "use-debounce";
 
-import { Text, Loader, Stack } from "@mantine/core";
+import { Text, Loader, Stack, createStyles, Menu, ScrollArea } from "@mantine/core";
 
 import { useEffect, useState } from "react";
 import {
@@ -18,6 +19,36 @@ import { UserAuth } from "../../../context/AuthContext";
 import { useSearchParams } from "react-router-dom";
 import { AutocompleteSnippets } from "./AutocompleteSnippets";
 import { auth } from "../../../services/firebase";
+import {
+	IconArrowForwardUp,
+	IconArrowBackUp,
+	IconTypography,
+} from "@tabler/icons";
+
+const useStyles = createStyles((theme) => {
+	return {
+		control: {
+			backgroundColor:
+				theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.white,
+			minWidth: 26,
+			height: 26,
+			display: "flex",
+			justifyContent: "center",
+			alignItems: "center",
+			border: `1px solid ${
+				theme.colorScheme === "dark"
+					? theme.colors.dark[4]
+					: theme.colors.gray[4]
+			}`,
+			borderRadius: theme.fn.radius(),
+			cursor: "default",
+
+			"&:hover": {
+				...theme.fn.hover({ backgroundColor: theme.colors.gray[0] }),
+			},
+		},
+	};
+});
 
 export default function CustomRTE({ localDocData, setLocalDocData, editor }) {
 	// has data on timestamp etc
@@ -27,11 +58,11 @@ export default function CustomRTE({ localDocData, setLocalDocData, editor }) {
 	const [isRewriteLoading, setIsRewriteLoading] = useState(false);
 
 	const { user } = UserAuth();
+	const { classes } = useStyles();
 
 	const getWordCountFromString = (str: string) => {
 		return str.split(" ").length;
 	};
-
 
 	const getRewrite = async (token) => {
 		try {
@@ -54,7 +85,7 @@ export default function CustomRTE({ localDocData, setLocalDocData, editor }) {
 			setIsRewriteLoading(false);
 			console.error(e);
 		}
-	}
+	};
 
 	const [debouncedEditor] = useDebounce(editor?.state.doc.content, 2500);
 
@@ -71,8 +102,34 @@ export default function CustomRTE({ localDocData, setLocalDocData, editor }) {
 		}
 	}, [debouncedEditor]);
 
+	const setEditorFontFamily = (font) => {
+		editor.chain().focus().setFontFamily(font).run();
+	}
+
 	const toolbar = (
 		<RichTextEditor.Toolbar sticky stickyOffset={60}>
+			<RichTextEditor.ControlsGroup>
+				<Menu position={"right-start"}>
+				<Menu.Target>
+					<button className={classes.control}>
+						<IconTypography stroke={1.5} size={16} />
+					</button>
+				</Menu.Target>
+				<Menu.Dropdown>
+					<Menu.Label><strong>Fonts</strong></Menu.Label>
+					<Menu.Item onClick={() => setEditorFontFamily("Times New Roman")}>Times New Roman</Menu.Item>
+					<Menu.Item onClick={() => setEditorFontFamily("Calibri")}>Calibri</Menu.Item>
+					<Menu.Item onClick={() => setEditorFontFamily("Arial")}>Arial</Menu.Item>
+					<Menu.Item onClick={() => setEditorFontFamily("Verdana")}>Verdana</Menu.Item>
+					<Menu.Item onClick={() => setEditorFontFamily("Inter")}>Inter</Menu.Item>
+					<Menu.Item onClick={() => setEditorFontFamily("Helvetica")}>Helvetica</Menu.Item>
+					<Menu.Item onClick={() => setEditorFontFamily("serif")}>Serif</Menu.Item>
+					<Menu.Item onClick={() => setEditorFontFamily("monospace")}>Monospace</Menu.Item>
+					<Menu.Item onClick={() => setEditorFontFamily("cursive")}>Cursive</Menu.Item>
+					<Menu.Item onClick={() => editor.chain().focus().unsetFontFamily().run()}>Unset Font</Menu.Item>
+				</Menu.Dropdown>
+				</Menu>
+			</RichTextEditor.ControlsGroup>
 			<RichTextEditor.ControlsGroup>
 				<RichTextEditor.Bold />
 				<RichTextEditor.Italic />
@@ -109,7 +166,22 @@ export default function CustomRTE({ localDocData, setLocalDocData, editor }) {
 				<RichTextEditor.AlignRight />
 			</RichTextEditor.ControlsGroup>
 
-			<RichTextEditor.ControlsGroup></RichTextEditor.ControlsGroup>
+			<RichTextEditor.ControlsGroup>
+				<button
+					onClick={() => editor.chain().focus().undo().run()}
+					disabled={editor ? !editor.can().undo() : false}
+					className={classes.control}
+				>
+					<IconArrowBackUp stroke={1.5} size={16} />
+				</button>
+				<button
+					onClick={() => editor.chain().focus().redo().run()}
+					disabled={editor ? !editor.can().redo() : false}
+					className={classes.control}
+				>
+					<IconArrowForwardUp stroke={1.5} size={16} />
+				</button>
+			</RichTextEditor.ControlsGroup>
 		</RichTextEditor.Toolbar>
 	);
 
@@ -162,9 +234,8 @@ export default function CustomRTE({ localDocData, setLocalDocData, editor }) {
 										onClick={async () => {
 											setIsRewriteLoading(true);
 											auth.currentUser.getIdToken(true).then((idToken) => {
-												getRewrite(idToken)
-											})
-										
+												getRewrite(idToken);
+											});
 										}}
 										aria-label="Rewrite with AI"
 										title="Rewrite with AI"

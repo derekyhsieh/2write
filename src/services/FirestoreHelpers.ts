@@ -148,6 +148,15 @@ const saveNotepad = async (
 	}
 };
 
+const checkIfEssayExists = async (userID: string, essayID: string) => {
+	const essayRef = doc(db, "users", userID, "essays", essayID);
+
+	const essaySnap = await getDoc(essayRef);
+
+	return essaySnap.exists();
+};
+
+
 export {
 	saveEssay,
 	createEssay,
@@ -157,4 +166,5 @@ export {
 	saveTitle,
 	saveEssayPrompt,
 	removeEssay,
+	checkIfEssayExists,
 };

@@ -23,6 +23,11 @@ export default function HomePageContainer() {
 
 	useLayoutEffect(() => {
 		loadEssayList(user.uid).then((essayList) => {
+			for (const essay of essayList) {
+				if (essay["essayId"] === "hasSeenOnboarding") {
+					essayList.splice(essayList.indexOf(essay), 1);
+				}
+			}
 			setEssayList(essayList);
 			setIsOnRenderLoading(false);
 		});
