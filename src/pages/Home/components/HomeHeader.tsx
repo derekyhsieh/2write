@@ -6,8 +6,9 @@ import {
 	Burger,
 	Text,
 	Image,
+	Kbd,
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure, useHotkeys } from "@mantine/hooks";
 import { IconSearch } from "@tabler/icons";
 import { UserAuth } from "../../../context/AuthContext";
 import { useEffect, useRef, useState } from "react";
@@ -79,6 +80,8 @@ export default function HomeHeader(props: { essayList: DocumentData[] }) {
 	const searchInput = useRef<HTMLInputElement>(null);
 	const navigate = useNavigate();
 
+	useHotkeys([["mod+K", () => searchInput.current.focus()]]);
+
 	useEffect(() => {
 		let essaySearch = [];
 		// Sort the essay list by the last edit date
@@ -104,6 +107,15 @@ export default function HomeHeader(props: { essayList: DocumentData[] }) {
 		});
 		setEssayTitleArray(essaySearch);
 	}, [props.essayList]);
+
+	const rightSection = (
+		<Kbd style={{ border: 0 }}>
+			<Text>
+				{navigator.userAgent.indexOf("Mac OS X") != -1 ? "⌘" : "Ctrl"}
+				{" + K"}
+			</Text>
+		</Kbd>
+	);
 
 	return (
 		<Header
@@ -158,6 +170,9 @@ export default function HomeHeader(props: { essayList: DocumentData[] }) {
 							search: `?${createSearchParams({ essayId: item.key })}`,
 						});
 					}}
+					// rightSectionWidth={80}
+					// rightSection={rightSection}
+					// styles={{ rightSection: { pointerEvents: "none" } }}
 				/>
 
 				<UserMenu

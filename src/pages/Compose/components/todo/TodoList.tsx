@@ -67,7 +67,7 @@ export default function TodoList() {
 	};
 
 	const deleteTask = (index) => {
-		var clonedTasks = [...tasks];
+		let clonedTasks = [...tasks];
 
 		clonedTasks.splice(index, 1);
 
@@ -95,7 +95,7 @@ export default function TodoList() {
 	}, []);
 
 	return (
-		<div>
+		<>
 			<Modal
 				opened={opened}
 				size={"md"}
@@ -182,6 +182,6 @@ export default function TodoList() {
 					</Button>
 				</Center>
 			</Container>
-		</div>
+		</>
 	);
 }
