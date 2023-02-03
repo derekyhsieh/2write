@@ -23,6 +23,7 @@ import {
 	Tooltip,
 	Button,
 	Stack,
+	Kbd,
 } from "@mantine/core";
 import Highlight from "@tiptap/extension-highlight";
 import StarterKit from "@tiptap/starter-kit";
@@ -31,8 +32,8 @@ import TextAlign from "@tiptap/extension-text-align";
 import Superscript from "@tiptap/extension-superscript";
 import SubScript from "@tiptap/extension-subscript";
 import Typography from "@tiptap/extension-typography";
-import TextStyle from '@tiptap/extension-text-style'
-import FontFamily from '@tiptap/extension-font-family'
+import TextStyle from "@tiptap/extension-text-style";
+import FontFamily from "@tiptap/extension-font-family";
 import { IconHighlight, IconDrone } from "@tabler/icons";
 import { useDebounce } from "use-debounce";
 import { CharacterCount } from "@tiptap/extension-character-count";
@@ -40,7 +41,11 @@ import { AutocompleteSnippets } from "./AutocompleteSnippets";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { LoginContext } from "../../../context/DocContext";
 
-import { createEssay, loadEssay, checkIfEssayExists } from "../../../services/FirestoreHelpers";
+import {
+	createEssay,
+	loadEssay,
+	checkIfEssayExists,
+} from "../../../services/FirestoreHelpers";
 
 import { NavbarMini } from "./Navbar";
 import CustomRichContainer from "./CustomRTE";
@@ -160,12 +165,12 @@ export default function ComposeContainer() {
 
 	useLayoutEffect(() => {
 		checkIfEssayExists(user.uid, "hasSeenOnboarding").then((exists) => {
-			if(exists) {
+			if (exists) {
 				setOnboardingOpen(false);
 			} else {
 				setOnboardingOpen(true);
 			}
-		})
+		});
 	}, []);
 
 	// document metadata
@@ -217,16 +222,25 @@ export default function ComposeContainer() {
 	const steps = [
 		{
 			selector: ".mantine-3f8va4",
-			content:
-				"Type your documents here. You can use the Tab key to accept an autcomplete suggestion or just keep typing to ignore it. Suggestions are made after you've written at least 6 words.",
+			content: () => (
+				<>
+					{"Type your documents here. You can use the "}
+					<Kbd>Tab</Kbd>
+					{
+						" key to accept an autcomplete suggestion or just keep typing to ignore it. Suggestions are made after you've written at least 6 words."
+					}
+				</>
+			),
 		},
 		{
 			selector: ".mantine-g0wba",
-			content: "Use this button to create an outline for your essay. Make sure you have a prompt!",
+			content:
+				"Use this button to create an outline for your essay. Make sure you have a prompt!",
 		},
 		{
 			selector: ".mantine-hhjyz1",
-			content: "Use the toolbar to edit different aspects of your document. You can also keep track of statistics about your document here.",
+			content:
+				"Use the toolbar to edit different aspects of your document. You can also keep track of statistics about your document here.",
 		},
 	];
 
@@ -237,10 +251,13 @@ export default function ComposeContainer() {
 				isOpen={onboardingOpen}
 				onRequestClose={() => {
 					setOnboardingOpen(false);
-					createEssay(user.uid, "hasSeenOnboarding", "").then(()=>{
-						console.log("saved hasSeenOnboarding")
+					createEssay(user.uid, "hasSeenOnboarding", "").then(() => {
+						console.log("saved hasSeenOnboarding");
 					});
 				}}
+				showNumber={false}
+				rounded={15}
+				accentColor="#228BE6"
 			/>
 			<LoginContext.Provider value={{ localDocData, setLocalDocData }}>
 				<Modal
