@@ -90,7 +90,7 @@ export default function EssayCard(props: {
 		const iframe = document.createElement("iframe");
 		iframe.style.position = "absolute";
 		iframe.style.top = "-9999px";
-		if (window.innerWidth >= 4300) {
+		if (window.innerWidth >= 2250) {
 			previewHtml = getWidePreview(essayHtml);
 			iframe.height = "200";
 			iframe.width = "1400";
