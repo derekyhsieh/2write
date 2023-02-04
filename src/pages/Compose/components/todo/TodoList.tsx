@@ -100,6 +100,15 @@ export default function TodoList() {
 		saveTasks(user.uid, [...clonedTasks]);
 	};
 
+	const handleTaskCreation = () => {
+		setButtonDisabled(true);
+		createTask();
+		setOpened(false);
+		setButtonDisabled(false);
+		setTaskDescription("");
+		setTaskTitle("");
+	};
+
 	return (
 		<>
 			<Modal
@@ -133,9 +142,7 @@ export default function TodoList() {
 						classNames={classes}
 						onKeyDown={(event) => {
 							if (event.key === "Enter" && taskTitle !== "") {
-								setButtonDisabled(true);
-								createTask();
-								setOpened(false);
+								handleTaskCreation();
 							}
 						}}
 					/>
@@ -147,21 +154,14 @@ export default function TodoList() {
 						classNames={classes}
 						onKeyDown={(event) => {
 							if (event.key === "Enter" && taskTitle !== "") {
-								setButtonDisabled(true);
-								createTask();
-								setOpened(false);
+								handleTaskCreation();
 							}
 						}}
 					/>
 					<Button
 						onClick={() => {
 							if (taskTitle !== "") {
-								setButtonDisabled(true);
-								createTask();
-								setOpened(false);
-								setButtonDisabled(false);
-								setTaskDescription("");
-								setTaskTitle("");
+								handleTaskCreation();
 							}
 						}}
 						disabled={buttonDisabled}
