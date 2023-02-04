@@ -57,19 +57,18 @@ const useStyles = createStyles((theme) => ({
 		},
 
 		[theme.fn.smallerThan("md")]: {
-			top: "-0.08999%",
 			right: "1.8%",
+		},
+
+		[theme.fn.largerThan("md")]: {
+			top: 4,
 		},
 
 		zIndex: 1000,
 		position: "fixed",
-		top: "0.55%",
+		top: -2,
 		right: "1.2%",
 
-		[theme.fn.largerThan("xl")]: {
-			top: "0.2%",
-			right: "1.2%",
-		},
 	},
 
 	plagiarismDetector: {
@@ -78,19 +77,18 @@ const useStyles = createStyles((theme) => ({
 		},
 
 		[theme.fn.smallerThan("md")]: {
-			top: "1.4%",
 			right: "12%",
+		},
+
+		[theme.fn.largerThan("md")]: {
+			top: 17,
 		},
 
 		zIndex: 1000,
 		position: "fixed",
-		top: "1.99%",
+		top: 11,
 		right: "7%",
 
-		[theme.fn.largerThan("xl")]: {
-			top: "0.5%",
-			right: "7%",
-		},
 	},
 
 	plagiarismDetectorClone: {
