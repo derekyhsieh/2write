@@ -50,7 +50,7 @@ export default function Notepad() {
 
 	useEffect(() => {
 		if (editorValue !== "") {
-			console.log(editorValue);
+			// console.log(editorValue);
 			console.log("saving notepad");
 			saveNotepad(user.uid, searchParams.get("essayId"), editorValue);
 		}
@@ -58,7 +58,7 @@ export default function Notepad() {
 
 	useEffect(() => {
 		setEditorValue(localDocData.notepad);
-		console.log(localDocData.notepad);
+		// console.log(localDocData.notepad);
 	}, [localDocData]);
 
 	const handleCreateOutline = () => {

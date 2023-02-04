@@ -50,7 +50,7 @@ function returnOnlyParagraphUserIsTypingIn(text: string) {
 
 function convertEditorJSONToPlainText(doc: DocumentJSON, range: IRange) {
 
-    console.log(doc)
+    // console.log(doc)
 
 
     // need to subtract by one bc tiptap weird and starts counting text by 1 instead of 0 wtf
@@ -70,9 +70,9 @@ function convertEditorJSONToPlainText(doc: DocumentJSON, range: IRange) {
                     text += c
                     indexCounter += 1
                     } else {
-                        console.log(text)
+                        // console.log(text)
     
-                        console.log(returnOnlyParagraphUserIsTypingIn(text))
+                        // console.log(returnOnlyParagraphUserIsTypingIn(text))
     
     
     
@@ -87,7 +87,7 @@ function convertEditorJSONToPlainText(doc: DocumentJSON, range: IRange) {
             text += "\n"
         }
     })
-    console.log(returnOnlyParagraphUserIsTypingIn(text))
+    // console.log(returnOnlyParagraphUserIsTypingIn(text))
     return returnOnlyParagraphUserIsTypingIn(text)
 
 }

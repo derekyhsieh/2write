@@ -36,7 +36,7 @@ app.use("/api", (req, res, next) => {
     .auth()
     .verifyIdToken(idToken, true)
     .then((claims) => {
-      console.log(claims);
+      // console.log(claims);
       // console.log(req.socket.remoteAddress)
 
       // save uid and ip

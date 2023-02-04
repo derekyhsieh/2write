@@ -156,6 +156,31 @@ const checkIfEssayExists = async (userID: string, essayID: string) => {
 	return essaySnap.exists();
 };
 
+const loadTasks = async (userID: string) => {
+	const tasksListRef = doc(db, "users", userID, "todo", "tasks");
+	const tasksListSnap = await getDoc(tasksListRef);
+
+	if (tasksListSnap.exists()) {
+		return JSON.parse(tasksListSnap.data().tasks);
+	} else {
+		console.log("Todo list does not exist, creating new one");
+		return await setDoc(tasksListRef, {
+			tasks: JSON.stringify([]),
+		});
+	}
+};
+
+const saveTasks = async (userID: string, tasks: any) => {
+	const tasksListRef = doc(db, "users", userID, "todo", "tasks");
+
+	try {
+		await setDoc(tasksListRef, {
+			tasks: JSON.stringify(tasks),
+		});
+	} catch (error) {
+		console.log(error);
+	}
+};
 
 export {
 	saveEssay,
@@ -167,4 +192,6 @@ export {
 	saveEssayPrompt,
 	removeEssay,
 	checkIfEssayExists,
+	loadTasks,
+	saveTasks,
 };

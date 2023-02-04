@@ -13,7 +13,7 @@ export const useFetch = <T,>(url: string, body: { prompt: string; },  initialSta
         })
         .then((res) => res.json())
         .then((data) => {
-            console.log(data);
+            // console.log(data);
             setData(data);
             
         }).finally(() => setLoading(false))
