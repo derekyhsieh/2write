@@ -164,9 +164,10 @@ const loadTasks = async (userID: string) => {
 		return JSON.parse(tasksListSnap.data().tasks);
 	} else {
 		console.log("Todo list does not exist, creating new one");
-		return await setDoc(tasksListRef, {
+		await setDoc(tasksListRef, {
 			tasks: JSON.stringify([]),
 		});
+		return [];
 	}
 };
 
