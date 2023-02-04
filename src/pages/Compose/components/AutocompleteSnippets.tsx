@@ -109,7 +109,7 @@ export const AutocompleteSnippets = Extension.create({
 
                                 // get position of node at index with prosemirror
 
-                                console.log(textCount, node.textContent)
+                                // console.log(textCount, node.textContent)
 
                                 const paraNode = {
                                     content: node.textContent,
@@ -123,7 +123,7 @@ export const AutocompleteSnippets = Extension.create({
                                 nodeArray.push(paraNode)
                             } else if (nodeArray.length === 0) {
                                 textCount += node.nodeSize
-                                console.log(textCount, node.textContent)
+                                // console.log(textCount, node.textContent)
 
                                 const paraNode = {
                                     content: node.textContent,
@@ -155,7 +155,7 @@ export const AutocompleteSnippets = Extension.create({
 
                                     debounceTimeout = setTimeout(() => {
 
-                                        console.log("DEBOUNCING")
+                                        // console.log("DEBOUNCING")
 
                                         // const loader = document.createElement("span");
 

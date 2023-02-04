@@ -5,18 +5,18 @@ import {
 	Title,
 	Modal,
 	TextInput,
-	Group,
-	Card,
-	ActionIcon,
 	Center,
 	useMantineTheme,
 	Stack,
 	createStyles,
-	Checkbox,
+	ScrollArea,
+	Loader,
 } from "@mantine/core";
-import { useState, useRef, useEffect } from "react";
-import { IconTrash } from "@tabler/icons";
+import React, { useState, useEffect, useContext } from "react";
+import { saveTasks } from "../../../../services/FirestoreHelpers";
+import { UserAuth } from "../../../../context/AuthContext";
 import Task from "./Task";
+import { TodoTasks } from "../../../../context/TodoContext";
 
 const useStyles = createStyles((theme) => ({
 	root: {
@@ -41,9 +41,11 @@ const useStyles = createStyles((theme) => ({
 export default function TodoList() {
 	const theme = useMantineTheme();
 	const { classes } = useStyles();
+	const { user } = UserAuth();
+	const { tasks, setTasks } = TodoTasks();
 
-	const [tasks, setTasks] = useState([]);
 	const [opened, setOpened] = useState(false);
+	const [buttonDisabled, setButtonDisabled] = useState(false);
 
 	const [taskTitle, setTaskTitle] = useState("");
 	const [taskDescription, setTaskDescription] = useState("");
@@ -54,16 +56,38 @@ export default function TodoList() {
 			{
 				title: taskTitle,
 				description: taskDescription,
+				checked: false,
 			},
 		]);
 
-		saveTasks([
+		saveTasks(user.uid, [
 			...tasks,
 			{
 				title: taskTitle,
 				description: taskDescription,
+				checked: false,
 			},
 		]);
+	};
+
+	// sort tasks by if they are checked or not, checked tasks go to the bottom
+	const sortTasks = (tasks) => {
+		let sortedTasks = tasks.sort((a, b) => {
+			return a.checked - b.checked;
+		});
+
+		return sortedTasks;
+	};
+
+	// set a task to checked based on index
+	const setTaskChecked = (index) => {
+		let clonedTasks = [...tasks];
+
+		clonedTasks[index].checked = !clonedTasks[index].checked;
+
+		setTasks(clonedTasks);
+
+		saveTasks(user.uid, [...clonedTasks]);
 	};
 
 	const deleteTask = (index) => {
@@ -73,26 +97,8 @@ export default function TodoList() {
 
 		setTasks(clonedTasks);
 
-		saveTasks([...clonedTasks]);
+		saveTasks(user.uid, [...clonedTasks]);
 	};
-
-	const loadTasks = () => {
-		let loadedTasks = localStorage.getItem("tasks");
-
-		let tasks = JSON.parse(loadedTasks);
-
-		if (tasks) {
-			setTasks(tasks);
-		}
-	};
-
-	const saveTasks = (tasks) => {
-		localStorage.setItem("tasks", JSON.stringify(tasks));
-	};
-
-	useEffect(() => {
-		loadTasks();
-	}, []);
 
 	return (
 		<>
@@ -125,6 +131,13 @@ export default function TodoList() {
 						placeholder="Write your task title here"
 						required
 						classNames={classes}
+						onKeyDown={(event) => {
+							if (event.key === "Enter" && taskTitle !== "") {
+								setButtonDisabled(true);
+								createTask();
+								setOpened(false);
+							}
+						}}
 					/>
 					<TextInput
 						value={taskDescription}
@@ -132,56 +145,79 @@ export default function TodoList() {
 						label="Description"
 						placeholder="Write your task description here"
 						classNames={classes}
+						onKeyDown={(event) => {
+							if (event.key === "Enter" && taskTitle !== "") {
+								setButtonDisabled(true);
+								createTask();
+								setOpened(false);
+							}
+						}}
 					/>
 					<Button
 						onClick={() => {
-							createTask();
-							setOpened(false);
+							if (taskTitle !== "") {
+								setButtonDisabled(true);
+								createTask();
+								setOpened(false);
+								setButtonDisabled(false);
+								setTaskDescription("");
+								setTaskTitle("");
+							}
 						}}
+						disabled={buttonDisabled}
 					>
 						Create Task
 					</Button>
 				</Stack>
 			</Modal>
-			<Container>
-				<Center>
-					<Title
-						sx={(theme) => ({
-							fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-							fontWeight: 900,
-						})}
-						ta={"center"}
-					>
-						My Todo List
-					</Title>
-				</Center>
-				{tasks.length > 0 ? (
-					tasks.map((task, index) => {
-						if (task.title) {
-							return (
-								<Task index={index} task={task} deleteTask={deleteTask}/>
-							);
-						}
-					})
-				) : (
+			<ScrollArea.Autosize maxHeight={750}>
+				<Container>
 					<Center>
-						<Text size={"lg"} mt={"md"} color={"dimmed"}>
-							You haven't created any tasks yet.
-						</Text>
+						<Title
+							sx={(theme) => ({
+								fontFamily: `Greycliff CF, ${theme.fontFamily}`,
+								fontWeight: 900,
+							})}
+							ta={"center"}
+						>
+							My Todo List
+						</Title>
 					</Center>
-				)}
-				<Center>
-					<Button
-						onClick={() => {
-							setOpened(true);
-						}}
-						mt={"md"}
-						w="80%"
-					>
-						New Task
-					</Button>
-				</Center>
-			</Container>
+					{tasks.length > 0 ? (
+						React.Children.toArray(
+							sortTasks(tasks).map((task, index) => {
+								if (task.title) {
+									return (
+										<Task
+											index={index}
+											task={task}
+											deleteTask={deleteTask}
+											setTaskChecked={setTaskChecked}
+										/>
+									);
+								}
+							})
+						)
+					) : (
+						<Center>
+							<Text size={"lg"} mt={"md"} color={"dimmed"}>
+								You haven't created any tasks yet.
+							</Text>
+						</Center>
+					)}
+					<Center>
+						<Button
+							onClick={() => {
+								setOpened(true);
+							}}
+							mt={"md"}
+							w="80%"
+						>
+							New Task
+						</Button>
+					</Center>
+				</Container>
+			</ScrollArea.Autosize>
 		</>
 	);
 }

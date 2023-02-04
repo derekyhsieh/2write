@@ -8,9 +8,15 @@ interface TodoDrawerProps {
 	opened: string;
 }
 
-const TodoDrawer: FC<TodoDrawerProps> = ({ setOpened, opened }) => {
+const TodoDrawer: FC<TodoDrawerProps> = ({
+	setOpened,
+	opened,
+}) => {
 	return (
-		<CustomDrawer setOpened={setOpened} opened={opened == "todos"}>
+		<CustomDrawer
+			setOpened={setOpened}
+			opened={opened == "todos"}
+		>
 			<TodoList />
 		</CustomDrawer>
 	);

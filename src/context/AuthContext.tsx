@@ -1,17 +1,15 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React from "react";
 import { useContext, createContext, useEffect, useState } from "react";
 import {
   GoogleAuthProvider,
   TwitterAuthProvider,
   GithubAuthProvider,
-  signInWithRedirect,
   signOut,
   onAuthStateChanged,
   signInWithPopup,
 } from "firebase/auth";
 import { auth } from "../services/firebase";
 import { User as FirebaseUser } from "firebase/auth";
-import useCheckUser from "../hooks/useCheckUser";
 
 interface AuthContextInterface {
   googleSignIn: () => void;
