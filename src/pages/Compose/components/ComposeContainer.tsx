@@ -23,6 +23,7 @@ import Typography from "@tiptap/extension-typography";
 import TextStyle from "@tiptap/extension-text-style";
 import FontFamily from "@tiptap/extension-font-family";
 import { CharacterCount } from "@tiptap/extension-character-count";
+import { Color } from "@tiptap/extension-color";
 import { AutocompleteSnippets } from "./AutocompleteSnippets";
 import { useSearchParams } from "react-router-dom";
 import { LoginContext } from "../../../context/DocContext";
@@ -44,6 +45,7 @@ import { auth } from "../../../services/firebase";
 import Tour from "reactour";
 import { TodoTasks } from "../../../context/TodoContext";
 import { loadTasks } from "../../../services/FirestoreHelpers";
+import { FontSize } from "./FontSize";
 
 const useStyles = createStyles((theme) => ({
 	user: {
@@ -68,7 +70,6 @@ const useStyles = createStyles((theme) => ({
 		position: "fixed",
 		top: -2,
 		right: "1.2%",
-
 	},
 
 	plagiarismDetector: {
@@ -88,7 +89,6 @@ const useStyles = createStyles((theme) => ({
 		position: "fixed",
 		top: 11,
 		right: "7%",
-
 	},
 
 	plagiarismDetectorClone: {
@@ -99,13 +99,16 @@ const useStyles = createStyles((theme) => ({
 		},
 
 		[theme.fn.smallerThan("md")]: {
-			top: "1.4%",
 			right: "12%",
+		},
+
+		[theme.fn.largerThan("md")]: {
+			top: 17,
 		},
 
 		zIndex: 1099,
 		position: "fixed",
-		top: "1.99%",
+		top: 11,
 		right: "7%",
 	},
 
@@ -169,13 +172,12 @@ export default function ComposeContainer() {
 	const loadTasksLocally = async () => {
 		let tasks = await loadTasks(user.uid);
 		setTasks(tasks);
-		console.log(tasks);
 	};
 
 	useEffect(() => {
 		loadTasksLocally();
 	}, []);
-	
+
 	// document metadata
 	const [localDocData, setLocalDocData] = useState<{
 		content: string;
@@ -203,10 +205,12 @@ export default function ComposeContainer() {
 			Superscript,
 			SubScript,
 			CharacterCount,
-			Highlight,
+			Highlight.configure({ multicolor: true }),
 			Typography,
 			TextStyle,
 			FontFamily,
+			Color,
+			FontSize,
 			TextAlign.configure({ types: ["heading", "paragraph"] }),
 		],
 
@@ -262,142 +266,139 @@ export default function ComposeContainer() {
 				rounded={15}
 				accentColor="#228BE6"
 			/>
-				<LoginContext.Provider value={{ localDocData, setLocalDocData }}>
-					<Modal
-						opened={plagiarismModalIsOpen}
-						centered
-						onClose={() => setPlagiarismModalIsOpen(false)}
-						withCloseButton={false}
-						overlayColor={
-							theme.colorScheme === "dark"
-								? theme.colors.dark[9]
-								: theme.colors.gray[2]
-						}
-						overlayOpacity={0.55}
-						overlayBlur={3}
-						zIndex={999999}
-						trapFocus
-					>
-						<CreatePlagiarismModalContent
-							setIsActive={setPlagiarismModalIsOpen}
-							classification={currentClassification}
-							percentage={currentClassificationPercentage}
-							classificationTitles={[
-								"Text written by a human",
-								"Text written by an AI",
-							]}
-							classificationDescription="We use state-of-the-art machine learning algorithms to accurately
+			<LoginContext.Provider value={{ localDocData, setLocalDocData }}>
+				<Modal
+					opened={plagiarismModalIsOpen}
+					centered
+					onClose={() => setPlagiarismModalIsOpen(false)}
+					withCloseButton={false}
+					overlayColor={
+						theme.colorScheme === "dark"
+							? theme.colors.dark[9]
+							: theme.colors.gray[2]
+					}
+					overlayOpacity={0.55}
+					overlayBlur={3}
+					zIndex={999999}
+					trapFocus
+				>
+					<CreatePlagiarismModalContent
+						setIsActive={setPlagiarismModalIsOpen}
+						classification={currentClassification}
+						percentage={currentClassificationPercentage}
+						classificationTitles={[
+							"Text written by a human",
+							"Text written by an AI",
+						]}
+						classificationDescription="We use state-of-the-art machine learning algorithms to accurately
 						identify AI-generated content."
-						/>
-					</Modal>
-					<AppShell
-						styles={{
-							main: {
-								background:
-									theme.colorScheme === "dark"
-										? theme.colors.dark[8]
-										: theme.colors.gray[0],
-							},
-						}}
-						navbarOffsetBreakpoint="sm"
-						asideOffsetBreakpoint="sm"
-						navbar={
-							<NavbarMini editor={editor} />
-						}
-						aside={
-							<MediaQuery smallerThan="sm" styles={{ display: "none" }}>
-								<Aside
-									p="md"
-									hiddenBreakpoint="sm"
-									width={{ sm: 300, md: 350, lg: 400 }}
-								>
-									<Notepad />
-								</Aside>
-							</MediaQuery>
-						}
-						header={
-							<>
-								<Header
-									height={{ base: 60, md: 70 }}
-									p="md"
-									style={{ position: "fixed", top: 0 }}
-								>
-									<DocumentHeader localDocData={localDocData} editor={editor} />
-								</Header>
-								{/* This user menu needs to be here (outside of headers, etc), menus won't be accessible otherwise due to the way AppShell works */}
-								<UserMenu
-									userMenuOpened={userMenuOpened}
-									setUserMenuOpened={setUserMenuOpened}
-									classes={classes}
-									user={user}
-									logOut={logOut}
-								/>
-								<Tooltip
-									label={"Detects AI generated and plagiarized content"}
-									position="bottom"
-									multiline
-								>
-									<Button
-										className={classes.plagiarismDetector}
-										disabled={
-											editor?.view.state.doc.textContent.split(" ").length < 100
-										}
-										radius="md"
-										variant="outline"
-										size="sm"
-										loading={isPlagiarismButtonLoading}
-										onClick={async () => {
-											setIsPlagiarismButtonLoading(true);
-											const idToken = await auth.currentUser?.getIdToken();
-											await fetch("/api/classify", {
-												method: "post",
-												headers: { "Content-Type": "application/json" },
-												body: JSON.stringify({
-													idToken: idToken,
-													prompt: editor?.view.state.doc.textContent,
-												}),
-											})
-												.then((res) => res.json())
-												.then((data: any) => {
-													setCurrentClassification(data.label);
-													setCurrentClassificationPercentage(data.score);
-													setPlagiarismModalIsOpen(true);
-													setIsPlagiarismButtonLoading(false);
-												});
-										}}
-									>
-										Plagiarism Detector
-									</Button>
-								</Tooltip>
-								<Tooltip
-									label={
-										"Detects AI generated and plagiarized content, minimum of 100 words"
+					/>
+				</Modal>
+				<AppShell
+					styles={{
+						main: {
+							background:
+								theme.colorScheme === "dark"
+									? theme.colors.dark[8]
+									: theme.colors.gray[0],
+						},
+					}}
+					navbarOffsetBreakpoint="sm"
+					asideOffsetBreakpoint="sm"
+					navbar={<NavbarMini editor={editor} />}
+					aside={
+						<MediaQuery smallerThan="sm" styles={{ display: "none" }}>
+							<Aside
+								p="md"
+								hiddenBreakpoint="sm"
+								width={{ sm: 300, md: 350, lg: 400 }}
+							>
+								<Notepad />
+							</Aside>
+						</MediaQuery>
+					}
+					header={
+						<>
+							<Header
+								height={{ base: 60, md: 70 }}
+								p="md"
+								style={{ position: "fixed", top: 0 }}
+							>
+								<DocumentHeader localDocData={localDocData} editor={editor} />
+							</Header>
+							{/* This user menu needs to be here (outside of headers, etc), menus won't be accessible otherwise due to the way AppShell works */}
+							<UserMenu
+								userMenuOpened={userMenuOpened}
+								setUserMenuOpened={setUserMenuOpened}
+								classes={classes}
+								user={user}
+								logOut={logOut}
+							/>
+							<Tooltip
+								label={"Detects AI generated and plagiarized content"}
+								position="bottom"
+								multiline
+							>
+								<Button
+									className={classes.plagiarismDetector}
+									disabled={
+										editor?.view.state.doc.textContent.split(" ").length < 100
 									}
-									position="bottom"
-									multiline
+									radius="md"
+									variant="outline"
+									size="sm"
+									loading={isPlagiarismButtonLoading}
+									onClick={async () => {
+										setIsPlagiarismButtonLoading(true);
+										const idToken = await auth.currentUser?.getIdToken();
+										await fetch("/api/classify", {
+											method: "post",
+											headers: { "Content-Type": "application/json" },
+											body: JSON.stringify({
+												idToken: idToken,
+												prompt: editor?.view.state.doc.textContent,
+											}),
+										})
+											.then((res) => res.json())
+											.then((data: any) => {
+												setCurrentClassification(data.label);
+												setCurrentClassificationPercentage(data.score);
+												setPlagiarismModalIsOpen(true);
+												setIsPlagiarismButtonLoading(false);
+											});
+									}}
 								>
-									<Button
-										className={classes.plagiarismDetectorClone}
-										disabled={
-											editor?.view.state.doc.textContent.split(" ").length >=
-											100
-										}
-										radius="md"
-										size="sm"
-									>
-										Plagiarism Detector
-									</Button>
-								</Tooltip>
-							</>
-						}
-					>
-						<CustomRTE
-							localDocData={localDocData}
-							setLocalDocData={setLocalDocData}
-							editor={editor}
-						/>
-					</AppShell>
-				</LoginContext.Provider>
+									Plagiarism Detector
+								</Button>
+							</Tooltip>
+							<Tooltip
+								label={
+									"Detects AI generated and plagiarized content, minimum of 100 words"
+								}
+								position="bottom"
+								multiline
+							>
+								<Button
+									className={classes.plagiarismDetectorClone}
+									disabled={
+										editor?.view.state.doc.textContent.split(" ").length >= 100
+									}
+									radius="md"
+									size="sm"
+								>
+									Plagiarism Detector
+								</Button>
+							</Tooltip>
+						</>
+					}
+				>
+					<CustomRTE
+						localDocData={localDocData}
+						setLocalDocData={setLocalDocData}
+						editor={editor}
+					/>
+				</AppShell>
+			</LoginContext.Provider>
 		</div>
 	);
 }

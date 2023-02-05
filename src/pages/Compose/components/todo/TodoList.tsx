@@ -45,7 +45,7 @@ export default function TodoList() {
 	const { tasks, setTasks } = TodoTasks();
 
 	const [opened, setOpened] = useState(false);
-	const [buttonDisabled, setButtonDisabled] = useState(false);
+	const [buttonDisabled, setButtonDisabled] = useState(true);
 
 	const [taskTitle, setTaskTitle] = useState("");
 	const [taskDescription, setTaskDescription] = useState("");
@@ -101,10 +101,9 @@ export default function TodoList() {
 	};
 
 	const handleTaskCreation = () => {
-		setButtonDisabled(true);
 		createTask();
+		setButtonDisabled(true);
 		setOpened(false);
-		setButtonDisabled(false);
 		setTaskDescription("");
 		setTaskTitle("");
 	};
@@ -135,7 +134,14 @@ export default function TodoList() {
 					</Title>
 					<TextInput
 						value={taskTitle}
-						onChange={(event) => setTaskTitle(event.currentTarget.value)}
+						onChange={(event) => {
+							setTaskTitle(event.currentTarget.value);
+							if (event.currentTarget.value === "") {
+								setButtonDisabled(true);
+							} else {
+								setButtonDisabled(false);
+							}
+						}}
 						label="Title"
 						placeholder="Write your task title here"
 						required

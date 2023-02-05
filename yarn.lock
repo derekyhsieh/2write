@@ -2130,6 +2130,11 @@
   resolved "https://registry.yarnpkg.com/@tiptap/extension-code/-/extension-code-2.0.0-beta.209.tgz#dda857528043c5aa4c451bb9f63731aa809182cb"
   integrity sha512-LCcfQMroYps6o9ASpVZqYbbdTkSwxTokjmkkKKmWZlZSJ/h+1kThOnRZgcPkfSeaaC30T+LSxAXXyf1dMgl5+Q==
 
+"@tiptap/extension-color@^2.0.0-beta.212":
+  version "2.0.0-beta.212"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-color/-/extension-color-2.0.0-beta.212.tgz#f0ce758551578ae506dacd8435a76797c3806b0a"
+  integrity sha512-iz2inN0IAEDcyWA9qgV0KCdUdRwn5M2qn4OvSud0dvm3qIPyKzM5mlC9JXrxxQVW+8iHsXBsfi6BQ7zGTSYdUA==
+
 "@tiptap/extension-document@^2.0.0-beta.209":
   version "2.0.0-beta.209"
   resolved "https://registry.yarnpkg.com/@tiptap/extension-document/-/extension-document-2.0.0-beta.209.tgz#7bb4025737a5361c06d52e56406d7e0649387e88"

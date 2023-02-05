@@ -6,10 +6,20 @@ import {
 import { BubbleMenu } from "@tiptap/react";
 import History from "@tiptap/extension-history";
 import { useDebounce } from "use-debounce";
+import { Editor } from "@tiptap/react";
 
-import { Text, Loader, Stack, createStyles, Menu, ScrollArea } from "@mantine/core";
+import {
+	Text,
+	Loader,
+	Stack,
+	createStyles,
+	Menu,
+	ScrollArea,
+	TextInput,
+	useMantineTheme,
+} from "@mantine/core";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
 	saveEssay,
 	createEssay,
@@ -23,42 +33,31 @@ import {
 	IconArrowForwardUp,
 	IconArrowBackUp,
 	IconTypography,
+	IconPlus,
+	IconMinus,
 } from "@tabler/icons";
 
-const useStyles = createStyles((theme) => {
-	return {
-		control: {
-			backgroundColor:
-				theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.white,
-			minWidth: 26,
-			height: 26,
-			display: "flex",
-			justifyContent: "center",
-			alignItems: "center",
-			border: `1px solid ${
-				theme.colorScheme === "dark"
-					? theme.colors.dark[4]
-					: theme.colors.gray[4]
-			}`,
-			borderRadius: theme.fn.radius(),
-			cursor: "default",
+type CustomRTEProps = {
+	localDocData: any;
+	setLocalDocData: Function;
+	editor: Editor;
+};
 
-			"&:hover": {
-				...theme.fn.hover({ backgroundColor: theme.colors.gray[0] }),
-			},
-		},
-	};
-});
-
-export default function CustomRTE({ localDocData, setLocalDocData, editor }) {
+export default function CustomRTE({
+	localDocData,
+	setLocalDocData,
+	editor,
+}: CustomRTEProps) {
 	// has data on timestamp etc
 
 	const [searchParams, setSearchParams] = useSearchParams();
 	const [initalContent, setInitialContent] = useState("");
 	const [isRewriteLoading, setIsRewriteLoading] = useState(false);
+	const [fontSize, setFontSize] = useState(11);
+	const fontRef = useRef<HTMLInputElement>(null);
 
 	const { user } = UserAuth();
-	const { classes } = useStyles();
+	const theme = useMantineTheme();
 
 	const getWordCountFromString = (str: string) => {
 		return str.split(" ").length;
@@ -104,36 +103,144 @@ export default function CustomRTE({ localDocData, setLocalDocData, editor }) {
 
 	const setEditorFontFamily = (font) => {
 		editor.chain().focus().setFontFamily(font).run();
-	}
+	};
 
 	const toolbar = (
 		<RichTextEditor.Toolbar sticky stickyOffset={60}>
 			<RichTextEditor.ControlsGroup>
 				<Menu position={"right-start"}>
-				<Menu.Target>
-					<button className={classes.control}>
-						<IconTypography stroke={1.5} size={16} />
-					</button>
-				</Menu.Target>
-				<Menu.Dropdown>
-					<Menu.Label><strong>Fonts</strong></Menu.Label>
-					<Menu.Item onClick={() => setEditorFontFamily("Times New Roman")}>Times New Roman</Menu.Item>
-					<Menu.Item onClick={() => setEditorFontFamily("Calibri")}>Calibri</Menu.Item>
-					<Menu.Item onClick={() => setEditorFontFamily("Arial")}>Arial</Menu.Item>
-					<Menu.Item onClick={() => setEditorFontFamily("Verdana")}>Verdana</Menu.Item>
-					<Menu.Item onClick={() => setEditorFontFamily("Inter")}>Inter</Menu.Item>
-					<Menu.Item onClick={() => setEditorFontFamily("Helvetica")}>Helvetica</Menu.Item>
-					<Menu.Item onClick={() => setEditorFontFamily("serif")}>Serif</Menu.Item>
-					<Menu.Item onClick={() => setEditorFontFamily("monospace")}>Monospace</Menu.Item>
-					<Menu.Item onClick={() => setEditorFontFamily("cursive")}>Cursive</Menu.Item>
-					<Menu.Item onClick={() => editor.chain().focus().unsetFontFamily().run()}>Unset Font</Menu.Item>
-				</Menu.Dropdown>
+					<Menu.Target>
+						<RichTextEditor.Control>
+							<IconTypography stroke={1.5} size={16} />
+						</RichTextEditor.Control>
+					</Menu.Target>
+					<Menu.Dropdown>
+						<Menu.Label>
+							<strong>Fonts</strong>
+						</Menu.Label>
+						<Menu.Item onClick={() => setEditorFontFamily("Times New Roman")}>
+							Times New Roman
+						</Menu.Item>
+						<Menu.Item onClick={() => setEditorFontFamily("Calibri")}>
+							Calibri
+						</Menu.Item>
+						<Menu.Item onClick={() => setEditorFontFamily("Arial")}>
+							Arial
+						</Menu.Item>
+						<Menu.Item onClick={() => setEditorFontFamily("Verdana")}>
+							Verdana
+						</Menu.Item>
+						<Menu.Item onClick={() => setEditorFontFamily("Inter")}>
+							Inter
+						</Menu.Item>
+						<Menu.Item onClick={() => setEditorFontFamily("Helvetica")}>
+							Helvetica
+						</Menu.Item>
+						<Menu.Item onClick={() => setEditorFontFamily("serif")}>
+							Serif
+						</Menu.Item>
+						<Menu.Item onClick={() => setEditorFontFamily("monospace")}>
+							Monospace
+						</Menu.Item>
+						<Menu.Item onClick={() => setEditorFontFamily("cursive")}>
+							Cursive
+						</Menu.Item>
+						<Menu.Item
+							onClick={() => editor.chain().focus().unsetFontFamily().run()}
+						>
+							Unset Font
+						</Menu.Item>
+					</Menu.Dropdown>
 				</Menu>
+				<RichTextEditor.Control>
+					<IconMinus
+						onClick={() => {
+							if (fontSize - 1 > 0) {
+								setFontSize(fontSize - 1);
+								editor.commands.setFontSize(fontSize.toString());
+							}
+						}}
+						stroke={1.5}
+						size={16}
+					/>
+				</RichTextEditor.Control>
+				<RichTextEditor.Control>
+					<input
+						ref={fontRef}
+						style={{
+							padding: 0,
+							margin: 5,
+							border: 0,
+							outline: "none",
+							// width: 13,
+							width: 30,
+							textAlign: "center",
+
+							fontFamily: `Greycliff CF, ${theme.fontFamily}`,
+							fontSize: 13,
+							fontWeight: 300,
+						}}
+						type="number"
+						min={1}
+						value={fontSize}
+						onChange={(e) => {
+							setFontSize(parseInt(e.currentTarget.value));
+						}}
+						onKeyDown={(e) => {
+							if (e.key === "Enter") {
+								fontRef.current.blur();
+							}
+						}}
+						onBlur={() => {
+							// check if font size is less than 1 or cannot be parsed
+							if (fontSize < 1 || !fontSize) {
+								setFontSize(11);
+								editor.commands.setFontSize(fontSize.toString());
+							} else {
+								editor.commands.setFontSize(fontSize.toString());
+							}
+						}}
+					/>
+					<style>
+						{
+							"input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }input[type=number] {-moz-appearance: textfield;}"
+						}
+					</style>
+				</RichTextEditor.Control>
+				<RichTextEditor.Control>
+					<IconPlus
+						onClick={() => {
+							setFontSize(fontSize + 1);
+							editor.commands.setFontSize(fontSize.toString());
+						}}
+						stroke={1.5}
+						size={16}
+					/>
+				</RichTextEditor.Control>
 			</RichTextEditor.ControlsGroup>
 			<RichTextEditor.ControlsGroup>
 				<RichTextEditor.Bold />
 				<RichTextEditor.Italic />
 				<RichTextEditor.Underline />
+				<RichTextEditor.ColorPicker
+					colors={[
+						"#25262b",
+						"#868e96",
+						"#fa5252",
+						"#e64980",
+						"#be4bdb",
+						"#7950f2",
+						"#4c6ef5",
+						"#228be6",
+						"#15aabf",
+						"#12b886",
+						"#40c057",
+						"#82c91e",
+						"#fab005",
+						"#fd7e14",
+					]}
+				/>
+				<RichTextEditor.Highlight />
 				<RichTextEditor.Strikethrough />
 				<RichTextEditor.ClearFormatting />
 			</RichTextEditor.ControlsGroup>
@@ -167,20 +274,18 @@ export default function CustomRTE({ localDocData, setLocalDocData, editor }) {
 			</RichTextEditor.ControlsGroup>
 
 			<RichTextEditor.ControlsGroup>
-				<button
+				<RichTextEditor.Control
 					onClick={() => editor.chain().focus().undo().run()}
 					disabled={editor ? !editor.can().undo() : false}
-					className={classes.control}
 				>
 					<IconArrowBackUp stroke={1.5} size={16} />
-				</button>
-				<button
+				</RichTextEditor.Control>
+				<RichTextEditor.Control
 					onClick={() => editor.chain().focus().redo().run()}
 					disabled={editor ? !editor.can().redo() : false}
-					className={classes.control}
 				>
 					<IconArrowForwardUp stroke={1.5} size={16} />
-				</button>
+				</RichTextEditor.Control>
 			</RichTextEditor.ControlsGroup>
 		</RichTextEditor.Toolbar>
 	);
