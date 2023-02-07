@@ -7,7 +7,8 @@ import {
 	Image,
 } from "@mantine/core";
 import { IconBrandDiscord } from "@tabler/icons";
-import logo from "../../img/logo.png"
+import logo from "../../img/logo.png";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
 	footer: {
@@ -73,6 +74,7 @@ const useStyles = createStyles((theme) => ({
 		fontSize: theme.fontSizes.sm,
 		paddingTop: 3,
 		paddingBottom: 3,
+		cursor: "pointer",
 
 		"&:hover": {
 			textDecoration: "underline",
@@ -119,6 +121,7 @@ interface FooterLinksProps {
 
 export function FooterLinks({ data }: FooterLinksProps) {
 	const { classes } = useStyles();
+	const navigate = useNavigate();
 
 	const groups = data.map((group) => {
 		const links = group.links.map((link, index) => (
@@ -126,8 +129,10 @@ export function FooterLinks({ data }: FooterLinksProps) {
 				key={index}
 				className={classes.link}
 				component="a"
-				href={link.link}
-				onClick={(event) => event.preventDefault()}
+				onClick={(event) => {
+					event.preventDefault();
+					navigate(link.link);
+				}}
 			>
 				{link.label}
 			</Text>
@@ -154,7 +159,7 @@ export function FooterLinks({ data }: FooterLinksProps) {
 			</Container>
 			<Container className={classes.afterFooter}>
 				<Text color="dimmed" size="sm">
-					© 2023 2write. All rights reserved.
+					© {new Date().getFullYear()} 2write. All rights reserved.
 				</Text>
 
 				<Group spacing={0} className={classes.social} position="right" noWrap>

@@ -27,8 +27,12 @@ const useStyles = createStyles((theme) => ({
 		alignItems: "center",
 		justifyContent: "space-between",
 		height: "100%",
+	},
+
+	logo: {
 		cursor: "pointer",
 	},
+
 	user: {
 		color: theme.white,
 		padding: `${theme.spacing.xs}px ${theme.spacing.sm}px`,
@@ -124,7 +128,7 @@ export default function HomeHeader(props: { essayList: DocumentData[] }) {
 			style={{ position: "fixed", top: 0, zIndex: 1 }}
 		>
 			<div className={classes.inner}>
-				<Group align={"center"} onClick={() => navigate("/")}>
+				<Group align={"center"} onClick={() => navigate("/")} className={classes.logo}>
 					<Burger opened={opened} onClick={toggle} size="sm" />
 					<Image src={logo} width={35} height={35} mb={4} mr={-10} />
 					<Text
