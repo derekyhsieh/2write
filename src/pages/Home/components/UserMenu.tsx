@@ -10,7 +10,6 @@ function UserMenu(props: {
 	user: any;
 	logOut: any;
 }) {
-	let blankComponent;
 
 	return (
 		<Group>
@@ -46,20 +45,16 @@ function UserMenu(props: {
 							{convertURLToName(props.user.providerData[0].providerId)} Account
 						</strong>
 					</Menu.Label>
-					{props.user.displayName ? (
+					{props.user.displayName && (
 						<Menu.Item icon={<IconUser size={14} stroke={1.5} />} closeMenuOnClick={false}>
 							{props.user.displayName}
 						</Menu.Item>
-					) : (
-						blankComponent
 					)}
 
-					{props.user.email ? (
+					{props.user.email && (
 						<Menu.Item icon={<IconMail size={14} stroke={1.5} />} closeMenuOnClick={false}>
 							{props.user.email}
 						</Menu.Item>
-					) : (
-						blankComponent
 					)}
 					<Menu.Divider />
 					<Menu.Item

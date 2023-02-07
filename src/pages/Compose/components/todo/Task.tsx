@@ -16,7 +16,6 @@ function Task(props: {
 	setTaskChecked: Function;
 }) {
 	const [checked, setChecked] = React.useState(props.task.checked);
-	let blankComponent;
 
 	useEffect(() => {
 		setChecked(props.task.checked);
@@ -59,7 +58,7 @@ function Task(props: {
 					<IconTrash />
 				</ActionIcon>
 			</Group>
-			{props.task.description ? (
+			{props.task.description && (
 				<Text
 					color={"dimmed"}
 					size={"md"}
@@ -69,8 +68,6 @@ function Task(props: {
 				>
 					{props.task.description}
 				</Text>
-			) : (
-				blankComponent
 			)}
 		</Card>
 		// </Group>

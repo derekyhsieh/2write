@@ -64,6 +64,7 @@
     "prosemirror-transform": "^1.7.0",
     "prosemirror-view": "^1.29.1",
     "react": "^18.2.0",
+    "react-cookie-consent": "^8.0.1",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.8.0",
     "react-video-looper": "^1.0.16",
