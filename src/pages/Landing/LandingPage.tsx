@@ -112,8 +112,8 @@ export default function LandingPage() {
 						{
 							title: "Privacy",
 							links: [
-								{ label: "Terms & Conditions", link: "" },
-								{ label: "Privacy Policy", link: "" },
+								{ label: "Terms & Conditions", link: "/terms" },
+								{ label: "Privacy Policy", link: "/privacy" },
 							],
 						},
 					]}
