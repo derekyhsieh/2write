@@ -13,30 +13,7 @@ import Privacy from "./pages/Privacy/Privacy";
 import Terms from "./pages/Privacy/Terms";
 import ProtectedAuth from "./utils/ProtectedRoute";
 
-function CookiesBanners() {
-	return (
-		<Paper withBorder p="lg" radius="md" shadow="md">
-			<Group position="apart" mb="xs">
-				<Text size="md" weight={500}>
-					Allow cookies
-				</Text>
-			</Group>
-			<Group position="apart" mt="xs">
-      <Text color="dimmed" size="xs">
-				This website uses cookies to enhance the user experience.
-			</Text>
-				<Button variant="outline" size="xs">
-					Accept all
-				</Button>
-			</Group>
-		</Paper>
-	);
-}
-
 function App() {
-	const mantineButton = () => {
-		return <Button style={{ alignItems: "center" }} />;
-	};
 	return (
 		<AuthContextProvider>
 			<TodoContextProvider>
