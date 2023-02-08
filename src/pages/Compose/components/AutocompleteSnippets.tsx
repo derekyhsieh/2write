@@ -173,8 +173,8 @@ export const AutocompleteSnippets = Extension.create({
                                         auth.currentUser?.getIdToken(true).then((token) => {
                                             fetch("/api/autocomplete", {
                                                 method: "post",
-                                                headers: { 'Content-Type': 'application/json' },
-                                                body: JSON.stringify({ "idToken": token,"prompt": textContentOfCurrentParagraph })
+                                                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer '.concat(token) },
+                                                body: JSON.stringify({ "prompt": textContentOfCurrentParagraph })
                                             })
                                                 .then((res) => res.json())
                                                 .then((data) => {

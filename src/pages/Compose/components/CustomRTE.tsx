@@ -67,9 +67,8 @@ export default function CustomRTE({
 		try {
 			const res = await fetch("/api/rewrite", {
 				method: "post",
-				headers: { "Content-Type": "application/json" },
+				headers: { "Content-Type": "application/json", 'Authorization': 'Bearer '.concat(token) },
 				body: JSON.stringify({
-					idToken: token,
 					prompt: editor.state.doc.textBetween(
 						editor.state.selection.from,
 						editor.state.selection.to,
