@@ -20,7 +20,10 @@ import "./NotepadEditor.css";
 import { useFetch } from "../../../hooks/useFetch";
 import { useDebounce } from "use-debounce";
 import { useSearchParams } from "react-router-dom";
-import { saveNotepad } from "../../../services/FirestoreHelpers";
+import {
+	saveEssayPrompt,
+	saveNotepad,
+} from "../../../services/FirestoreHelpers";
 import { UserAuth } from "../../../context/AuthContext";
 import { useContext } from "react";
 import { LoginContext } from "../../../context/DocContext";
@@ -62,7 +65,7 @@ export default function Notepad() {
 	}, [localDocData]);
 
 	const handleCreateOutline = () => {
-		if (localDocData.hasOwnProperty("essayPrompt")) {
+		if (localDocData.hasOwnProperty("essayPrompt") && localDocData.essayPrompt) {
 			// fetch outline
 			const prompt = localDocData.essayPrompt;
 
@@ -71,7 +74,10 @@ export default function Notepad() {
 			auth.currentUser?.getIdToken(true).then((token) => {
 				fetch("/api/outline", {
 					method: "post",
-					headers: { "Content-Type": "application/json", 'Authorization': 'Bearer '.concat(token) },
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: "Bearer ".concat(token),
+					},
 					body: JSON.stringify({ prompt: prompt }),
 				})
 					.then((res) => res.json())
@@ -108,8 +114,14 @@ export default function Notepad() {
 				}
 				overlayOpacity={0.55}
 				overlayBlur={3}
+				zIndex={9999}
+				radius={"md"}
 			>
-				<CreateOutlineModalContent setIsActive={setModalIsOpen} />
+				<CreateOutlineModalContent
+					setIsActive={setModalIsOpen}
+					userID={user.uid}
+					essayID={searchParams.get("essayId")}
+				/>
 			</Modal>
 
 			<Group>
@@ -160,9 +172,14 @@ const useStyles = createStyles((theme) => ({
 
 type Props = {
 	setIsActive: (active: boolean) => void;
+	userID: string;
+	essayID: string;
 };
 
-function CreateOutlineModalContent({ setIsActive }: Props) {
+function CreateOutlineModalContent({ setIsActive, userID, essayID }: Props) {
+	const [prompt, setPrompt] = useState("");
+	const [generateButtonDisabled, setGenerateButtonDisabled] = useState(true);
+
 	return (
 		<Center>
 			<Stack>
@@ -170,12 +187,19 @@ function CreateOutlineModalContent({ setIsActive }: Props) {
 					Oops, you forgot to include your essay prompt!
 				</Title>
 
-				<ContainedInputs />
+				<ContainedInputs
+					prompt={prompt}
+					setPrompt={setPrompt}
+					generateButtonDisabled={generateButtonDisabled}
+					setGenerateButtonDisabled={setGenerateButtonDisabled}
+				/>
 
 				<Button
 					onClick={() => {
 						setIsActive(false);
+						saveEssayPrompt(userID, essayID, prompt);
 					}}
+					disabled={generateButtonDisabled}
 				>
 					Generate ✨
 				</Button>
@@ -184,16 +208,31 @@ function CreateOutlineModalContent({ setIsActive }: Props) {
 	);
 }
 
-function ContainedInputs() {
+function ContainedInputs(props: {
+	prompt;
+	setPrompt;
+	generateButtonDisabled;
+	setGenerateButtonDisabled;
+}) {
 	// You can add these classes as classNames to any Mantine input, it will work the same
 	const { classes } = useStyles();
 
 	return (
 		<div>
 			<TextInput
+				value={props.prompt}
+				onChange={(event) => {
+					props.setPrompt(event.currentTarget.value);
+					if(props.prompt === "") {
+						props.setGenerateButtonDisabled(true);
+					} else {
+						props.setGenerateButtonDisabled(false);
+					}
+				}}
 				label="Enter the prompt for your essay"
 				placeholder="Why is 2Write the best app?"
 				classNames={classes}
+				required
 			/>
 
 			<Select

@@ -56,6 +56,7 @@ export default function HomePageContainer() {
 				overlayOpacity={0.55}
 				overlayBlur={3}
 				trapFocus
+				radius={"md"}
 			>
 				<CreateDropzoneModalContent setIsActive={setDropzoneModalIsOpen} />
 			</Modal>
@@ -71,6 +72,7 @@ export default function HomePageContainer() {
 				}
 				overlayOpacity={0.55}
 				overlayBlur={3}
+				radius={"md"}
 			>
 				<CreatePromptModalContent setIsActive={setPromptModalIsOpen} />
 			</Modal>
@@ -87,6 +89,7 @@ export default function HomePageContainer() {
 				}
 				overlayOpacity={0.55}
 				overlayBlur={3}
+				radius={"md"}
 			>
 				<CreatePromptModalContent setIsActive={setCreateModalIsOpen} />
 			</Modal>
@@ -102,6 +105,7 @@ export default function HomePageContainer() {
 				}
 				overlayOpacity={0.55}
 				overlayBlur={3}
+				radius={"md"}
 			>
 				<CreateRenameModalContent
 					oldTitle={oldTitle}
