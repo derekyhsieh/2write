@@ -353,9 +353,8 @@ export default function ComposeContainer() {
 										const idToken = await auth.currentUser?.getIdToken();
 										await fetch("/api/classify", {
 											method: "post",
-											headers: { "Content-Type": "application/json" },
+											headers: { "Content-Type": "application/json", 'Authorization': 'Bearer '.concat(idToken) },
 											body: JSON.stringify({
-												idToken: idToken,
 												prompt: editor?.view.state.doc.textContent,
 											}),
 										})

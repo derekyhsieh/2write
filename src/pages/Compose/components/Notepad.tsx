@@ -71,8 +71,8 @@ export default function Notepad() {
 			auth.currentUser?.getIdToken(true).then((token) => {
 				fetch("/api/outline", {
 					method: "post",
-					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({ idToken: token, prompt: prompt }),
+					headers: { "Content-Type": "application/json", 'Authorization': 'Bearer '.concat(token) },
+					body: JSON.stringify({ prompt: prompt }),
 				})
 					.then((res) => res.json())
 					.then((returnedData) => {
