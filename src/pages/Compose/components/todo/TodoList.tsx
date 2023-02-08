@@ -127,6 +127,7 @@ export default function TodoList() {
 				overlayBlur={3}
 				trapFocus
 				zIndex={99999}
+				radius={"md"}
 			>
 				<Stack>
 					<Title size={"lg"} order={4} align="center">

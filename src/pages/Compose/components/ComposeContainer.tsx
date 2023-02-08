@@ -280,6 +280,7 @@ export default function ComposeContainer() {
 					overlayOpacity={0.55}
 					overlayBlur={3}
 					zIndex={999999}
+					radius={"md"}
 					trapFocus
 				>
 					<CreatePlagiarismModalContent
