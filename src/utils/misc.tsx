@@ -30,13 +30,13 @@ function searchDocumentList(
 			? 0.5
 			: 0;
 		const score = titleScore + contentScore;
-        if (score === 0) {
-            return null
-        }
+		if (score === 0) {
+			return null;
+		}
 		return { ...document, score };
 	});
-    
-    const filteredResults = searchResults.filter((result) => result !== null)
+
+	const filteredResults = searchResults.filter((result) => result !== null);
 	return filteredResults.sort((a, b) => b.score - a.score);
 }
 
@@ -47,4 +47,15 @@ function convertURLToName(url) {
 	return name;
 }
 
-export { getMonthName, convertFirebaseTimestampToDate, searchDocumentList, convertURLToName };
+// check if string starts with http
+const isExternal = (link: string) => {
+	return link.startsWith("http");
+};
+
+export {
+	getMonthName,
+	convertFirebaseTimestampToDate,
+	searchDocumentList,
+	convertURLToName,
+	isExternal,
+};

@@ -35,6 +35,10 @@ const AnalyticsDrawer: FC<SettingsDrawerProps> = ({ setOpened, opened, editor })
     }
     return result;
   }
+
+  function removePeriods(arr) {
+    return arr.filter((str: string) => str !== '.')
+  }
   
 
   const [wordCount, setWordCount] = useState("")
@@ -48,10 +52,10 @@ const AnalyticsDrawer: FC<SettingsDrawerProps> = ({ setOpened, opened, editor })
 
       const textContent = editor.editor.view.state.doc.textContent
 
-      setWordCount(textContent.split(" ").length)
+      setWordCount(removePeriods(textContent.split(" ")).length)
       setCharCount(textContent.length)
 
-      setCitationWordCount(removeCapitalizedParentheses(textContent).split(" ").length)
+      setCitationWordCount(removePeriods(removeCapitalizedParentheses(textContent).split(" ")).length)
 
 
 

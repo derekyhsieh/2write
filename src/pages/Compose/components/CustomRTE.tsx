@@ -110,7 +110,7 @@ export default function CustomRTE({
 			<RichTextEditor.ControlsGroup>
 				<Menu position={"right-start"}>
 					<Menu.Target>
-						<RichTextEditor.Control>
+						<RichTextEditor.Control title="Fonts">
 							<IconTypography stroke={1.5} size={16} />
 						</RichTextEditor.Control>
 					</Menu.Target>
@@ -152,7 +152,7 @@ export default function CustomRTE({
 						</Menu.Item>
 					</Menu.Dropdown>
 				</Menu>
-				<RichTextEditor.Control>
+				<RichTextEditor.Control title="Decrease font size">
 					<IconMinus
 						onClick={() => {
 							if (fontSize - 1 > 0) {
@@ -164,7 +164,7 @@ export default function CustomRTE({
 						size={16}
 					/>
 				</RichTextEditor.Control>
-				<RichTextEditor.Control>
+				<RichTextEditor.Control title="Font size">
 					<input
 						ref={fontRef}
 						style={{
@@ -207,7 +207,7 @@ export default function CustomRTE({
 						}
 					</style>
 				</RichTextEditor.Control>
-				<RichTextEditor.Control>
+				<RichTextEditor.Control title="Increase font size">
 					<IconPlus
 						onClick={() => {
 							setFontSize(fontSize + 1);
@@ -277,12 +277,14 @@ export default function CustomRTE({
 				<RichTextEditor.Control
 					onClick={() => editor.chain().focus().undo().run()}
 					disabled={editor ? !editor.can().undo() : false}
+					title="Undo"
 				>
 					<IconArrowBackUp stroke={1.5} size={16} />
 				</RichTextEditor.Control>
 				<RichTextEditor.Control
 					onClick={() => editor.chain().focus().redo().run()}
 					disabled={editor ? !editor.can().redo() : false}
+					title="Redo"
 				>
 					<IconArrowForwardUp stroke={1.5} size={16} />
 				</RichTextEditor.Control>
