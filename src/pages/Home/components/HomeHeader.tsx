@@ -7,6 +7,13 @@ import {
 	Text,
 	Image,
 	Kbd,
+	UnstyledButton,
+	ThemeIcon,
+	useMantineTheme,
+	Drawer,
+	Container,
+	Divider,
+	Button,
 } from "@mantine/core";
 import { useDisclosure, useHotkeys } from "@mantine/hooks";
 import { IconSearch } from "@tabler/icons";
@@ -20,6 +27,13 @@ import { createSearchParams, useNavigate } from "react-router-dom";
 import logo from "../../../img/logo.png";
 import UserMenu from "./UserMenu";
 import { DocumentData } from "firebase/firestore";
+import { isExternal } from "../../../utils/misc";
+import {
+	IconHome,
+	IconPassword,
+	IconArticle,
+	IconBrandDiscord,
+} from "@tabler/icons";
 
 const useStyles = createStyles((theme) => ({
 	inner: {
@@ -70,11 +84,50 @@ const useStyles = createStyles((theme) => ({
 	avatarMenu: {
 		outline: "3px solid #D4D4D4",
 	},
+
+	subLink: {
+		width: "100%",
+		padding: `${theme.spacing.xs}px ${theme.spacing.md}px`,
+		borderRadius: theme.radius.md,
+
+		...theme.fn.hover({
+			backgroundColor:
+				theme.colorScheme === "dark"
+					? theme.colors.dark[7]
+					: theme.colors.gray[0],
+		}),
+
+		"&:active": theme.activeStyles,
+	},
 }));
+
+const linkArray = [
+	{
+		icon: IconHome,
+		title: "Home",
+		link: "/",
+	},
+	{
+		icon: IconPassword,
+		title: "Privacy",
+		link: "/privacy",
+	},
+	{
+		icon: IconArticle,
+		title: "Terms & Conditions",
+		link: "/terms",
+	},
+	{
+		icon: IconBrandDiscord,
+		title: "Discord",
+		link: "https://discord.gg/HRkKvbtr6j",
+	},
+];
 
 export default function HomeHeader(props: { essayList: DocumentData[] }) {
 	const { user, logOut } = UserAuth();
-	const [opened, { toggle }] = useDisclosure(false);
+	const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
+		useDisclosure(false);
 
 	const { classes } = useStyles();
 	const [userMenuOpened, setUserMenuOpened] = useState(false);
@@ -83,6 +136,7 @@ export default function HomeHeader(props: { essayList: DocumentData[] }) {
 	const [essayTitleArray, setEssayTitleArray] = useState([]);
 	const searchInput = useRef<HTMLInputElement>(null);
 	const navigate = useNavigate();
+	const theme = useMantineTheme();
 
 	useHotkeys([["mod+K", () => searchInput.current.focus()]]);
 
@@ -121,6 +175,29 @@ export default function HomeHeader(props: { essayList: DocumentData[] }) {
 		</Kbd>
 	);
 
+	const links = linkArray.map((item) => (
+		<UnstyledButton
+			className={classes.subLink}
+			key={item.title}
+			onClick={() =>
+				isExternal(item.link)
+					? window.open(item.link, "_blank")
+					: navigate(item.link)
+			}
+		>
+			<Group position="left">
+				<ThemeIcon size={34} variant="default" radius="md">
+					<item.icon size={22} color={theme.fn.primaryColor()} />
+				</ThemeIcon>
+				<div>
+					<Text size="sm" weight={500}>
+						{item.title}
+					</Text>
+				</div>
+			</Group>
+		</UnstyledButton>
+	));
+
 	return (
 		<Header
 			height={{ base: 60, md: 70 }}
@@ -128,8 +205,12 @@ export default function HomeHeader(props: { essayList: DocumentData[] }) {
 			style={{ position: "fixed", top: 0, zIndex: 1 }}
 		>
 			<div className={classes.inner}>
-				<Group align={"center"} onClick={() => navigate("/")} className={classes.logo}>
-					<Burger opened={opened} onClick={toggle} size="sm" />
+				<Group
+					align={"center"}
+					onClick={() => navigate("/")}
+					className={classes.logo}
+				>
+					<Burger opened={drawerOpened} onClick={toggleDrawer} size="sm" />
 					<Image src={logo} width={35} height={35} mb={4} mr={-10} />
 					<Text
 						variant="gradient"
@@ -186,6 +267,26 @@ export default function HomeHeader(props: { essayList: DocumentData[] }) {
 					user={user}
 					logOut={logOut}
 				/>
+				<Drawer
+					opened={drawerOpened}
+					onClose={closeDrawer}
+					padding="md"
+					size={"full"}
+					zIndex={1000000}
+				>
+					<Container sx={{ height: "calc(100vh - 60px)" }}>
+						{links}
+
+						<Divider
+							my="sm"
+							color={theme.colorScheme === "dark" ? "dark.5" : "gray.1"}
+						/>
+
+						<Group position="center" grow pb="xl" px="md">
+							<Button onClick={() => logOut()}>Logout</Button>
+						</Group>
+					</Container>
+				</Drawer>
 			</div>
 		</Header>
 	);
