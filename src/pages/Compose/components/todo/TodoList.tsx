@@ -6,7 +6,6 @@ import {
 	Modal,
 	TextInput,
 	Center,
-	useMantineTheme,
 	Stack,
 	createStyles,
 	ScrollArea,
@@ -39,8 +38,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export default function TodoList() {
-	const theme = useMantineTheme();
-	const { classes } = useStyles();
+	const { classes, theme } = useStyles();
 	const { user } = UserAuth();
 	const { tasks, setTasks } = TodoTasks();
 

@@ -20,7 +20,7 @@ import {
 	ScrollArea,
 	Container,
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import {
 	IconHome,
 	IconPassword,
@@ -30,6 +30,7 @@ import {
 import logo from "../../img/logo.png";
 import { useNavigate } from "react-router-dom";
 import { isExternal } from "../../utils/misc";
+import { UserAuth } from "../../context/AuthContext";
 
 const useStyles = createStyles((theme) => ({
 	link: {
@@ -132,7 +133,10 @@ export function HeaderMegaMenu() {
 		useDisclosure(false);
 	const { classes, theme } = useStyles();
 	const navigate = useNavigate();
+	const { user, logOut } = UserAuth();
 
+	const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm}px)`);
+	
 	const links = linkArray.map((item) => (
 		<UnstyledButton
 			className={classes.subLink}
@@ -161,6 +165,14 @@ export function HeaderMegaMenu() {
 			<Header height={60} px="md">
 				<Group position="apart" sx={{ height: "100%" }}>
 					<Group className={classes.logo} onClick={() => navigate("/")}>
+						<Burger
+							opened={drawerOpened}
+							onClick={(event) => {
+								event.stopPropagation();
+								toggleDrawer();
+							}}
+							// className={classes.hiddenDesktop}
+						/>
 						<Image src={logo} width={35} height={35} mb={4} mr={-10} />
 						<Text
 							variant="gradient"
@@ -191,21 +203,14 @@ export function HeaderMegaMenu() {
 					<Group className={classes.hiddenMobile}>
 						<Button onClick={() => navigate("/auth")}>Sign up</Button>
 					</Group>
-
-					<Burger
-						opened={drawerOpened}
-						onClick={toggleDrawer}
-						className={classes.hiddenDesktop}
-					/>
 				</Group>
 			</Header>
 
 			<Drawer
 				opened={drawerOpened}
 				onClose={closeDrawer}
-				size="full"
+				size={isMobile ? "100%" : "30%"}
 				padding="md"
-				className={classes.hiddenDesktop}
 				zIndex={1000000}
 			>
 				<Container sx={{ height: "calc(100vh - 60px)" }}>
@@ -217,7 +222,11 @@ export function HeaderMegaMenu() {
 					/>
 
 					<Group position="center" grow pb="xl" px="md">
-						<Button onClick={() => navigate("/auth")}>Sign up</Button>
+						{user ? (
+							<Button onClick={() => logOut()}>Logout</Button>
+						) : (
+							<Button onClick={() => navigate("/auth")}>Sign up</Button>
+						)}
 					</Group>
 				</Container>
 			</Drawer>
