@@ -52,11 +52,13 @@ app.use("/api", (req, res, next) => {
 });
 
 app.post("/api/outline", (req, res) => {
-	getAnswer(
-		"Create an outline for an essay about ".concat(req.body.prompt)
-	).then((answerString) => {
-		res.status(200).json({ answer: answerString });
-	});
+	getAnswer("Create an outline for an essay about ".concat(req.body.prompt))
+		.then((answerString) => {
+			res.status(200).json({ answer: answerString });
+		})
+		.catch((error) => {
+			res.status(400).json({ error: error.message });
+		});
 });
 
 app.post("/api/rewrite", (req, res) => {
@@ -64,25 +66,32 @@ app.post("/api/rewrite", (req, res) => {
 		"Rewrite the following text in a more professional tone: ".concat(
 			req.body.prompt
 		)
-	).then((answerString) => {
-		res.status(200).json({ answer: answerString?.replace(/\n/g, "") });
-	});
+	)
+		.then((answerString) => {
+			res.status(200).json({ answer: answerString?.replace(/\n/g, "") });
+		})
+		.catch((error) => {
+			res.status(400).json({ error: error.message });
+		});
 });
 
 app.post("/api/autocomplete", (req, res) => {
 	// {"prompt": "In the fifteenth and sixteenth centuries, European nations began to claim "}
 
 	if (req.body.prompt.length < 1) {
-		res.status(200).json({
+		res.status(400).json({
 			error: "Autocomplete sentence must be longer",
-			answer: "",
 		});
 		return;
 	}
 
-	getAnswer(req.body.prompt, true).then((answerString) => {
-		res.status(200).json({ answer: answerString });
-	});
+	getAnswer(req.body.prompt, true)
+		.then((answerString) => {
+			res.status(200).json({ answer: answerString });
+		})
+		.catch((error) => {
+			res.status(400).json({ error: error.message });
+		});
 });
 
 app.post("/api/classify", (req, res) => {
@@ -97,7 +106,7 @@ app.post("/api/classify", (req, res) => {
 			res.status(200).json(data);
 		})
 		.catch((error) => {
-			res.status(400).json({ error: "Error: bad request" });
+			res.status(400).json({ error: error.message });
 		});
 });
 
