@@ -27,35 +27,28 @@ const app = express();
 app.use(bodyParser.json());
 
 app.use("/api", (req, res, next) => {
-	const bearerString = "Bearer ";
-	let tokenIndex = 0;
-	const authorizationHeader = req.headers.authorization;
 	// @ts-ignore
-	if (authorizationHeader.includes(bearerString)) {
-		tokenIndex = bearerString.length;
-	}
-	// @ts-ignore
-	const idToken: any = authorizationHeader.substring(
-		tokenIndex,
+	if (req.headers.authorization.startsWith("Bearer ")) {
 		// @ts-ignore
-		authorizationHeader.length
-	);
+		const idToken = req.headers.authorization.split(" ")[1];
+		// Verify the ID token, check if revoked and decode its payload.
+		admin
+			.auth()
+			.verifyIdToken(idToken, true)
+			.then((claims) => {
+				// save uid and ip
 
-	// Verify the ID token, check if revoked and decode its payload.
-	admin
-		.auth()
-		.verifyIdToken(idToken, true)
-		.then((claims) => {
-			// save uid and ip
+				claims.last_ip = req.socket.remoteAddress;
+				claims.time_stamp = new Date().toUTCString();
 
-			claims.last_ip = req.socket.remoteAddress;
-			claims.time_stamp = new Date().toUTCString();
-
-			next();
-		})
-		.catch((error) => {
-			res.status(400).json({ error: error.message });
-		});
+				next();
+			})
+			.catch((error) => {
+				res.status(400).json({ error: error.message });
+			});
+	} else {
+		res.status(400).json({ error: "Invalid token" });
+	}
 });
 
 app.post("/api/outline", (req, res) => {
