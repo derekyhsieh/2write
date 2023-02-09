@@ -9,13 +9,12 @@ import {
 	Kbd,
 	UnstyledButton,
 	ThemeIcon,
-	useMantineTheme,
 	Drawer,
 	Container,
 	Divider,
 	Button,
 } from "@mantine/core";
-import { useDisclosure, useHotkeys } from "@mantine/hooks";
+import { useDisclosure, useHotkeys, useMediaQuery } from "@mantine/hooks";
 import { IconSearch } from "@tabler/icons";
 import { UserAuth } from "../../../context/AuthContext";
 import { useEffect, useRef, useState } from "react";
@@ -129,14 +128,15 @@ export default function HomeHeader(props: { essayList: DocumentData[] }) {
 	const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
 		useDisclosure(false);
 
-	const { classes } = useStyles();
+	const { classes, theme } = useStyles();
 	const [userMenuOpened, setUserMenuOpened] = useState(false);
 
 	const [searchQuery, setSearchQuery] = useState("");
 	const [essayTitleArray, setEssayTitleArray] = useState([]);
 	const searchInput = useRef<HTMLInputElement>(null);
 	const navigate = useNavigate();
-	const theme = useMantineTheme();
+
+	const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm}px)`);
 
 	useHotkeys([["mod+K", () => searchInput.current.focus()]]);
 
@@ -210,7 +210,7 @@ export default function HomeHeader(props: { essayList: DocumentData[] }) {
 					onClick={() => navigate("/")}
 					className={classes.logo}
 				>
-					<Burger opened={drawerOpened} onClick={toggleDrawer} size="sm" />
+					<Burger opened={drawerOpened} onClick={toggleDrawer} />
 					<Image src={logo} width={35} height={35} mb={4} mr={-10} />
 					<Text
 						variant="gradient"
@@ -271,7 +271,7 @@ export default function HomeHeader(props: { essayList: DocumentData[] }) {
 					opened={drawerOpened}
 					onClose={closeDrawer}
 					padding="md"
-					size={"full"}
+					size={isMobile ? "full" : "30%"}
 					zIndex={1000000}
 				>
 					<Container sx={{ height: "calc(100vh - 60px)" }}>

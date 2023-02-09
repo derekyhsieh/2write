@@ -8,7 +8,6 @@ import {
 	Modal,
 	MediaQuery,
 	createStyles,
-	useMantineTheme,
 	Tooltip,
 	Button,
 	Kbd,
@@ -135,8 +134,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export default function ComposeContainer() {
-	const theme = useMantineTheme();
-	const { classes } = useStyles();
+	const { classes, theme } = useStyles();
 	const [userMenuOpened, setUserMenuOpened] = useState(false);
 	const [plagiarismModalIsOpen, setPlagiarismModalIsOpen] = useState(false);
 	const [isPlagiarismButtonLoading, setIsPlagiarismButtonLoading] =
