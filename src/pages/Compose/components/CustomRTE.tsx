@@ -1,33 +1,14 @@
-import {
-	RichTextEditor,
-	Link,
-	useRichTextEditorContext,
-} from "@mantine/tiptap";
+import { RichTextEditor } from "@mantine/tiptap";
 import { BubbleMenu } from "@tiptap/react";
-import History from "@tiptap/extension-history";
 import { useDebounce } from "use-debounce";
 import { Editor } from "@tiptap/react";
 
-import {
-	Text,
-	Loader,
-	Stack,
-	createStyles,
-	Menu,
-	ScrollArea,
-	TextInput,
-	useMantineTheme,
-} from "@mantine/core";
+import { Text, Loader, Stack, Menu, createStyles } from "@mantine/core";
 
 import { useEffect, useState, useRef } from "react";
-import {
-	saveEssay,
-	createEssay,
-	loadEssay,
-} from "../../../services/FirestoreHelpers";
+import { saveEssay } from "../../../services/FirestoreHelpers";
 import { UserAuth } from "../../../context/AuthContext";
 import { useSearchParams } from "react-router-dom";
-import { AutocompleteSnippets } from "./AutocompleteSnippets";
 import { auth } from "../../../services/firebase";
 import {
 	IconArrowForwardUp,
@@ -36,12 +17,31 @@ import {
 	IconPlus,
 	IconMinus,
 } from "@tabler/icons";
+import { AudioRecorder, useAudioRecorder } from "react-audio-voice-recorder";
 
 type CustomRTEProps = {
 	localDocData: any;
 	setLocalDocData: Function;
 	editor: Editor;
 };
+
+const useStyles = createStyles((theme) => ({
+	audioRecordNow: {
+		backgroundColor: `${theme.colors.gray[1]} !important`,
+		boxShadow: "none !important",
+		borderRadius: "20px",
+		boxSizing: "border-box",
+		width: "40px !important",
+		height: "40px !important",
+		display: "flex",
+		alignItems: "center",
+		padding: "12px",
+		transition: "all .2s ease-in",
+	},
+	audioInvisible: {
+		display: "none !important",
+	},
+}));
 
 export default function CustomRTE({
 	localDocData,
@@ -50,14 +50,17 @@ export default function CustomRTE({
 }: CustomRTEProps) {
 	// has data on timestamp etc
 
+	const { classes, theme } = useStyles();
 	const [searchParams, setSearchParams] = useSearchParams();
 	const [initalContent, setInitialContent] = useState("");
 	const [isRewriteLoading, setIsRewriteLoading] = useState(false);
+	const [audioLoading, setAudioLoading] = useState(false);
 	const [fontSize, setFontSize] = useState(11);
 	const fontRef = useRef<HTMLInputElement>(null);
 
 	const { user } = UserAuth();
-	const theme = useMantineTheme();
+
+	const recorderControls = useAudioRecorder();
 
 	const getWordCountFromString = (str: string) => {
 		return str.split(" ").length;
@@ -67,7 +70,10 @@ export default function CustomRTE({
 		try {
 			const res = await fetch("/api/rewrite", {
 				method: "post",
-				headers: { "Content-Type": "application/json", 'Authorization': 'Bearer '.concat(token) },
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: "Bearer ".concat(token),
+				},
 				body: JSON.stringify({
 					prompt: editor.state.doc.textBetween(
 						editor.state.selection.from,
@@ -81,6 +87,25 @@ export default function CustomRTE({
 			editor?.commands.insertContent(data.answer);
 		} catch (e) {
 			setIsRewriteLoading(false);
+			console.error(e);
+		}
+	};
+
+	const transcribeAudio = async (audioBlob, token) => {
+		try {
+			const res = await fetch("/api/transcribe", {
+				method: "post",
+				headers: {
+					"Content-Type": "application/octet-stream",
+					Authorization: "Bearer ".concat(token),
+				},
+				body: audioBlob,
+			});
+			const data = await res.json();
+			editor?.commands.insertContent(
+				data.results.channels[0].alternatives[0].transcript
+			);
+		} catch (e) {
 			console.error(e);
 		}
 	};
@@ -287,6 +312,30 @@ export default function CustomRTE({
 				>
 					<IconArrowForwardUp stroke={1.5} size={16} />
 				</RichTextEditor.Control>
+			</RichTextEditor.ControlsGroup>
+
+			<RichTextEditor.ControlsGroup>
+				<AudioRecorder
+					onRecordingComplete={(audioBlob) => {
+						setAudioLoading(true);
+						auth.currentUser?.getIdToken(true).then((token) => {
+							transcribeAudio(audioBlob, token).then(() => {
+								setAudioLoading(false);
+							});
+						});
+					}}
+					recorderControls={recorderControls}
+					classes={{
+						AudioRecorderClass: audioLoading
+							? classes.audioInvisible
+							: classes.audioRecordNow,
+						AudioRecorderStatusClass: classes.audioInvisible,
+						AudioRecorderTimerClass: classes.audioInvisible,
+						AudioRecorderPauseResumeClass: classes.audioInvisible,
+						AudioRecorderDiscardClass: classes.audioInvisible,
+					}}
+				/>
+				{audioLoading && <Loader h={25} w={25} />}
 			</RichTextEditor.ControlsGroup>
 		</RichTextEditor.Toolbar>
 	);

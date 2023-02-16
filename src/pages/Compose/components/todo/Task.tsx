@@ -1,11 +1,10 @@
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
 	Text,
 	Group,
 	Card,
 	ActionIcon,
 	Checkbox,
-	ScrollArea,
 } from "@mantine/core";
 import { IconTrash } from "@tabler/icons";
 
@@ -15,7 +14,7 @@ function Task(props: {
 	deleteTask: any;
 	setTaskChecked: Function;
 }) {
-	const [checked, setChecked] = React.useState(props.task.checked);
+	const [checked, setChecked] = useState(props.task.checked);
 
 	useEffect(() => {
 		setChecked(props.task.checked);

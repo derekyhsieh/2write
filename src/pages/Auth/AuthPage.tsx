@@ -2,21 +2,16 @@ import {
 	Button,
 	Center,
 	Stack,
-	TextInput,
-	PasswordInput,
-	Checkbox,
-	Anchor,
 	Paper,
 	Title,
 	Text,
 	Container,
-	Group,
 	Header,
 	Loader,
 	AppShell,
 } from "@mantine/core";
 import { UserAuth } from "../../context/AuthContext";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { HeaderMegaMenu } from "../Landing/Header";
 import {

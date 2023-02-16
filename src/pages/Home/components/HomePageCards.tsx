@@ -4,7 +4,6 @@ import {
 	Card,
 	Text,
 	Container,
-	AspectRatio,
 	Group,
 	Stack,
 	ActionIcon,
@@ -13,7 +12,6 @@ import {
 	Center,
 	Title,
 	Loader,
-	Image,
 } from "@mantine/core";
 import {
 	IconChevronDown,
@@ -25,8 +23,6 @@ import {
 } from "@tabler/icons";
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { loadEssayList } from "../../../services/FirestoreHelpers";
-import { UserAuth } from "../../../context/AuthContext";
 import { searchDocumentList } from "../../../utils/misc";
 import { DocumentData } from "firebase/firestore";
 import EssayCard from "./EssayCard";

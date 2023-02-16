@@ -1,6 +1,5 @@
 import React, { FC, SetStateAction } from "react";
 import { CustomDrawer } from "./CustomDrawer";
-import { Text } from "@mantine/core";
 import TodoList from "./todo/TodoList";
 
 interface TodoDrawerProps {

@@ -1,9 +1,8 @@
 import React, { FC, SetStateAction, useState, useContext, useEffect } from 'react'
 import { CustomDrawer } from './CustomDrawer';
 import { LoginContext } from '../../../context/DocContext';
-import { Text, Textarea, Stack, Center, Title } from '@mantine/core';
-import { useDebounce } from 'use-debounce';
-import { saveEssay, saveEssayPrompt } from '../../../services/FirestoreHelpers';
+import { Textarea, Stack, Center, Title } from '@mantine/core';
+import {  saveEssayPrompt } from '../../../services/FirestoreHelpers';
 import { UserAuth } from '../../../context/AuthContext';
 import { useSearchParams } from 'react-router-dom';
 
