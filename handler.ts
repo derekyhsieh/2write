@@ -188,7 +188,10 @@ async function getAnswer(question, isAutocomplete = false) {
 		})
 		.catch((error) => {
 			if (error.message.includes("429")) {
-				sendNoCreditsEmail();
+				sendNoCreditsEmail()
+				.catch((error) => {
+					throw new Error(error.message)
+				})
 			}
 			throw new Error(error.message);
 		});
@@ -202,22 +205,15 @@ async function sendNoCreditsEmail() {
 	// @ts-ignore
 	sgMail.setApiKey(import.meta.env.VITE_SENDGRID_API_KEY);
 
-	const aidanMsg = {
-		to: "aidanb08@icloud.com",
-		from: "aidanb08@icloud.com",
-		subject: "2Write is out of credits",
-		html: `<strong>2Write is out of credits, create a new API key</strong>`,
-	};
-
-	const derekMsg = {
-		to: "devderekhsieh@gmail.com",
+	const msg = {
+		to: ["devaidanbunch@gmail.com", "devderekhsieh@gmail.com"],
 		from: "aidanb08@icloud.com",
 		subject: "2Write is out of credits",
 		html: `<strong>2Write is out of credits, create a new API key</strong>`,
 	};
 
 	sgMail
-		.send([aidanMsg, derekMsg])
+		.send(msg)
 		.then(() => {
 			console.log("Emails sent");
 		})
