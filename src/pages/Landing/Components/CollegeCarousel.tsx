@@ -1,4 +1,4 @@
-import { createStyles, Image } from "@mantine/core";
+import { Image } from "@mantine/core";
 import { Carousel, Embla } from "@mantine/carousel";
 import { useState, useEffect } from "react";
 import { useInterval } from "@mantine/hooks";

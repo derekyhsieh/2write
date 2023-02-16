@@ -1,6 +1,5 @@
 import React, { FC, SetStateAction } from 'react'
 import { CustomDrawer } from './CustomDrawer';
-import { Button, Stack, Center, Text, Title, Space, Divider } from '@mantine/core';
 
 interface SettingsDrawerProps {
     setOpened: React.Dispatch<SetStateAction<string>>,

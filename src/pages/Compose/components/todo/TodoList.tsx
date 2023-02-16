@@ -9,9 +9,8 @@ import {
 	Stack,
 	createStyles,
 	ScrollArea,
-	Loader,
 } from "@mantine/core";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState } from "react";
 import { saveTasks } from "../../../../services/FirestoreHelpers";
 import { UserAuth } from "../../../../context/AuthContext";
 import Task from "./Task";

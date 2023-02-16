@@ -1,9 +1,6 @@
-import { IconFaceId } from "@tabler/icons";
-import { Editor, Extension } from "@tiptap/core";
-import { Node as ProsemirrorNode } from "prosemirror-model";
+import { Extension } from "@tiptap/core";
 import { Plugin } from "prosemirror-state";
 import { Decoration, DecorationSet } from "prosemirror-view";
-import { useDebounce } from "use-debounce";
 import "./Loader.css"
 import { auth } from "../../../services/firebase";
 
@@ -181,7 +178,7 @@ export const AutocompleteSnippets = Extension.create({
     
                                                     autocomplete = data.answer
     
-                                                    if (autocomplete[0] === " ") {
+                                                    if (autocomplete && autocomplete[0] === " ") {
                                                         autocomplete = autocomplete.substring(1)
     
                                                     }

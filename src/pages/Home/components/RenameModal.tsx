@@ -4,8 +4,6 @@ import {
 	TextInput,
 	Title,
 	Button,
-	Center,
-	Loader,
 } from "@mantine/core";
 import { useState } from "react";
 import { saveTitle } from "../../../services/FirestoreHelpers";

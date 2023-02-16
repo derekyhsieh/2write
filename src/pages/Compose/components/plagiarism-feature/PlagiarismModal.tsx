@@ -1,4 +1,4 @@
-import { Group, Stack, createStyles, Title, Button, Container } from "@mantine/core";
+import { Group, Stack, Title, Button } from "@mantine/core";
 import { StatsRingCard } from "./StatsRingCard";
 
 type Props = {

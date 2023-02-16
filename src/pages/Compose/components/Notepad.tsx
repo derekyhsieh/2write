@@ -6,13 +6,12 @@ import {
 	Modal,
 	useMantineTheme,
 	Center,
-	Text,
 	TextInput,
 	Select,
 	createStyles,
 } from "@mantine/core";
 
-import { useState, Dispatch, SetStateAction, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { convertStringIntoHTML } from "../../../utils/CleanHTML";
 
 import { RichTextEditor } from "@mantine/rte";
@@ -76,7 +75,7 @@ export default function Notepad() {
 					method: "post",
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: "Bearer ".concat(token),
+						"Authorization": "Bearer ".concat(token),
 					},
 					body: JSON.stringify({ prompt: prompt }),
 				})

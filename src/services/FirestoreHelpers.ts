@@ -103,7 +103,8 @@ const loadEssayList = async (userID: string) => {
 const createEssay = async (
 	userID: string,
 	essayID: string,
-	essayPrompt?: string
+	essayPrompt?: string,
+	content?: string
 ) => {
 	// generate essay ID with "uuidv4()" outside of this function
 
@@ -113,7 +114,7 @@ const createEssay = async (
 		await setDoc(essayRef, {
 			timestamp: serverTimestamp(),
 			lastEdit: serverTimestamp(),
-			content: "",
+			content: content !== undefined ? content : "",
 			essayPrompt: essayPrompt,
 		});
 	} catch (error) {

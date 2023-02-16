@@ -1,7 +1,7 @@
 import { Modal, useMantineTheme } from "@mantine/core";
 import HomePageCards from "./HomePageCards";
 import HomeHeader from "./HomeHeader";
-import { useEffect, useState, useLayoutEffect } from "react";
+import {  useState, useLayoutEffect } from "react";
 import { CreateDropzoneModalContent } from "./DropzoneModal";
 import { CreatePromptModalContent } from "./PromptModal";
 import { UserAuth } from "../../../context/AuthContext";

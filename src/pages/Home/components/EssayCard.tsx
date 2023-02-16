@@ -6,7 +6,6 @@ import {
 	Stack,
 	ActionIcon,
 	Image,
-	Button,
 	Menu,
 	Portal,
 } from "@mantine/core";

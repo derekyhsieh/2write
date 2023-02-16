@@ -10,18 +10,11 @@ import {
 } from "@mantine/core";
 import {
 	TablerIcon,
-	IconHome2,
-	IconGauge,
 	IconDeviceDesktopAnalytics,
 	IconListCheck,
-	IconCalendarStats,
-	IconUser,
 	IconSettings,
 	IconChartDonut,
-	IconLogout,
-	IconSwitchHorizontal,
 } from "@tabler/icons";
-import { CustomDrawer } from "./CustomDrawer";
 import logo from "../../../img/logo.png";
 import SettingsDrawer from "./SettingsDrawer";
 import AnalyticsDrawer from "./AnalyticsDrawer";
