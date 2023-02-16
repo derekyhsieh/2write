@@ -28,9 +28,10 @@ const app = express();
 app.use(bodyParser.json({ limit: "200mb" }));
 
 app.use("/api", (req, res, next) => {
-	// @ts-ignore
-	if (req.headers.authorization.startsWith("Bearer ")) {
-		// @ts-ignore
+	if (
+		typeof req.headers.authorization === "string" &&
+		req.headers.authorization.startsWith("Bearer ")
+	) {
 		const idToken = req.headers.authorization.split(" ")[1];
 		// Verify the ID token, check if revoked and decode its payload.
 		admin
@@ -142,13 +143,11 @@ app.post(
 			mammothPlus.extractRawText({ arrayBuffer: binaryString }),
 		])
 			.then((results) => {
-				res
-					.status(200)
-					.json({
-						html: results[0].value,
-						rawText: results[1].value,
-						warnings: [results[0].messages, results[1].messages],
-					});
+				res.status(200).json({
+					html: results[0].value,
+					rawText: results[1].value,
+					warnings: [results[0].messages, results[1].messages],
+				});
 			})
 			.catch((error) => {
 				res.status(400).json({ error: error.message });

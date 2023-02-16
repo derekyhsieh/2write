@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import {
 	Text,
 	Group,
@@ -17,6 +17,7 @@ import { createSearchParams, useNavigate } from "react-router-dom";
 
 type Props = {
 	setIsActive: (active: boolean) => void;
+	setDropzoneFailedModalIsActive: (active: boolean) => void;
 };
 
 const useStyles = createStyles((theme) => ({
@@ -43,15 +44,30 @@ const useStyles = createStyles((theme) => ({
 		left: "calc(50% - 125px)",
 		bottom: -20,
 	},
+
+	invisible: {
+		display: "none",
+	},
 }));
 
-export function CreateDropzoneModalContent({ setIsActive }: Props) {
-	return <DropzoneButton onDrop={setIsActive} />;
+export function CreateDropzoneModalContent({
+	setIsActive,
+	setDropzoneFailedModalIsActive,
+}: Props) {
+	return (
+		<DropzoneButton
+			setDropzoneModalActive={setIsActive}
+			setDropzoneFailedModalActive={setDropzoneFailedModalIsActive}
+		/>
+	);
 }
 
-export function DropzoneButton(props: { onDrop: Function }) {
+export function DropzoneButton(props: {
+	setDropzoneModalActive: Function;
+	setDropzoneFailedModalActive: Function;
+}) {
 	const { classes, theme } = useStyles();
-	const [failedModalIsOpen, setFailedModalIsOpen] = useState(false);
+	const [isDropzoneLoading, setIsDropzoneLoading] = useState(false);
 
 	const openRef = useRef<() => void>(null);
 
@@ -73,55 +89,35 @@ export function DropzoneButton(props: { onDrop: Function }) {
 			return data;
 		} catch (e) {
 			console.error(e);
-			setFailedModalIsOpen(true);
+			dropzoneFailed();
 		}
+	};
+
+	const dropzoneFailed = () => {
+		setIsDropzoneLoading(false);
+		props.setDropzoneModalActive(false);
+		props.setDropzoneFailedModalActive(true);
 	};
 
 	return (
 		<>
-			<Modal
-				opened={failedModalIsOpen}
-				centered
-				onClose={() => setFailedModalIsOpen(false)}
-				withCloseButton={false}
-				overlayColor={
-					theme.colorScheme === "dark"
-						? theme.colors.dark[9]
-						: theme.colors.gray[2]
-				}
-				overlayOpacity={0.55}
-				overlayBlur={3}
-				zIndex={999999}
-				radius={"md"}
-				trapFocus
-			>
-				<Notification
-					icon={<IconX size={18} />}
-					title="File upload failed"
-					color="red"
-					disallowClose
-					style={{ border: 0, boxShadow: "none" }}
-				>
-					Something went wrong with the file you uploaded. Please, try again!
-				</Notification>
-			</Modal>
-
 			<div className={classes.wrapper}>
 				<Dropzone
+					loading={isDropzoneLoading}
 					openRef={openRef}
 					onDrop={(files) => {
-						props.onDrop(false);
+						setIsDropzoneLoading(true);
 						// loop through all selected files in dropzone
 						files.forEach((file, index) => {
 							const reader = new FileReader();
 
 							reader.onabort = () => {
 								console.log("file reader aborted");
-								setFailedModalIsOpen(true);
+								dropzoneFailed();
 							};
 							reader.onerror = () => {
 								console.log("file reading failed");
-								setFailedModalIsOpen(true);
+								dropzoneFailed();
 							};
 
 							reader.onload = (event) => {
@@ -129,48 +125,57 @@ export function DropzoneButton(props: { onDrop: Function }) {
 									let binaryString =
 										typeof reader.result === "object" && reader.result;
 
-									auth.currentUser.getIdToken(true).then(async (idToken) => {
-										// send binary string of file to server for conversion to html
+									auth.currentUser
+										.getIdToken(true)
+										.then(async (idToken) => {
+											// send binary string of file to server for conversion to html
 
-										const conversionResults = await convertDocxToHtml(
-											binaryString,
-											idToken
-										);
+											const conversionResults = await convertDocxToHtml(
+												binaryString,
+												idToken
+											);
 
-										// create new essay in firestore for each file
-										const essayID = uuidv4();
+											// create new essay in firestore for each file
+											const essayID = uuidv4();
 
-										Promise.all([
-											createEssay(
-												user.uid,
-												essayID,
-												"",
-												conversionResults.html
-											),
-											saveTitle(
-												user.uid,
-												essayID,
-												// get all characters before the first \n (new line), which is the title of the document
-												conversionResults.rawText.split("\n")[0]
-											),
-										])
-											.then(() => {
-												// open first uploaded document
-												if (index === 0) {
-													navigate({
-														pathname: "/compose",
-														search: `?${createSearchParams({
-															essayId: essayID,
-															isNewDoc: "true",
-														})}`,
-													});
-												}
-											})
-											.catch((error) => {
-												console.error(error);
-												setFailedModalIsOpen(true);
-											});
-									});
+											Promise.all([
+												createEssay(
+													user.uid,
+													essayID,
+													"",
+													conversionResults.html
+												),
+												saveTitle(
+													user.uid,
+													essayID,
+													// get all characters before the first \n (new line), which is the title of the document
+													conversionResults.rawText.split("\n")[0]
+												),
+											])
+												.then(() => {
+													setIsDropzoneLoading(false);
+													// open first uploaded document
+													if (index === 0) {
+														navigate({
+															pathname: "/compose",
+															search: `?${createSearchParams({
+																essayId: essayID,
+																isNewDoc: "true",
+															})}`,
+														});
+													}
+												})
+												// catch errors in contacting firestore to create a new essay
+												.catch((error) => {
+													console.error(error);
+													dropzoneFailed();
+												});
+										})
+										// catch errors in fetching id token
+										.catch((error) => {
+											console.error(error);
+											dropzoneFailed();
+										});
 								}
 							};
 
@@ -220,14 +225,17 @@ export function DropzoneButton(props: { onDrop: Function }) {
 					</div>
 				</Dropzone>
 
-				<Button
-					className={classes.control}
-					size="md"
-					radius="xl"
-					onClick={() => openRef.current?.()}
-				>
-					Select files
-				</Button>
+				{/* show button if dropzone isn't loading */}
+				{!isDropzoneLoading && (
+					<Button
+						className={classes.control}
+						size="md"
+						radius="xl"
+						onClick={() => openRef.current?.()}
+					>
+						Select files
+					</Button>
+				)}
 			</div>
 		</>
 	);

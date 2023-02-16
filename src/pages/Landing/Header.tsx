@@ -130,7 +130,7 @@ export function HeaderMegaMenu() {
 	const { user, logOut } = UserAuth();
 
 	const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm}px)`);
-	
+
 	const links = linkArray.map((item) => (
 		<UnstyledButton
 			className={classes.subLink}
@@ -195,7 +195,9 @@ export function HeaderMegaMenu() {
 					</Group>
 
 					<Group className={classes.hiddenMobile}>
-						<Button onClick={() => navigate("/auth")}>Sign up</Button>
+						<Button onClick={() => navigate("/auth")}>
+							{user ? "Home" : "Sign up"}
+						</Button>
 					</Group>
 				</Group>
 			</Header>
