@@ -1,4 +1,4 @@
-import { Modal, useMantineTheme } from "@mantine/core";
+import { Modal, useMantineTheme, Notification } from "@mantine/core";
 import HomePageCards from "./HomePageCards";
 import HomeHeader from "./HomeHeader";
 import {  useState, useLayoutEffect } from "react";
@@ -8,12 +8,14 @@ import { UserAuth } from "../../../context/AuthContext";
 import { CreateRenameModalContent } from "./RenameModal";
 import { DocumentData } from "firebase/firestore";
 import { loadEssayList } from "../../../services/FirestoreHelpers";
+import { IconX } from "@tabler/icons";
 
 export default function HomePageContainer() {
 	const [dropzoneModalIsOpen, setDropzoneModalIsOpen] = useState(false);
 	const [promptModalIsOpen, setPromptModalIsOpen] = useState(false);
 	const [createModalIsOpen, setCreateModalIsOpen] = useState(false);
 	const [renameModalIsOpen, setRenameModalIsOpen] = useState(false);
+	const [dropzoneFailedModalIsOpen, setDropzoneFailedModalIsOpen] = useState(false);
 
 	const [isOnRenderLoading, setIsOnRenderLoading] = useState(true);
 	const [essayList, setEssayList] = useState<DocumentData[]>([]);
@@ -58,7 +60,7 @@ export default function HomePageContainer() {
 				trapFocus
 				radius={"md"}
 			>
-				<CreateDropzoneModalContent setIsActive={setDropzoneModalIsOpen} />
+				<CreateDropzoneModalContent setIsActive={setDropzoneModalIsOpen} setDropzoneFailedModalIsActive={setDropzoneFailedModalIsOpen} />
 			</Modal>
 			<Modal
 				opened={promptModalIsOpen}
@@ -115,6 +117,32 @@ export default function HomePageContainer() {
 					userId={user.uid}
 					setIsActive={setRenameModalIsOpen}
 				/>
+			</Modal>
+			<Modal
+				opened={dropzoneFailedModalIsOpen}
+				centered
+				onClose={() => setDropzoneFailedModalIsOpen(false)}
+				withCloseButton={false}
+				overlayColor={
+					theme.colorScheme === "dark"
+						? theme.colors.dark[9]
+						: theme.colors.gray[2]
+				}
+				overlayOpacity={0.55}
+				overlayBlur={3}
+				zIndex={999999}
+				radius={"md"}
+				trapFocus
+			>
+				<Notification
+					icon={<IconX size={18} />}
+					title="File upload failed"
+					color="red"
+					disallowClose
+					style={{ border: 0, boxShadow: "none" }}
+				>
+					Something went wrong with the file you uploaded. Please, try again!
+				</Notification>
 			</Modal>
 			<HomeHeader essayList={essayList} />
 			<HomePageCards
