@@ -116,7 +116,7 @@ export default function AuthPage() {
 								</Center>
 								<Center>
 									<Button
-										onClick={() => handleSignIn(twitterSignIn)}
+										onClick={async () => handleSignIn(twitterSignIn)}
 										variant={"filled"}
 										leftIcon={<IconBrandTwitter />}
 										w={"80%"}
