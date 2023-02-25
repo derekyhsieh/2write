@@ -71,8 +71,8 @@ export default function AuthPage() {
 						{
 							title: "Privacy",
 							links: [
-								{ label: "Terms & Conditions", link: "" },
-								{ label: "Privacy Policy", link: "" },
+								{ label: "Terms & Conditions", link: "/terms" },
+								{ label: "Privacy Policy", link: "/privacy" },
 							],
 						},
 					]}
@@ -116,7 +116,7 @@ export default function AuthPage() {
 								</Center>
 								<Center>
 									<Button
-										onClick={async () => handleSignIn(twitterSignIn)}
+										onClick={() => handleSignIn(twitterSignIn)}
 										variant={"filled"}
 										leftIcon={<IconBrandTwitter />}
 										w={"80%"}
