@@ -16,7 +16,6 @@ import {
 	IconChartDonut,
 } from "@tabler/icons";
 import logo from "../../../img/logo.png";
-import SettingsDrawer from "./SettingsDrawer";
 import AnalyticsDrawer from "./AnalyticsDrawer";
 import TodoDrawer from "./TodoDrawer";
 import EssayDataDrawer from "./EssayDataDrawer";
@@ -101,7 +100,6 @@ export function NavbarMini(editor) {
 
 	return (
 		<>
-			<SettingsDrawer opened={openDrawer} setOpened={setOpenDrawer} />
 			<AnalyticsDrawer
 				opened={openDrawer}
 				setOpened={setOpenDrawer}
