@@ -33,8 +33,15 @@ To get started with 2write, follow these steps:
 
 1. Clone the repository to your local machine.
 2. Install dependencies by running `yarn`.
-3. Set up a Firebase project and add your Firebase credentials to the .env.local file as `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`,
-`VITE_FIREBASE_PROJECT_ID`, `VITE_FIREBASE_STORAGE_BUCKET`, `VITE_FIREBASE_MESSAGING_SENDER_ID`, `VITE_FIREBASE_APP_ID`, `VITE_FIREBASE_MEASUREMENT_ID` and `VITE_FIREBASE_SERVICE_ACCOUNT_KEY` for the admin SDK.
+3. Set up a Firebase project and add your Firebase credentials to the .env.local file as: 
+    - `VITE_FIREBASE_API_KEY`
+    - `VITE_FIREBASE_AUTH_DOMAIN`
+    - `VITE_FIREBASE_PROJECT_ID`
+    - `VITE_FIREBASE_STORAGE_BUCKET`
+    - `VITE_FIREBASE_MESSAGING_SENDER_ID`
+    - `VITE_FIREBASE_APP_ID`
+    - `VITE_FIREBASE_MEASUREMENT_ID`
+    - `VITE_FIREBASE_SERVICE_ACCOUNT_KEY`
 4. Set up an OpenAI account and add your API key to the .env.local file as `VITE_OPENAI_API_KEY`.
 5. If you want email notifications for when OpenAI credits run out, create a SendGrid account and add the API key to the .env.local file as `VITE_SENDGRID_API_KEY`.
 6. Run the development server by running `yarn dev`.
