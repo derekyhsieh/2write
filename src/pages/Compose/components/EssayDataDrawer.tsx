@@ -28,7 +28,7 @@ const EssayDataDrawer: FC<EssayDataDrawerProps> = ({ setOpened, opened }) => {
 
 	useEffect(() => {
 		setEssayPrompt(localDocData.essayPrompt);
-	}, []);
+	}, [localDocData]);
 
 	return (
 		<CustomDrawer setOpened={setOpened} opened={opened == "data"}>
