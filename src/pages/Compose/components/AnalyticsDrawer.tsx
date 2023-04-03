@@ -2,14 +2,14 @@ import React, { FC, SetStateAction, useEffect, useState } from 'react'
 import { CustomDrawer } from './CustomDrawer';
 import { Center, Divider, Stack, Text, Title, Space } from '@mantine/core';
 
-interface SettingsDrawerProps {
+interface AnalyticsDrawerProps {
   setOpened: React.Dispatch<SetStateAction<string>>,
   opened: string,
   editor: any
 }
 
 
-const AnalyticsDrawer: FC<SettingsDrawerProps> = ({ setOpened, opened, editor }) => {
+const AnalyticsDrawer: FC<AnalyticsDrawerProps> = ({ setOpened, opened, editor }) => {
 
 
   function removeCapitalizedParentheses(str) {
