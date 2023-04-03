@@ -12,7 +12,6 @@ import {
 	TablerIcon,
 	IconDeviceDesktopAnalytics,
 	IconListCheck,
-	IconSettings,
 	IconChartDonut,
 } from "@tabler/icons";
 import logo from "../../../img/logo.png";
@@ -78,7 +77,6 @@ const iconsData = [
 	{ icon: IconChartDonut, label: "Essay Prompt", name: "data" },
 	{ icon: IconDeviceDesktopAnalytics, label: "Analytics", name: "analytics" },
 	{ icon: IconListCheck, label: "To-Dos", name: "todos" },
-	{ icon: IconSettings, label: "Settings", name: "settings" },
 ];
 
 export function NavbarMini(editor) {
