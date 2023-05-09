@@ -17,8 +17,8 @@ https://user-images.githubusercontent.com/44245721/227432287-8171c407-4b70-4288-
 - Rewrite feature: 2write provides a feature that allows users to highlight text and rewrite it with AI, with word count information displayed for the selected text.
 <img width="935" alt="rewrite" src="https://user-images.githubusercontent.com/44245721/227432617-4c0b956f-792e-4cff-b9cf-81e9dac0a26f.png">
 
-- Essay analytics: Users can track word count, character count, and word count without citations, providing helpful insights into their writing.
-<img width="1091" alt="analytics" src="https://user-images.githubusercontent.com/44245721/227432686-2b1cc329-fc5e-4374-b9cb-03fe5a58dc97.png">
+- Essay analytics: Users can track word count with or without citations, character count, top words, reading time and sentiment analysis, providing helpful insights into their writing.
+<img width="1491" alt="analytics" src="https://user-images.githubusercontent.com/44245721/236967827-14103b3c-8638-4b0f-9b08-f7ac9b27a435.png">
 
 - Todo list: There is a built-in todo list inside the editor for users to keep track of what they want to do.
 <img width="1091" alt="todo" src="https://user-images.githubusercontent.com/44245721/227432625-0fba325c-af60-4472-b310-985f24527a53.png">
