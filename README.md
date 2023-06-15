@@ -1,4 +1,4 @@
-## 2write
+# 2write
 Welcome to 2write, a cloud-enabled AI-powered text editor designed for writing essays. This application is built using Mantine, React, Vite and Firebase, with OpenAI's GPT-3 model powering the AI features.
 
 https://user-images.githubusercontent.com/44245721/227432287-8171c407-4b70-4288-88be-f440dbfadc14.mp4
