@@ -6,7 +6,7 @@ import {
     SimpleGrid,
     Container,
   } from '@mantine/core';
-  import { IconGauge, IconUser, IconMessageChatbot, IconBallpen, IconFriends, IconClipboardTypography} from '@tabler/icons';
+  import { IconGauge, IconUser, IconMessageChatbot, IconBallpen, IconChecklist, IconClipboardTypography } from '@tabler/icons';
   
   const featuresArray = [
     {
@@ -18,7 +18,7 @@ import {
     {
       title: 'Plagiarism-free',
       description:
-      "2write ensures all concent generated is original, checked against Turnitin.",
+      "2write provides checks to ensure all content generated is original and won't be detected as AI.",
       icon: IconUser,
     },
     {
@@ -35,16 +35,16 @@ import {
     },
   
     {
-      title: 'Bibliography Generation',
+      title: 'Analytics',
       description:
-      "Automatically create bibliography from a group of links.",
+      "Get insights into your writing style and how to improve it.",
       icon: IconClipboardTypography,
     },
     {
-      title: 'Real-time collaboration',
+      title: 'Task Management',
       description:
-      "Allows multiple users to work together on the same document or project at the same time.",
-      icon: IconFriends,
+      "Manage your writing tasks and deadlines with 2write.",
+      icon: IconChecklist,
     },
   ];
   
